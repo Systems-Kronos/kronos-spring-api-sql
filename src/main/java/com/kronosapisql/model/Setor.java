@@ -1,5 +1,6 @@
 package com.kronosapisql.model;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
@@ -12,6 +13,7 @@ public class Setor {
     private long id;
     @Column(name = "cNmSetor")
     @NotNull
+    @Schema(description = "Nome do setor", example = "Limpeza")
     private String nome;
     @NotNull
     @ManyToOne
