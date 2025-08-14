@@ -14,7 +14,6 @@ import java.util.List;
 @RequestMapping("/api/usuario")
 @Tag(name = "Usuario", description = "Operações relacionadas ao usuário")
 public class UsuarioController {
-
     private UsuarioService usuarioService;
 
     public UsuarioController(UsuarioService usuarioService){
@@ -45,8 +44,4 @@ public class UsuarioController {
         usuarioService.deletar(id);
         return ResponseEntity.ok("Usuário deletado com sucesso.");
     }
-
-
-
-
 }

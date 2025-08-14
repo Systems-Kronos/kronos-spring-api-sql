@@ -14,7 +14,6 @@ import java.util.List;
 @RequestMapping("/api/empresa")
 @Tag(name = "Empresa", description = "Operações relacionadas à empresa")
 public class EmpresaController  {
-
     private final EmpresaService empresaService;
 
     public EmpresaController(EmpresaService empresaService) {
@@ -26,6 +25,7 @@ public class EmpresaController  {
     public List<Empresa> selecionar() {
         return empresaService.selecionar();
     }
+
     @Operation(summary = "Adiciona uma nova empresa")
     @PostMapping("/adicionar")
     public ResponseEntity<String> adicionar(@RequestBody @Valid Empresa empresa) {
@@ -39,6 +39,7 @@ public class EmpresaController  {
         empresaService.atualizar(empresa);
         return ResponseEntity.ok("Empresa atualizada com sucesso");
     }
+
     @Operation(summary = "Deleta uma empresa")
     @DeleteMapping("/deletar/{id}")
     public ResponseEntity<String> deletar(@PathVariable Long id) {

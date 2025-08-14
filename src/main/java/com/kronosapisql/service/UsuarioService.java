@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
-
 @Service
 public class UsuarioService {
     private final UsuarioRepository usuarioRepository;
@@ -34,6 +33,4 @@ public class UsuarioService {
     public void atualizar(Usuario usuario) {
         this.usuarioRepository.save(usuario);
     }
-
-
 }
