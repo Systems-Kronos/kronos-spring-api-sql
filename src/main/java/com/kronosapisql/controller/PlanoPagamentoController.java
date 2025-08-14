@@ -12,8 +12,8 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("api/planopagamento")
-@Tag(name = "PlanoPagaento", description = "Operações relacionadas a plano pagamento")
+@RequestMapping("api/plano")
+@Tag(name = "Plano", description = "Operações relacionadas a plano pagamento")
 public class PlanoPagamentoController {
     private final PlanoPagamentoService planoPagamentoService;
 
