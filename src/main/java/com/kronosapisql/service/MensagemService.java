@@ -32,9 +32,7 @@ public class MensagemService {
         this.mensagemRepository.save(mensagem);
     }
 
-    public List<Mensagem> selecionarPelaEmpresaId(Long id) {
-        return this.mensagemRepository.findByEmpresaId(id);
-    }
+
 
 }
 
