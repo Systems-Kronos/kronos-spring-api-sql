@@ -1,6 +1,5 @@
 package com.kronosapisql.service;
 
-import aj.org.objectweb.asm.Opcodes;
 import com.kronosapisql.model.Setor;
 import com.kronosapisql.repository.SetorRepository;
 import org.springframework.stereotype.Service;
@@ -10,7 +9,6 @@ import java.util.Optional;
 
 @Service
 public class SetorService {
-
     private final SetorRepository setorRepository;
 
     public SetorService(SetorRepository setorRepository) {
@@ -40,5 +38,4 @@ public class SetorService {
     public List<Setor> selecionarPelaEmpresaId(Long id) {
         return this.setorRepository.findByEmpresaId(id);
     }
-
 }

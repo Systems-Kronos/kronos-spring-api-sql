@@ -1,6 +1,5 @@
 package com.kronosapisql.model;
 
-import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
@@ -11,12 +10,15 @@ public class Mensagem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "nCdMensagem")
     private long id;
+
     @Column(name = "cTitulo")
     @NotNull
     private String titulo;
+
     @Column(name = "cMensagem")
     @NotNull
     private String mensagem;
+
     @Column(name = "cCategoria")
     @NotNull
     private String categoria;
@@ -33,16 +35,17 @@ public class Mensagem {
         this.mensagem = mensagem;
         this.categoria = categoria;
     }
+
     public Mensagem() {}
 
     public long getId() {
         return id;
     }
 
-
     public String getTitulo() {
         return titulo;
     }
+
     public String getMensagem() {
         return mensagem;
     }
@@ -50,5 +53,4 @@ public class Mensagem {
     public String getCategoria() {
         return categoria;
     }
-
 }

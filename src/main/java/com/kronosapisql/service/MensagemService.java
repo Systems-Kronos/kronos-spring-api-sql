@@ -9,7 +9,6 @@ import java.util.Optional;
 
 @Service
 public class MensagemService {
-    
     private final MensagemRepository mensagemRepository;
 
     public MensagemService(MensagemRepository mensagemRepository) {
@@ -31,8 +30,5 @@ public class MensagemService {
     public void atualizar(Mensagem mensagem) {
         this.mensagemRepository.save(mensagem);
     }
-
-
-
 }
 

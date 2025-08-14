@@ -6,7 +6,6 @@ import jakarta.validation.constraints.NotNull;
 @Entity
 @Table(name = "habilidade")
 public class Habilidade {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "nCdHabilidade")
@@ -37,6 +36,7 @@ public class Habilidade {
         this.nome = nome;
         this.descricao = descricao;
     }
+
     public Habilidade(){}
 
     public long getId() {

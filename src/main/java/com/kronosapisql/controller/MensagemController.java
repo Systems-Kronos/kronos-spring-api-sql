@@ -15,7 +15,6 @@ import java.util.Optional;
 @RequestMapping("/api/mensagem")
 @Tag(name = "Mensagem", description = "Operações relacionadas ao mensagem")
 public class MensagemController {
-
     private final MensagemService mensagemService;
 
     public MensagemController(MensagemService mensagemService) {
@@ -27,7 +26,6 @@ public class MensagemController {
     public Optional<Mensagem> selecionarPeloId(@PathVariable Long id) {
         return mensagemService.selecionarPeloId(id);
     }
-
 
     @Operation(summary = "Adiciona uma nova mensagem")
     @PostMapping("/adicionar")

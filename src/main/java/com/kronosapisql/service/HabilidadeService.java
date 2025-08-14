@@ -9,7 +9,6 @@ import java.util.Optional;
 
 @Service
 public class HabilidadeService {
-
     private HabilidadeRepository habilidadeRepository;
 
     public HabilidadeService(HabilidadeRepository habilidadeRepository) {
@@ -35,5 +34,4 @@ public class HabilidadeService {
     public void atualizar(Habilidade habilidade) {
         this.habilidadeRepository.save(habilidade);
     }
-
 }
