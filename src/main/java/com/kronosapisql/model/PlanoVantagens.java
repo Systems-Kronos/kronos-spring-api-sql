@@ -15,9 +15,9 @@ public class PlanoVantagens {
     private long id;
 
     @NotNull
-    @ManyToMany
+    @ManyToOne
     @JoinColumn(name = "nCdPlano", nullable = false)
-    private List<PlanoPagamento> planoPagamento;
+    private PlanoPagamento planoPagamento;
 
     @Column(name = "cNmVantagem")
     @NotNull
@@ -27,14 +27,14 @@ public class PlanoVantagens {
     @NotNull
     private String descricao;
 
-    public PlanoVantagens(long id, List<PlanoPagamento> planoPagamento, String nomeVantagem, String descricao) {
+    public PlanoVantagens(long id, PlanoPagamento planoPagamento, String nomeVantagem, String descricao) {
         this.id = id;
         this.planoPagamento = planoPagamento;
         this.nomeVantagem = nomeVantagem;
         this.descricao = descricao;
     }
 
-    public PlanoVantagens(List<PlanoPagamento> planoPagamento, String nomeVantagem, String descricao) {
+    public PlanoVantagens(PlanoPagamento planoPagamento, String nomeVantagem, String descricao) {
         this.planoPagamento = planoPagamento;
         this.nomeVantagem = nomeVantagem;
         this.descricao = descricao;
@@ -46,7 +46,7 @@ public class PlanoVantagens {
         return id;
     }
 
-    public List<PlanoPagamento> getPlanoPagamento() {
+    public PlanoPagamento getPlanoPagamento() {
         return planoPagamento;
     }
 
