@@ -72,6 +72,15 @@ public class Usuario {
         return id;
     }
 
+    public void setId(long id) {
+        this.id = id;
+    }
+
+//    public Gestor getGestor() {
+//        return gestor;
+//    }
+
+
     public Empresa getEmpresa() {
         return empresa;
     }
