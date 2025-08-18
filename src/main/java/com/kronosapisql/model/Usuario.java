@@ -11,11 +11,6 @@ public class Usuario {
     @Column(name = "nCdUsuario")
     private long id;
 
-//    @NotNull
-//    @OneToOne
-//    @JoinColumn(name = "nCdGestor", nullable = false)
-//    private Gestor gestor;
-
     @NotNull
     @ManyToOne
     @JoinColumn(name = "nCdEmpresa", nullable = false)
@@ -46,7 +41,6 @@ public class Usuario {
 
     public Usuario(long id, Empresa empresa, Setor setor, String cpf, String telefone, String email, String senha, String foto) {
         this.id = id;
-//        this.gestor = gestor;
         this.empresa = empresa;
         this.setor = setor;
         this.cpf = cpf;
@@ -56,7 +50,6 @@ public class Usuario {
         this.foto = foto;
     }
     public Usuario(Empresa empresa, Setor setor, String cpf, String telefone, String email, String senha, String foto) {
-//        this.gestor = gestor;
         this.empresa = empresa;
         this.setor = setor;
         this.cpf = cpf;
@@ -71,15 +64,6 @@ public class Usuario {
     public long getId() {
         return id;
     }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-//    public Gestor getGestor() {
-//        return gestor;
-//    }
-
 
     public Empresa getEmpresa() {
         return empresa;
