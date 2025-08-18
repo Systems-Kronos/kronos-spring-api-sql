@@ -1,5 +1,6 @@
 package com.kronosapisql.controller;
 
+import com.kronosapisql.dto.LoginDTO;
 import com.kronosapisql.security.JwtUtil;
 import com.kronosapisql.model.Usuario;
 import com.kronosapisql.service.UsuarioService;
@@ -18,9 +19,12 @@ import java.util.Optional;
 @Tag(name = "Usuario", description = "Operações relacionadas ao usuário")
 public class UsuarioController {
     private final UsuarioService usuarioService;
+    private final JwtUtil jwtUtil;
 
-    public UsuarioController(UsuarioService usuarioService){
+
+    public UsuarioController(UsuarioService usuarioService, JwtUtil jwtUtil){
         this.usuarioService = usuarioService;
+        this.jwtUtil = jwtUtil;
     }
 
     @Operation(summary = "Lista todos os usuários")
@@ -49,15 +53,16 @@ public class UsuarioController {
     }
 
     @Operation(summary = "Faz login de um usuário")
-    @PostMapping("/login")
-    public ResponseEntity<?> login(@Valid @RequestBody Usuario usuario) {
-        Optional<Usuario> usuarioEncontrado = usuarioService.login(usuario.getEmail(), usuario.getSenha());
 
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@Valid @RequestBody LoginDTO loginDTO) {
+        Optional<Usuario> usuarioEncontrado = usuarioService.login(loginDTO.getEmail(), loginDTO.getSenha());
         if (usuarioEncontrado.isPresent()) {
-            String token = JwtUtil.gerarToken(String.valueOf(usuarioEncontrado.get().getId()));
+            String token = jwtUtil.gerarToken(String.valueOf(usuarioEncontrado.get().getId()));
             return ResponseEntity.ok(Map.of("token", token));
         } else {
             return ResponseEntity.status(401).body("Usuário ou senha inválidos");
         }
     }
+
 }
