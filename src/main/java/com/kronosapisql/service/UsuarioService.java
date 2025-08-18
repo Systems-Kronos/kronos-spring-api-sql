@@ -14,6 +14,7 @@ public class UsuarioService {
     public UsuarioService(UsuarioRepository usuarioRepository){
         this.usuarioRepository = usuarioRepository;
     }
+
     public Optional<Usuario> selecionarPeloId(Long id) {
         return this.usuarioRepository.findById(id);
     }
@@ -32,5 +33,14 @@ public class UsuarioService {
 
     public void atualizar(Usuario usuario) {
         this.usuarioRepository.save(usuario);
+    }
+
+    public Optional<Usuario> login(String email, String senha) {
+        Optional<Usuario> usuario = usuarioRepository.findByEmail(email);
+
+        if (usuario.isPresent() && usuario.get().getSenha().equals(senha)) {
+            return usuario;
+        }
+        return Optional.empty();
     }
 }
