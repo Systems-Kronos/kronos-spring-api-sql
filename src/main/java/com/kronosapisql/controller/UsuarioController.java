@@ -1,5 +1,7 @@
 package com.kronosapisql.controller;
 
+import com.kronosapisql.dto.LoginDTO;
+import com.kronosapisql.security.JwtUtil;
 import com.kronosapisql.model.Usuario;
 import com.kronosapisql.service.UsuarioService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -9,16 +11,20 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/usuario")
 @Tag(name = "Usuario", description = "Operações relacionadas ao usuário")
 public class UsuarioController {
+    private final UsuarioService usuarioService;
+    private final JwtUtil jwtUtil;
 
-    private UsuarioService usuarioService;
 
-    public UsuarioController(UsuarioService usuarioService){
+    public UsuarioController(UsuarioService usuarioService, JwtUtil jwtUtil){
         this.usuarioService = usuarioService;
+        this.jwtUtil = jwtUtil;
     }
 
     @Operation(summary = "Lista todos os usuários")
@@ -46,7 +52,17 @@ public class UsuarioController {
         return ResponseEntity.ok("Usuário deletado com sucesso.");
     }
 
+    @Operation(summary = "Faz login de um usuário")
 
-
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@Valid @RequestBody LoginDTO loginDTO) {
+        Optional<Usuario> usuarioEncontrado = usuarioService.login(loginDTO.getEmail(), loginDTO.getSenha());
+        if (usuarioEncontrado.isPresent()) {
+            String token = jwtUtil.gerarToken(String.valueOf(usuarioEncontrado.get().getId()));
+            return ResponseEntity.ok(Map.of("token", token));
+        } else {
+            return ResponseEntity.status(401).body("Usuário ou senha inválidos");
+        }
+    }
 
 }

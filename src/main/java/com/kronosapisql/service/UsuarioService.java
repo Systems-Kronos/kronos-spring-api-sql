@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
-
 @Service
 public class UsuarioService {
     private final UsuarioRepository usuarioRepository;
@@ -15,6 +14,7 @@ public class UsuarioService {
     public UsuarioService(UsuarioRepository usuarioRepository){
         this.usuarioRepository = usuarioRepository;
     }
+
     public Optional<Usuario> selecionarPeloId(Long id) {
         return this.usuarioRepository.findById(id);
     }
@@ -35,5 +35,12 @@ public class UsuarioService {
         this.usuarioRepository.save(usuario);
     }
 
+    public Optional<Usuario> login(String email, String senha) {
+        Optional<Usuario> usuario = usuarioRepository.findByEmail(email);
 
+        if (usuario.isPresent() && usuario.get().getSenha().equals(senha)) {
+            return usuario;
+        }
+        return Optional.empty();
+    }
 }

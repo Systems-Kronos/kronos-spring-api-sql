@@ -2,8 +2,6 @@ package com.kronosapisql.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.*;
-
 
 @Entity
 @Table(name = "empresa")
@@ -49,6 +47,7 @@ public class Empresa {
         this.telefone = telefone;
         this.cep = cep;
     }
+
     public Empresa() {}
 
     public Long getId() {

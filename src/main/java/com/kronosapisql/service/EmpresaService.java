@@ -2,7 +2,6 @@ package com.kronosapisql.service;
 
 import com.kronosapisql.model.Empresa;
 import com.kronosapisql.repository.EmpresaRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -30,8 +29,8 @@ public class EmpresaService {
     public void deletar(long id) {
         empresaRepository.delete(empresaRepository.findById(id).get());
     }
+
     public void atualizar(Empresa empresa) {
         empresaRepository.save(empresa);
     }
-
 }
