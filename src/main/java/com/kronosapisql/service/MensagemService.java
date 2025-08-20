@@ -4,7 +4,6 @@ import com.kronosapisql.model.Mensagem;
 import com.kronosapisql.repository.MensagemRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
