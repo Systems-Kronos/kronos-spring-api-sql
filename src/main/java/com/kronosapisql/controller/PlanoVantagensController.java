@@ -1,8 +1,6 @@
 package com.kronosapisql.controller;
 
-import com.kronosapisql.model.PlanoPagamento;
 import com.kronosapisql.model.PlanoVantagens;
-import com.kronosapisql.service.PlanoPagamentoService;
 import com.kronosapisql.service.PlanoVantagensService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

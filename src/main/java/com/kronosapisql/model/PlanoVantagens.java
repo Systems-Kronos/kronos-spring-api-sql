@@ -2,9 +2,6 @@ package com.kronosapisql.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import org.w3c.dom.stylesheets.LinkStyle;
-
-import java.util.List;
 
 @Entity
 @Table(name = "planoVantagens")
