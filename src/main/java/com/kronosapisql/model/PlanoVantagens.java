@@ -2,9 +2,17 @@ package com.kronosapisql.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "planoVantagens")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class PlanoVantagens {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,35 +31,4 @@ public class PlanoVantagens {
     @Column(name = "cDescricao")
     @NotNull
     private String descricao;
-
-    public PlanoVantagens(long id, PlanoPagamento planoPagamento, String nomeVantagem, String descricao) {
-        this.id = id;
-        this.planoPagamento = planoPagamento;
-        this.nomeVantagem = nomeVantagem;
-        this.descricao = descricao;
-    }
-
-    public PlanoVantagens(PlanoPagamento planoPagamento, String nomeVantagem, String descricao) {
-        this.planoPagamento = planoPagamento;
-        this.nomeVantagem = nomeVantagem;
-        this.descricao = descricao;
-    }
-
-    public PlanoVantagens() {}
-
-    public long getId() {
-        return id;
-    }
-
-    public PlanoPagamento getPlanoPagamento() {
-        return planoPagamento;
-    }
-
-    public String getNomeVantagem() {
-        return nomeVantagem;
-    }
-
-    public String getDescricao() {
-        return descricao;
-    }
 }

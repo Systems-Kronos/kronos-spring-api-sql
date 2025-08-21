@@ -2,9 +2,17 @@ package com.kronosapisql.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "mensagem")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class Mensagem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,34 +31,4 @@ public class Mensagem {
     @NotNull
     private String categoria;
 
-    public Mensagem(long id, String titulo, String mensagem, String categoria) {
-        this.id = id;
-        this.titulo = titulo;
-        this.mensagem = mensagem;
-        this.categoria = categoria;
-    }
-
-    public Mensagem(String titulo, String mensagem, String categoria) {
-        this.titulo = titulo;
-        this.mensagem = mensagem;
-        this.categoria = categoria;
-    }
-
-    public Mensagem() {}
-
-    public long getId() {
-        return id;
-    }
-
-    public String getTitulo() {
-        return titulo;
-    }
-
-    public String getMensagem() {
-        return mensagem;
-    }
-
-    public String getCategoria() {
-        return categoria;
-    }
 }
