@@ -19,11 +19,6 @@ public class Usuario {
     @Column(name = "nCdUsuario")
     private long id;
 
-//    @NotNull
-//    @OneToOne
-//    @JoinColumn(name = "nCdGestor", nullable = false)
-//    private Gestor gestor;
-
     @NotNull
     @ManyToOne
     @JoinColumn(name = "nCdEmpresa", nullable = false)
@@ -51,6 +46,5 @@ public class Usuario {
 
     @Column(name = "cFoto")
     private String foto;
-
 
 }
