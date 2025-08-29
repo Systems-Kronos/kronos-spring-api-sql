@@ -27,7 +27,7 @@ public class PlanoVantagensController {
         return planoVantagensService.selecionar();
     }
 
-    @GetMapping("/selecionar/id/{id}")
+    @GetMapping("/selecionar/{id}")
     @Operation(summary = "Lista uma vantagem pelo id")
     public Optional<PlanoVantagens> selecionarPeloId(@PathVariable Long id) {
         return planoVantagensService.selecionarPeloId(id);

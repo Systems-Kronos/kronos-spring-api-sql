@@ -5,6 +5,7 @@ import com.kronosapisql.repository.EmpresaRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class EmpresaService {
@@ -14,8 +15,8 @@ public class EmpresaService {
         this.empresaRepository = empresaRepository;
     }
 
-    public Empresa selecionarPeloId(long id) {
-        return empresaRepository.findById(id).get();
+    public Optional<Empresa> selecionarPeloId(long id) {
+        return this.empresaRepository.findById(id);
     }
 
     public List<Empresa> selecionar() {
@@ -27,7 +28,7 @@ public class EmpresaService {
     }
 
     public void deletar(long id) {
-        empresaRepository.delete(empresaRepository.findById(id).get());
+        this.empresaRepository.deleteById(id);
     }
 
     public void atualizar(Empresa empresa) {
