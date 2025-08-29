@@ -27,14 +27,14 @@ public class SetorController {
         return setorService.selecionar();
     }
 
-    @GetMapping("/selecionar/id/{id}")
+    @GetMapping("/selecionar/{id}")
     @Operation(summary = "Lista o setor pelo id")
     public Optional<Setor> selecionarPeloId(@PathVariable Long id) {
         return setorService.selecionarPeloId(id);
     }
 
     @Operation(summary = "Lista todos os setores pertencentes a uma empresa pelo id dela")
-    @GetMapping("/selecionar/empresa-id/{id}")
+    @GetMapping("/selecionar/empresa/{id}")
     public List<Setor> selecionarPelaEmpresaId(@PathVariable Long id) {
         return setorService.selecionarPelaEmpresaId(id);
     }
@@ -46,17 +46,17 @@ public class SetorController {
         return ResponseEntity.ok("Setor adicionado com sucesso");
     }
 
-    @Operation(summary = "Deleta um setor")
-    @DeleteMapping("/deletar/{id}")
-    public ResponseEntity<String> deletar(@PathVariable long id) {
-        setorService.deletar(id);
-        return ResponseEntity.ok("Setor removido com sucesso");
-    }
-
     @Operation(summary = "Atualiza um setor")
     @PutMapping("/atualizar")
     public ResponseEntity<String> atualizar(@RequestBody @Valid Setor setor) {
         setorService.atualizar(setor);
         return ResponseEntity.ok("Setor atualizado com sucesso");
+    }
+
+    @Operation(summary = "Deleta um setor")
+    @DeleteMapping("/deletar/{id}")
+    public ResponseEntity<String> deletar(@PathVariable long id) {
+        setorService.deletar(id);
+        return ResponseEntity.ok("Setor removido com sucesso");
     }
 }

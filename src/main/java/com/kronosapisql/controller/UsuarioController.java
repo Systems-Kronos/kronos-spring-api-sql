@@ -21,7 +21,6 @@ public class UsuarioController {
     private final UsuarioService usuarioService;
     private final JwtUtil jwtUtil;
 
-
     public UsuarioController(UsuarioService usuarioService, JwtUtil jwtUtil){
         this.usuarioService = usuarioService;
         this.jwtUtil = jwtUtil;
@@ -30,6 +29,12 @@ public class UsuarioController {
     @Operation(summary = "Lista todos os usuários")
     @GetMapping("/selecionar")
     public List<Usuario> selecionar() {return usuarioService.selecionar();}
+
+    @GetMapping("/selecionar/{id}")
+    @Operation(summary = "Lista um usuário pelo id")
+    public Optional<Usuario> selecionarPeloId(@PathVariable Long id) {
+        return usuarioService.selecionarPeloId(id);
+    }
 
     @Operation(summary = "Adiciona um novo usuário")
     @PostMapping("/adicionar")
@@ -53,7 +58,6 @@ public class UsuarioController {
     }
 
     @Operation(summary = "Faz login de um usuário")
-
     @PostMapping("/login")
     public ResponseEntity<?> login(@Valid @RequestBody LoginDTO loginDTO) {
         Optional<Usuario> usuarioEncontrado = usuarioService.login(loginDTO.getEmail(), loginDTO.getSenha());
@@ -64,5 +68,4 @@ public class UsuarioController {
             return ResponseEntity.status(401).body("Usuário ou senha inválidos");
         }
     }
-
 }
