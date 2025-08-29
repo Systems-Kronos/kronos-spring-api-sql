@@ -1,8 +1,6 @@
 package com.kronosapisql.controller;
 
-import com.kronosapisql.model.PlanoPagamento;
 import com.kronosapisql.model.PlanoVantagens;
-import com.kronosapisql.service.PlanoPagamentoService;
 import com.kronosapisql.service.PlanoVantagensService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -29,7 +27,7 @@ public class PlanoVantagensController {
         return planoVantagensService.selecionar();
     }
 
-    @GetMapping("/selecionar/id/{id}")
+    @GetMapping("/selecionar/{id}")
     @Operation(summary = "Lista uma vantagem pelo id")
     public Optional<PlanoVantagens> selecionarPeloId(@PathVariable Long id) {
         return planoVantagensService.selecionarPeloId(id);

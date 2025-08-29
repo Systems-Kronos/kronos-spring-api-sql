@@ -2,9 +2,17 @@ package com.kronosapisql.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "empresa")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class Empresa {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,46 +39,4 @@ public class Empresa {
     @Column(name = "cCEP")
     private String cep;
 
-    public Empresa(Long id, String nome, String cnpj, String email, String telefone, String cep) {
-        this.id = id;
-        this.nome = nome;
-        this.cnpj = cnpj;
-        this.email = email;
-        this.telefone = telefone;
-        this.cep = cep;
-    }
-
-    public Empresa(String nome, String cnpj, String email, String telefone, String cep) {
-        this.nome = nome;
-        this.cnpj = cnpj;
-        this.email = email;
-        this.telefone = telefone;
-        this.cep = cep;
-    }
-
-    public Empresa() {}
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getNome() {
-        return nome;
-    }
-
-    public String getCnpj() {
-        return cnpj;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public String getTelefone() {
-        return telefone;
-    }
-
-    public String getCep() {
-        return cep;
-    }
 }

@@ -3,9 +3,17 @@ package com.kronosapisql.model;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "setor")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class Setor {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,28 +30,4 @@ public class Setor {
     @JoinColumn(name = "nCdEmpresa", nullable = false)
     private Empresa empresa;
 
-    public Setor(long id, String nome, Empresa empresa) {
-        this.id = id;
-        this.nome = nome;
-        this.empresa = empresa;
-    }
-
-    public Setor(Empresa empresa, String nome) {
-        this.empresa = empresa;
-        this.nome = nome;
-    }
-
-    public Setor() {}
-
-    public long getId() {
-        return id;
-    }
-
-    public String getNome() {
-        return nome;
-    }
-
-    public Empresa getEmpresa() {
-        return empresa;
-    }
 }

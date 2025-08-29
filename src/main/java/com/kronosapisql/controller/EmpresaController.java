@@ -7,8 +7,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
-import java.net.http.HttpResponse;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/empresa")
@@ -24,6 +24,12 @@ public class EmpresaController  {
     @GetMapping("/selecionar")
     public List<Empresa> selecionar() {
         return empresaService.selecionar();
+    }
+
+    @GetMapping("/selecionar/{id}")
+    @Operation(summary = "Lista uma empresa pelo id")
+    public Optional<Empresa> selecionarPeloId(@PathVariable Long id) {
+        return empresaService.selecionarPeloId(id);
     }
 
     @Operation(summary = "Adiciona uma nova empresa")

@@ -27,7 +27,7 @@ public class HabilidadeController {
         return habilidadeService.selecionar();
     }
 
-    @GetMapping("/selecionar/id/{id}")
+    @GetMapping("/selecionar/{id}")
     @Operation(summary = "Lista a habilidade pelo id")
     public Optional<Habilidade> selecionarPeloId(@PathVariable Long id) {
         return habilidadeService.selecionarPeloId(id);
@@ -40,17 +40,17 @@ public class HabilidadeController {
         return ResponseEntity.ok("Habilidade adicionada com sucesso");
     }
 
-    @Operation(summary = "Deleta uma habilidade")
-    @DeleteMapping("/deletar/{id}")
-    public ResponseEntity<String> deletar(@PathVariable long id) {
-        habilidadeService.deletar(id);
-        return ResponseEntity.ok("Habilidade removida com sucesso");
-    }
-
     @Operation(summary = "Atualiza uma habilidade")
     @PutMapping("/atualizar")
     public ResponseEntity<String> atualizar(@RequestBody @Valid Habilidade habilidade) {
         habilidadeService.atualizar(habilidade);
         return ResponseEntity.ok("Habilidade atualizada com sucesso");
+    }
+
+    @Operation(summary = "Deleta uma habilidade")
+    @DeleteMapping("/deletar/{id}")
+    public ResponseEntity<String> deletar(@PathVariable long id) {
+        habilidadeService.deletar(id);
+        return ResponseEntity.ok("Habilidade removida com sucesso");
     }
 }

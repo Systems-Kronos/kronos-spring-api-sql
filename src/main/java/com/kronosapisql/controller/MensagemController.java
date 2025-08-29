@@ -8,7 +8,6 @@ import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -21,7 +20,7 @@ public class MensagemController {
         this.mensagemService = mensagemService;
     }
 
-    @GetMapping("/selecionar/id/{id}")
+    @GetMapping("/selecionar/{id}")
     @Operation(summary = "Lista a mensagem pelo id")
     public Optional<Mensagem> selecionarPeloId(@PathVariable Long id) {
         return mensagemService.selecionarPeloId(id);
