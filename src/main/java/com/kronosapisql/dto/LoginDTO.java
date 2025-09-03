@@ -12,8 +12,8 @@ import lombok.NoArgsConstructor;
 @Builder
 public class LoginDTO {
 
-    @NotNull(message = "O email é obrigatório")
-    private String email;
+    @NotNull(message = "O cpf é obrigatório")
+    private String cpf;
 
     @NotNull(message = "A senha é obrigatória")
     private String senha;
