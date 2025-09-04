@@ -38,5 +38,4 @@ public class Empresa {
     @NotNull
     @Column(name = "cCEP")
     private String cep;
-
 }

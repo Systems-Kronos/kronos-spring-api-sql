@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("api/vantagens")
+@RequestMapping("/api/vantagens")
 @Tag(name = "Vantagens", description = "Operações relacionadas a vantagens dos planos")
 public class PlanoVantagensController {
     private final PlanoVantagensService planoVantagensService;

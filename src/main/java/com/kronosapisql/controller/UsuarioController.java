@@ -60,7 +60,7 @@ public class UsuarioController {
     @Operation(summary = "Faz login de um usuário")
     @PostMapping("/login")
     public ResponseEntity<?> login(@Valid @RequestBody LoginDTO loginDTO) {
-        Optional<Usuario> usuarioEncontrado = usuarioService.login(loginDTO.getEmail(), loginDTO.getSenha());
+        Optional<Usuario> usuarioEncontrado = usuarioService.login(loginDTO.getCpf(), loginDTO.getSenha());
         if (usuarioEncontrado.isPresent()) {
             String token = jwtUtil.gerarToken(String.valueOf(usuarioEncontrado.get().getId()));
             return ResponseEntity.ok(Map.of("token", token));

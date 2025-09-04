@@ -30,5 +30,4 @@ public class Mensagem {
     @Column(name = "cCategoria")
     @NotNull
     private String categoria;
-
 }
