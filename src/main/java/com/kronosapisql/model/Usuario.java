@@ -21,6 +21,11 @@ public class Usuario {
 
     @NotNull
     @ManyToOne
+    @JoinColumn(name = "nCdGestor", nullable = false)
+    private Usuario gestor;
+
+    @NotNull
+    @ManyToOne
     @JoinColumn(name = "nCdEmpresa", nullable = false)
     private Empresa empresa;
 
@@ -28,6 +33,14 @@ public class Usuario {
     @OneToOne
     @JoinColumn(name = "nCdSetor", nullable = false)
     private Setor setor;
+
+    @NotNull
+    @Column(name = "cNmUsuario")
+    private String nome;
+
+    @NotNull
+    @Column(name = "bGestor")
+    private Boolean booleanGestor;
 
     @NotNull
     @Column(name = "nCPF")
@@ -47,4 +60,7 @@ public class Usuario {
     @Column(name = "cFoto")
     private String foto;
 
+    @NotNull
+    @Column(name = "bAtivo")
+    private Boolean ativo;
 }

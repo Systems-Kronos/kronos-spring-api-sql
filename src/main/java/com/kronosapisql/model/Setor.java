@@ -29,5 +29,4 @@ public class Setor {
     @ManyToOne
     @JoinColumn(name = "nCdEmpresa", nullable = false)
     private Empresa empresa;
-
 }

@@ -26,5 +26,4 @@ public class PlanoPagamento {
     @Column(name = "nPreco")
     @NotNull
     private Double preco;
-
 }

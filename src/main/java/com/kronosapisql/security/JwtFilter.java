@@ -14,7 +14,6 @@ import java.io.IOException;
 import java.util.List;
 @Component
 public class JwtFilter extends OncePerRequestFilter {
-
     private final JwtUtil jwtUtil;
 
     public JwtFilter(JwtUtil jwtUtil) {
@@ -30,7 +29,6 @@ public class JwtFilter extends OncePerRequestFilter {
         String authHeader = request.getHeader("Authorization");
         String path = request.getRequestURI();
 
-        // Ignora endpoints públicos
         if (path.equals("/api/usuario/login") || path.equals("/api/usuario/adicionar")) {
             filterChain.doFilter(request, response);
             return;
@@ -42,12 +40,11 @@ public class JwtFilter extends OncePerRequestFilter {
                 String subject = jwtUtil.getSubject(token);
 
                 if (jwtUtil.validarToken(token, subject)) {
-                    // Configura autenticação no Spring Security
                     UsernamePasswordAuthenticationToken auth =
                             new UsernamePasswordAuthenticationToken(
                                     subject,
                                     null,
-                                    List.of(new SimpleGrantedAuthority("USER")) // pode ajustar roles se quiser
+                                    List.of(new SimpleGrantedAuthority("USER"))
                             );
                     SecurityContextHolder.getContext().setAuthentication(auth);
 

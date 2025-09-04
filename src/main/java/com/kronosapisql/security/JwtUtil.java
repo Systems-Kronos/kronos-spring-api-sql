@@ -12,11 +12,10 @@ import java.util.Date;
 
 @Component
 public class JwtUtil {
-
     @Value("${JWT.SECRET}")
     private String secret;
 
-    private String secretKey; // não estático
+    private String secretKey;
 
     private static final long EXPIRATION_TIME = 1000 * 60 * 60;
 
