@@ -15,7 +15,7 @@ public class Tarefa {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "nCdTarefa")
-    private String id;
+    private Long id;
 
     @NotNull
     @Column(name = "cNmTarefa")
