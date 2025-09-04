@@ -14,7 +14,6 @@ import java.util.List;
 @RequestMapping("/api/report")
 @Tag(name = "Reports", description = "Operações relacionadas aos reports")
 public class ReportController {
-
     private final ReportService reportService;
 
     public ReportController(ReportService reportService) {

@@ -9,7 +9,6 @@ import java.util.Optional;
 
 @Service
 public class ReportService {
-
     private final ReportRepository reportRepository;
 
     public ReportService(ReportRepository reportRepository) {
