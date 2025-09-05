@@ -17,8 +17,9 @@ import java.util.List;
 @Component
 public class JwtFilter extends OncePerRequestFilter {
 
-    private static final List<String> EXCLUDED_PATHS = Arrays.asList(
+    private final JwtUtil jwtUtil;
 
+    private static final List<String> EXCLUDED_PATHS = Arrays.asList(
             "/api/usuario/login",
             "/api/usuario/adicionar",
             "/swagger-ui.html",
@@ -32,21 +33,50 @@ public class JwtFilter extends OncePerRequestFilter {
             "/webjars/**"
     );
 
+    public JwtFilter(JwtUtil jwtUtil) {
+        this.jwtUtil = jwtUtil;
+    }
+
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
 
+        String authHeader = request.getHeader("Authorization");
         String path = request.getRequestURI();
 
-        // Ignora paths do Swagger e login
         if (EXCLUDED_PATHS.stream().anyMatch(path::startsWith)) {
             filterChain.doFilter(request, response);
             return;
         }
 
-        // 👉 aqui entra sua lógica normal de validação do JWT
-        // ex: pegar Authorization header, validar token etc.
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+            String token = authHeader.substring(7);
+            try {
+                String subject = jwtUtil.getSubject(token);
+
+                if (jwtUtil.validarToken(token, subject)) {
+                    UsernamePasswordAuthenticationToken auth =
+                            new UsernamePasswordAuthenticationToken(
+                                    subject,
+                                    null,
+                                    List.of(new SimpleGrantedAuthority("USER"))
+                            );
+                    SecurityContextHolder.getContext().setAuthentication(auth);
+
+                    System.out.println("Token válido para: " + subject);
+                } else {
+                    response.sendError(HttpServletResponse.SC_FORBIDDEN, "Token inválido ou expirado");
+                    return;
+                }
+            } catch (Exception e) {
+                response.sendError(HttpServletResponse.SC_FORBIDDEN, "Token inválido");
+                return;
+            }
+        } else {
+            response.sendError(HttpServletResponse.SC_FORBIDDEN, "Token não informado");
+            return;
+        }
 
         filterChain.doFilter(request, response);
     }

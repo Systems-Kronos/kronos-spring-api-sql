@@ -35,8 +35,8 @@ public class UsuarioService {
         this.usuarioRepository.save(usuario);
     }
 
-    public Optional<Usuario> login(String email, String senha) {
-        Optional<Usuario> usuario = usuarioRepository.findByEmail(email);
+    public Optional<Usuario> login(String cpf, String senha) {
+        Optional<Usuario> usuario = usuarioRepository.findByCpf(cpf);
 
         if (usuario.isPresent() && usuario.get().getSenha().equals(senha)) {
             return usuario;

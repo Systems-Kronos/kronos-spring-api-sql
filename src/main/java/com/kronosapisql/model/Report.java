@@ -14,7 +14,7 @@ public class Report {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "nCdReport")
-    private String id;
+    private Long id;
 
     @NotNull
     @ManyToOne
