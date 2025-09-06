@@ -1,9 +1,6 @@
 package com.kronosapisql.service;
 import com.kronosapisql.dto.TarefaRequestDTO;
-import com.kronosapisql.model.Habilidade;
-import com.kronosapisql.model.Tarefa;
-import com.kronosapisql.model.TarefaHabilidade;
-import com.kronosapisql.model.Usuario;
+import com.kronosapisql.model.*;
 import com.kronosapisql.repository.HabilidadeRepository;
 import com.kronosapisql.repository.TarefaRepository;
 import com.kronosapisql.repository.UsuarioRepository;
@@ -46,6 +43,9 @@ public class TarefaService {
                 .urgencia(dto.getUrgencia())
                 .tendencia(dto.getTendencia())
                 .tempoEstimado(dto.getTempoEstimado())
+                .dataAtribuicao(dto.getDataAtribuicao())
+                .dataConclusao(null)
+                .status(dto.getStatus())
                 .build();
 
         List<TarefaHabilidade> habilidades = dto.getHabilidades().stream().map(hDTO -> {
@@ -58,9 +58,15 @@ public class TarefaService {
                     .build();
         }).toList();
 
+        List<TarefaUsuario> usuariosResponsaveis = dto.getUsuariosResponsaveis().stream().map(idUsuario ->{
+            Usuario usuarioResponsavel = usuarioRepository.findById(idUsuario.longValue()).orElseThrow(() ->
+                    new RuntimeException("Usuario não encontrada"));
+            return TarefaUsuario.builder().usuarioOriginal(usuarioResponsavel).usuarioAtuante(usuarioResponsavel).tarefa(tarefa).build();
+        }).toList();
+
+        tarefa.setUsuariosResponsaveis(usuariosResponsaveis);
         tarefa.setHabilidades(habilidades);
 
-        System.out.println(tarefa);
 
         return tarefaRepository.save(tarefa);
     }

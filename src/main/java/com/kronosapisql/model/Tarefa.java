@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -28,7 +29,18 @@ public class Tarefa {
     @NotNull
     @Column(name = "cDescricao")
     private String descricao;
-    
+
+    @NotNull
+    @Column(name = "cstatus")
+    private String status;
+
+    @NotNull
+    @Column(name = "ddataatribuicao")
+    private Date dataAtribuicao;
+
+    @Column(name = "ddataconclusao")
+    private Date dataConclusao;
+
     @NotNull
     @ManyToOne
     @JoinColumn(name = "nCdUsuarioRelator", referencedColumnName = "nCdUsuario")
@@ -53,5 +65,10 @@ public class Tarefa {
     @OneToMany(mappedBy = "tarefa", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private List<TarefaHabilidade> habilidades = new ArrayList<>();
+
+    @OneToMany(mappedBy = "tarefa", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<TarefaUsuario> usuariosResponsaveis= new ArrayList<>();
+
 
 }

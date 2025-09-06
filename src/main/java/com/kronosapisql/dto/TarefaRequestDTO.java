@@ -1,9 +1,11 @@
 package com.kronosapisql.dto;
 
+import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 @Data
@@ -26,5 +28,11 @@ public class TarefaRequestDTO {
     @NotNull
     private Double tempoEstimado;
     @NotNull
-    private List<TarefaHabilidadeDTO> habilidades; // lista de habilidades com prioridade
+    private String status;
+    @NotNull
+    private Date dataAtribuicao;
+    @NotNull
+    private List<TarefaHabilidadeDTO> habilidades;
+    @NotNull
+    private List<Integer> usuariosResponsaveis;
 }
