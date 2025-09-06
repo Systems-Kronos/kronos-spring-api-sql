@@ -10,6 +10,7 @@ import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -52,7 +53,7 @@ public class UsuarioController {
 
     @Operation(summary = "Deleta um usuário")
     @DeleteMapping("/deletar/{id}")
-    public ResponseEntity<String> deletar(@PathVariable long id) {
+    public ResponseEntity<String> deletar(@PathVariable Long id) {
         usuarioService.deletar(id);
         return ResponseEntity.ok("Usuário deletado com sucesso.");
     }

@@ -1,5 +1,6 @@
 package com.kronosapisql.controller;
 
+import com.kronosapisql.dto.TarefaRequestDTO;
 import com.kronosapisql.model.Tarefa;
 import com.kronosapisql.service.TarefaService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -40,8 +41,8 @@ public class TarefaController {
 
     @Operation(summary = "Inserir uma nova tarefa")
     @PostMapping("/adicionar")
-    public ResponseEntity<Tarefa> inserirTarefa(@RequestBody Tarefa tarefa) {
-        Tarefa salvo = tarefaService.salvar(tarefa);
+    public ResponseEntity<Tarefa> inserirTarefa(@RequestBody TarefaRequestDTO dto) {
+        Tarefa salvo = tarefaService.salvar(dto);
         return ResponseEntity.status(201).body(salvo);
     }
 
