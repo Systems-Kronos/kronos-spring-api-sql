@@ -4,6 +4,7 @@ import com.kronosapisql.model.Usuario;
 import com.kronosapisql.repository.UsuarioRepository;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 

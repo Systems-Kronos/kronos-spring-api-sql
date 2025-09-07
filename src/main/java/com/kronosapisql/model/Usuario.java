@@ -7,6 +7,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+
 @Entity
 @Table(name = "usuario")
 @Data
@@ -17,11 +19,10 @@ public class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "nCdUsuario")
-    private long id;
+    private Long id;
 
-    @NotNull
     @ManyToOne
-    @JoinColumn(name = "nCdGestor", nullable = false)
+    @JoinColumn(name = "nCdGestor")
     private Usuario gestor;
 
     @NotNull
