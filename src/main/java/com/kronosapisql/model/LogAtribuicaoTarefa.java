@@ -21,10 +21,11 @@ public class LogAtribuicaoTarefa {
     @Column(name = "nCdLogAtr")
     private Long id;
 
-    @Column(name = "nCdTarefa", nullable = false)
-    private Long idTarefa;
+    @ManyToOne
+    @JoinColumn(name = "nCdTarefa", referencedColumnName = "nCdTarefa")
+    private Tarefa idTarefa;
 
-    @Column(name = "nCdUsuarioA", nullable = false)
+    @Column(name = "nCdUsuario", nullable = false)
     private Long idUsuarioAtribuido;
 
     @Temporal(TemporalType.DATE)
