@@ -10,6 +10,7 @@ import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -30,10 +31,16 @@ public class UsuarioController {
     @GetMapping("/selecionar")
     public List<Usuario> selecionar() {return usuarioService.selecionar();}
 
-    @GetMapping("/selecionar/{id}")
+    @GetMapping("/selecionarId/{id}")
     @Operation(summary = "Lista um usuário pelo id")
     public Optional<Usuario> selecionarPeloId(@PathVariable Long id) {
         return usuarioService.selecionarPeloId(id);
+    }
+
+    @GetMapping("/selecionarCpf/{cpf}")
+    @Operation(summary = "Lista um usuário pelo cpf")
+    public Optional<Usuario> selecionarPeloCpf(@PathVariable String cpf) {
+        return usuarioService.selecionarPeloCpf(cpf);
     }
 
     @Operation(summary = "Adiciona um novo usuário")
@@ -52,7 +59,7 @@ public class UsuarioController {
 
     @Operation(summary = "Deleta um usuário")
     @DeleteMapping("/deletar/{id}")
-    public ResponseEntity<String> deletar(@PathVariable long id) {
+    public ResponseEntity<String> deletar(@PathVariable Long id) {
         usuarioService.deletar(id);
         return ResponseEntity.ok("Usuário deletado com sucesso.");
     }

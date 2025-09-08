@@ -4,6 +4,7 @@ import com.kronosapisql.model.Usuario;
 import com.kronosapisql.repository.UsuarioRepository;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,6 +19,11 @@ public class UsuarioService {
     public Optional<Usuario> selecionarPeloId(Long id) {
         return this.usuarioRepository.findById(id);
     }
+
+    public Optional<Usuario> selecionarPeloCpf(String cpf) {
+        return this.usuarioRepository.findByCpf(cpf);
+    }
+
 
     public List<Usuario> selecionar() {
         return this.usuarioRepository.findAll();
