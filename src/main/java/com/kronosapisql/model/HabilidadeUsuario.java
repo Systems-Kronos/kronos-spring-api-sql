@@ -21,6 +21,5 @@ public class HabilidadeUsuario {
 
     @ManyToOne
     @JoinColumn(name = "nCdUsuario", referencedColumnName = "nCdUsuario")
-    @Column(name = "nCdUsuario", nullable = false)
     private Usuario idUsuario;
 }
