@@ -20,6 +20,11 @@ public class UsuarioService {
         return this.usuarioRepository.findById(id);
     }
 
+    public Optional<Usuario> selecionarPeloCpf(String cpf) {
+        return this.usuarioRepository.findByCpf(cpf);
+    }
+
+
     public List<Usuario> selecionar() {
         return this.usuarioRepository.findAll();
     }
