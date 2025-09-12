@@ -60,17 +60,17 @@ public class JwtFilter extends OncePerRequestFilter {
                             new UsernamePasswordAuthenticationToken(
                                     subject,
                                     null,
-                                    List.of(new SimpleGrantedAuthority("USER"))
+                                    List.of(new SimpleGrantedAuthority("ROLE_USER"))
                             );
                     SecurityContextHolder.getContext().setAuthentication(auth);
 
-                    System.out.println("Token válido para: " + subject);
+                    System.out.println("Token válido para usuário ID: " + subject);
                 } else {
-                    response.sendError(HttpServletResponse.SC_FORBIDDEN, "Token inválido ou expirado");
+                    response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Token inválido ou expirado");
                     return;
                 }
             } catch (Exception e) {
-                response.sendError(HttpServletResponse.SC_FORBIDDEN, "Token inválido");
+                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Erro ao validar token");
                 return;
             }
         } else {
