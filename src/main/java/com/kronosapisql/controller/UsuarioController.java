@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -70,7 +71,10 @@ public class UsuarioController {
         Optional<Usuario> usuarioEncontrado = usuarioService.login(loginDTO.getCpf(), loginDTO.getSenha());
         if (usuarioEncontrado.isPresent()) {
             String token = jwtUtil.gerarToken(String.valueOf(usuarioEncontrado.get().getId()));
-            return ResponseEntity.ok(Map.of("token", token));
+            Map<String, String> response = new HashMap<>();
+            response.put("token", token);
+            return ResponseEntity.ok(response);
+
         } else {
             return ResponseEntity.status(401).body("Usuário ou senha inválidos");
         }
