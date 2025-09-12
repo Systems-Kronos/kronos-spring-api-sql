@@ -12,6 +12,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 @Component
@@ -54,18 +55,18 @@ public class JwtFilter extends OncePerRequestFilter {
             String token = authHeader.substring(7);
             try {
                 String subject = jwtUtil.getSubject(token);
-
                 if (jwtUtil.validarToken(token, subject)) {
                     UsernamePasswordAuthenticationToken auth =
                             new UsernamePasswordAuthenticationToken(
                                     subject,
                                     null,
-                                    List.of(new SimpleGrantedAuthority("ROLE_USER"))
+                                    Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"))
                             );
                     SecurityContextHolder.getContext().setAuthentication(auth);
 
                     System.out.println("Token válido para usuário ID: " + subject);
-                } else {
+                }
+                else {
                     response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Token inválido ou expirado");
                     return;
                 }
