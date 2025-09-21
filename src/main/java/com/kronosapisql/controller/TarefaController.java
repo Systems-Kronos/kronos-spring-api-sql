@@ -1,5 +1,6 @@
 package com.kronosapisql.controller;
 
+import com.kronosapisql.dto.TarefaFunctionDTO;
 import com.kronosapisql.dto.TarefaRequestDTO;
 import com.kronosapisql.model.Tarefa;
 import com.kronosapisql.service.TarefaService;
@@ -21,14 +22,10 @@ public class TarefaController {
         this.tarefaService = tarefaService;
     }
 
-    @Operation(summary = "Lista todas as tarefas")
-    @GetMapping("/selecionar")
-    public ResponseEntity<List<Tarefa>> listarTodasTarefas() {
-        List<Tarefa> tarefas = tarefaService.listarTodasTarefas();
-        if (tarefas.isEmpty()) {
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.ok(tarefas);
+    @Operation(summary = "Lista todas as tarefas baseada na function")
+    @GetMapping("/selecionarFunction/{usuarioId}")
+    public List<TarefaFunctionDTO> listarTarefasUsuario(@PathVariable Long usuarioId, @RequestParam(defaultValue = "1") String tipoTarefa, @RequestParam(defaultValue = "1") String status) {
+        return tarefaService.listarTarefasUsuario(usuarioId, tipoTarefa, status);
     }
 
     @Operation(summary = "Busca tarefa pelo ID")
