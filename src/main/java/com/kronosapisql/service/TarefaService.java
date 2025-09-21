@@ -1,4 +1,5 @@
 package com.kronosapisql.service;
+import com.kronosapisql.dto.TarefaFunctionDTO;
 import com.kronosapisql.dto.TarefaRequestDTO;
 import com.kronosapisql.model.*;
 import com.kronosapisql.repository.HabilidadeRepository;
@@ -23,20 +24,30 @@ public class TarefaService {
         this.tarefaRepository = tarefaRepository;
     }
 
-    public List<Tarefa> listarTodasTarefas() {
-        try {
-            return tarefaRepository.findAll();
-        } catch (Exception e) {
-            throw new RuntimeException("Erro ao listar tarefas: " + e.getMessage());
-        }
-    }
+    public List<TarefaFunctionDTO> listarTarefasUsuario(Long usuario, String tipoTarefa, String status) {
+        List<Object[]> results = tarefaRepository.listarTarefasUsuarioRaw(usuario, tipoTarefa, status);
 
+        return results.stream().map(obj -> new TarefaFunctionDTO(
+                ((Number) obj[0]).longValue(),
+                (String) obj[1],
+                ((Number) obj[2]).longValue(),
+                obj[3] != null ? ((Number) obj[3]).intValue() : null,
+                obj[4] != null ? ((Number) obj[4]).intValue() : null,
+                obj[5] != null ? ((Number) obj[5]).intValue() : null,
+                obj[6] != null ? ((Number) obj[6]).intValue() : null,
+                (String) obj[7],
+                (String) obj[8],
+                obj[9] != null ? ((java.sql.Timestamp) obj[9]).toLocalDateTime() : null,
+                obj[10] != null ? ((java.sql.Timestamp) obj[10]).toLocalDateTime() : null,
+                (String) obj[11]
+        )).toList();
+    }
     public Optional<Tarefa> buscarPorId(String id) {
         if (id == null || id.trim().isEmpty()) {
             throw new IllegalArgumentException("ID da tarefa não pode ser nulo ou vazio");
         }
         try {
-            Optional<Tarefa> tarefa = tarefaRepository.findById(id);
+            Optional<Tarefa> tarefa = tarefaRepository.findById(Long.valueOf(id));
             if (!tarefa.isPresent()) {
                 throw new EntityNotFoundException("Tarefa não encontrada com ID: " + id);
             }
@@ -106,7 +117,7 @@ public class TarefaService {
             throw new IllegalArgumentException("Tarefa não pode ser nula");
         }
         try {
-            if (!tarefaRepository.existsById(String.valueOf(tarefa.getId()))) {
+            if (!tarefaRepository.existsById(tarefa.getId())) {
                 throw new EntityNotFoundException("Tarefa não encontrada com ID: " + tarefa.getId());
             }
             tarefaRepository.save(tarefa);
@@ -122,7 +133,7 @@ public class TarefaService {
             throw new IllegalArgumentException("ID da tarefa não pode ser nulo ou vazio");
         }
         try {
-            tarefaRepository.deleteById(id);
+            tarefaRepository.deleteById(Long.valueOf(id));
         } catch (EmptyResultDataAccessException e) {
             throw new EntityNotFoundException("Tarefa não encontrada com ID: " + id);
         } catch (Exception e) {
