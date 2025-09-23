@@ -4,6 +4,7 @@ package com.kronosapisql.controller;
 import com.kronosapisql.model.LogAtribuicaoTarefa;
 import com.kronosapisql.service.LogAtribuicaoTarefaService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +14,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/log-atribuicao")
+@SecurityRequirement(name = "bearerAuth")
 @Tag(name = "Log Atribuição Tarefa", description = "Operações relacionadas ao Log de Atribuição das Tarefa")
 
 public class LogAtribuicaoTarefaController {

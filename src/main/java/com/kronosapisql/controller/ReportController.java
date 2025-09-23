@@ -3,6 +3,7 @@ package com.kronosapisql.controller;
 import com.kronosapisql.model.Report;
 import com.kronosapisql.service.ReportService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/report")
+@SecurityRequirement(name = "bearerAuth")
 @Tag(name = "Reports", description = "Operações relacionadas aos reports")
 public class ReportController {
     private final ReportService reportService;

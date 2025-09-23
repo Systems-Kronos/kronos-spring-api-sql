@@ -5,6 +5,7 @@ import com.kronosapisql.security.JwtUtil;
 import com.kronosapisql.model.Usuario;
 import com.kronosapisql.service.UsuarioService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +19,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/usuario")
+@SecurityRequirement(name = "bearerAuth")
 @Tag(name = "Usuario", description = "Operações relacionadas ao usuário")
 public class UsuarioController {
     private final UsuarioService usuarioService;
