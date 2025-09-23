@@ -68,8 +68,23 @@ public class UsuarioController {
 
     @Operation(summary = "Faz login de um usuário no App")
     @PostMapping("/loginApp")
-    public ResponseEntity<?> login(@Valid @RequestBody LoginDTO loginDTO) {
+    public ResponseEntity<?> loginApp(@Valid @RequestBody LoginDTO loginDTO) {
         Optional<Usuario> usuarioEncontrado = usuarioService.loginApp(loginDTO.getCpf(), loginDTO.getSenha());
+        if (usuarioEncontrado.isPresent()) {
+            String token = jwtUtil.gerarToken(String.valueOf(usuarioEncontrado.get().getId()));
+            Map<String, String> response = new HashMap<>();
+            response.put("token", token);
+            return ResponseEntity.ok(response);
+
+        } else {
+            return ResponseEntity.status(401).body("Usuário ou senha inválidos");
+        }
+    }
+
+    @Operation(summary = "Faz login de um gestor na Plataforma")
+    @PostMapping("/loginPlataforma")
+    public ResponseEntity<?> loginPlataforma(@Valid @RequestBody LoginDTO loginDTO) {
+        Optional<Usuario> usuarioEncontrado = usuarioService.loginPlataforma(loginDTO.getCpf(), loginDTO.getSenha());
         if (usuarioEncontrado.isPresent()) {
             String token = jwtUtil.gerarToken(String.valueOf(usuarioEncontrado.get().getId()));
             Map<String, String> response = new HashMap<>();
