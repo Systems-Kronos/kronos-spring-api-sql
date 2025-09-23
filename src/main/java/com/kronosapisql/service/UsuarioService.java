@@ -7,7 +7,6 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,7 +24,7 @@ public class UsuarioService {
         }
         try {
             Optional<Usuario> usuario = this.usuarioRepository.findById(id);
-            if (!usuario.isPresent()) {
+            if (!usuario.isEmpty()) {
                 throw new EntityNotFoundException("Usuário não encontrado com ID: " + id);
             }
             return usuario;
@@ -118,7 +117,7 @@ public class UsuarioService {
         }
     }
 
-    public Optional<Usuario> login(String cpf, String senha) {
+    public Optional<Usuario> loginApp(String cpf, String senha) {
         if (cpf == null || cpf.trim().isEmpty()) {
             throw new IllegalArgumentException("CPF não pode ser nulo ou vazio");
         }
@@ -128,13 +127,16 @@ public class UsuarioService {
         
         try {
             Optional<Usuario> usuario = usuarioRepository.findByCpf(cpf);
-            
             if (!usuario.isPresent()) {
                 throw new BadCredentialsException("Credenciais inválidas");
             }
-            
-            if (!usuario.get().getSenha().equals(senha)) {
-                throw new BadCredentialsException("Credenciais inválidas");
+
+            Usuario verificarUsuario = usuario.get();
+            if (!verificarUsuario.getSenha().equals(senha)) {
+                throw new BadCredentialsException("Senha inválida");
+            }
+            if (!verificarUsuario.getAtivo()) {
+                throw new BadCredentialsException("Usuário desligado");
             }
             
             return usuario;
