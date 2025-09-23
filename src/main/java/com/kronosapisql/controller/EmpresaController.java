@@ -3,6 +3,7 @@ package com.kronosapisql.controller;
 import com.kronosapisql.model.Empresa;
 import com.kronosapisql.service.EmpresaService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import jakarta.validation.Valid;
@@ -12,6 +13,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/empresa")
+@SecurityRequirement(name = "bearerAuth")
 @Tag(name = "Empresa", description = "Operações relacionadas à empresa")
 public class EmpresaController  {
     private final EmpresaService empresaService;

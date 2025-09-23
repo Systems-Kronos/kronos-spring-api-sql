@@ -3,6 +3,7 @@ package com.kronosapisql.controller;
 import com.kronosapisql.model.PlanoVantagens;
 import com.kronosapisql.service.PlanoVantagensService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +14,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/vantagens")
+@SecurityRequirement(name = "bearerAuth")
 @Tag(name = "Vantagens", description = "Operações relacionadas a vantagens dos planos")
 public class PlanoVantagensController {
     private final PlanoVantagensService planoVantagensService;
