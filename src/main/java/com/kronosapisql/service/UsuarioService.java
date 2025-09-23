@@ -146,4 +146,37 @@ public class UsuarioService {
             throw new RuntimeException("Erro ao realizar login: " + e.getMessage());
         }
     }
+
+    public Optional<Usuario> loginPlataforma(String cpf, String senha) {
+        if (cpf == null || cpf.trim().isEmpty()) {
+            throw new IllegalArgumentException("CPF não pode ser nulo ou vazio");
+        }
+        if (senha == null || senha.trim().isEmpty()) {
+            throw new IllegalArgumentException("Senha não pode ser nula ou vazia");
+        }
+
+        try {
+            Optional<Usuario> usuario = usuarioRepository.findByCpf(cpf);
+            if (!usuario.isPresent()) {
+                throw new BadCredentialsException("Credenciais inválidas");
+            }
+
+            Usuario verificarUsuario = usuario.get();
+            if (!verificarUsuario.getSenha().equals(senha)) {
+                throw new BadCredentialsException("Senha inválida");
+            }
+            if (!verificarUsuario.getAtivo()) {
+                throw new BadCredentialsException("Usuário desligado");
+            }
+            if (!verificarUsuario.getBooleanGestor()) {
+                throw new BadCredentialsException("Acesso restrito a gestores");
+            }
+
+            return usuario;
+        } catch (BadCredentialsException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao realizar login: " + e.getMessage());
+        }
+    }
 }
