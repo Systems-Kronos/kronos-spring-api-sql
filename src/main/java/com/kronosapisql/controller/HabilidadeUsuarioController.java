@@ -1,9 +1,9 @@
 package com.kronosapisql.controller;
 
-
 import com.kronosapisql.model.HabilidadeUsuario;
 import com.kronosapisql.service.HabilidadeUsuarioService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -13,10 +13,10 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/habilidade-usuario")
+@SecurityRequirement(name = "bearerAuth")
 @Tag(name = "Habilidade Usuario", description = "Operações relacionadas ao Habilidade Usuario")
 
 public class HabilidadeUsuarioController {
-
     private final HabilidadeUsuarioService habilidadeUsuarioService;
 
     public HabilidadeUsuarioController(HabilidadeUsuarioService habilidadeUsuarioService) {
@@ -50,7 +50,3 @@ public class HabilidadeUsuarioController {
         return ResponseEntity.ok("Habilidade do usuario deletada com sucesso.");
     }
 }
-
-
-
-

@@ -23,6 +23,10 @@ public class ReportService {
         return reportRepository.findById(id);
     }
 
+    public Optional<Report> buscarPorStatus(String status) {
+        return reportRepository.findByStatus(status);
+    }
+
     public Report salvar(Report report) {
         return reportRepository.save(report);
     }
@@ -30,6 +34,7 @@ public class ReportService {
     public void atualizar(Report report) {
         this.reportRepository.save(report);
     }
+
     public void deletar(String id) {
         reportRepository.deleteById(id);
     }

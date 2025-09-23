@@ -3,6 +3,7 @@ package com.kronosapisql.controller;
 import com.kronosapisql.model.Mensagem;
 import com.kronosapisql.service.MensagemService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +13,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/mensagem")
+@SecurityRequirement(name = "bearerAuth")
 @Tag(name = "Mensagem", description = "Operações relacionadas ao mensagem")
 public class MensagemController {
     private final MensagemService mensagemService;

@@ -3,6 +3,7 @@ package com.kronosapisql.controller;
 import com.kronosapisql.model.Setor;
 import com.kronosapisql.service.SetorService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +14,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/setor")
+@SecurityRequirement(name = "bearerAuth")
 @Tag(name = "Setor", description = "Operações relacionadas ao setor")
 public class SetorController {
     private final SetorService setorService;

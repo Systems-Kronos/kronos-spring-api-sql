@@ -14,7 +14,6 @@ import java.util.Date;
 
 @Component
 public class JwtUtil {
-
     private final Key chaveSecreta = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 
     public String gerarToken(String subject) {
