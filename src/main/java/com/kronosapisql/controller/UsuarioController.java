@@ -11,7 +11,6 @@ import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -67,10 +66,10 @@ public class UsuarioController {
         return ResponseEntity.ok("Usuário deletado com sucesso.");
     }
 
-    @Operation(summary = "Faz login de um usuário")
-    @PostMapping("/login")
+    @Operation(summary = "Faz login de um usuário no App")
+    @PostMapping("/loginApp")
     public ResponseEntity<?> login(@Valid @RequestBody LoginDTO loginDTO) {
-        Optional<Usuario> usuarioEncontrado = usuarioService.login(loginDTO.getCpf(), loginDTO.getSenha());
+        Optional<Usuario> usuarioEncontrado = usuarioService.loginApp(loginDTO.getCpf(), loginDTO.getSenha());
         if (usuarioEncontrado.isPresent()) {
             String token = jwtUtil.gerarToken(String.valueOf(usuarioEncontrado.get().getId()));
             Map<String, String> response = new HashMap<>();
