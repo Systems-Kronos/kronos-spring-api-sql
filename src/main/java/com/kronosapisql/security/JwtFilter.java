@@ -17,7 +17,6 @@ import java.util.List;
 
 @Component
 public class JwtFilter extends OncePerRequestFilter {
-
     private final JwtUtil jwtUtil;
 
     private static final List<String> EXCLUDED_PATHS = Arrays.asList(

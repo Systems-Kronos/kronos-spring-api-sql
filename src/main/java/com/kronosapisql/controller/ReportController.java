@@ -32,10 +32,18 @@ public class ReportController {
         return ResponseEntity.ok(reports);
     }
 
-    @Operation(summary = "Busca report pelo ID")
+    @Operation(summary = "Lista report pelo ID")
     @GetMapping("/listar/{id}")
     public ResponseEntity<Report> buscarPorId(@PathVariable String id) {
         return reportService.buscarPorId(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @Operation(summary = "Lista report pelo status")
+    @GetMapping("/listar/{status}")
+    public ResponseEntity<Report> buscarPorStatus(@PathVariable String status) {
+        return reportService.buscarPorStatus(status)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
@@ -62,7 +70,3 @@ public class ReportController {
         return ResponseEntity.noContent().build();
     }
 }
-
-
-
-

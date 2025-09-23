@@ -15,7 +15,6 @@ import java.util.Date;
 @AllArgsConstructor
 @Builder
 public class LogAtribuicaoTarefa {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "nCdLogAtr")
@@ -34,5 +33,4 @@ public class LogAtribuicaoTarefa {
 
     @Column(name = "cObservacao", length = 300)
     private String observacao;
-
 }

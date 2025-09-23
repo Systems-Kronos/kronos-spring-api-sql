@@ -15,7 +15,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class TarefaUsuario {
-
     @Id
     @Column(name = "nCdTarefaUsuario")
     @GeneratedValue(strategy = GenerationType.IDENTITY)

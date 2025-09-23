@@ -1,6 +1,5 @@
 package com.kronosapisql.controller;
 
-
 import com.kronosapisql.model.LogAtribuicaoTarefa;
 import com.kronosapisql.service.LogAtribuicaoTarefaService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -18,7 +17,6 @@ import java.util.Optional;
 @Tag(name = "Log Atribuição Tarefa", description = "Operações relacionadas ao Log de Atribuição das Tarefa")
 
 public class LogAtribuicaoTarefaController {
-
     private final LogAtribuicaoTarefaService logAtribuicaoTarefaService;
 
     public LogAtribuicaoTarefaController(LogAtribuicaoTarefaService logAtribuicaoTarefaService) {
@@ -52,7 +50,3 @@ public class LogAtribuicaoTarefaController {
         return ResponseEntity.ok("Log deletado com sucesso.");
     }
 }
-
-
-
-

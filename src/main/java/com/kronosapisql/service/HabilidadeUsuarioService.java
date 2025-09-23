@@ -1,6 +1,5 @@
 package com.kronosapisql.service;
 
-
 import com.kronosapisql.model.HabilidadeUsuario;
 import com.kronosapisql.repository.HabilidadeUsuarioRepository;
 import org.springframework.stereotype.Service;
@@ -10,7 +9,6 @@ import java.util.Optional;
 
 @Service
 public class HabilidadeUsuarioService {
-
     private final HabilidadeUsuarioRepository habilidadeUsuarioRepository;
 
     public HabilidadeUsuarioService(HabilidadeUsuarioRepository habilidadeUsuarioRepository) {
@@ -36,6 +34,4 @@ public class HabilidadeUsuarioService {
     public void atualizar(HabilidadeUsuario habilidadeUsuario) {
         this.habilidadeUsuarioRepository.save(habilidadeUsuario);
     }
-
 }
-
