@@ -42,6 +42,7 @@ public class TarefaService {
                 (String) obj[11]
         )).toList();
     }
+
     public Optional<Tarefa> buscarPorId(String id) {
         if (id == null || id.trim().isEmpty()) {
             throw new IllegalArgumentException("ID da tarefa não pode ser nulo ou vazio");

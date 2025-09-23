@@ -12,7 +12,6 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class TarefaHabilidade {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "nCdTarefaHabilidade")

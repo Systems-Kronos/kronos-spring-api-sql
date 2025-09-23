@@ -3,7 +3,6 @@ package com.kronosapisql.dto;
 import java.time.LocalDateTime;
 
 public class TarefaFunctionDTO {
-
     private Long id;
     private String nome;
     private Long usuarioRelator;

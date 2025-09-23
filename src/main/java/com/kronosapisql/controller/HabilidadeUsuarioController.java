@@ -1,6 +1,5 @@
 package com.kronosapisql.controller;
 
-
 import com.kronosapisql.model.HabilidadeUsuario;
 import com.kronosapisql.service.HabilidadeUsuarioService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -18,7 +17,6 @@ import java.util.Optional;
 @Tag(name = "Habilidade Usuario", description = "Operações relacionadas ao Habilidade Usuario")
 
 public class HabilidadeUsuarioController {
-
     private final HabilidadeUsuarioService habilidadeUsuarioService;
 
     public HabilidadeUsuarioController(HabilidadeUsuarioService habilidadeUsuarioService) {
@@ -52,7 +50,3 @@ public class HabilidadeUsuarioController {
         return ResponseEntity.ok("Habilidade do usuario deletada com sucesso.");
     }
 }
-
-
-
-

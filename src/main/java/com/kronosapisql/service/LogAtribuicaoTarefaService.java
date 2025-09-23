@@ -1,6 +1,5 @@
 package com.kronosapisql.service;
 
-
 import com.kronosapisql.model.LogAtribuicaoTarefa;
 import com.kronosapisql.model.Usuario;
 import com.kronosapisql.repository.LogAtribuicaoTarefaRepository;
@@ -11,7 +10,6 @@ import java.util.Optional;
 
 @Service
 public class LogAtribuicaoTarefaService {
-
     private final LogAtribuicaoTarefaRepository logAtribuicaoTarefaRepository;
 
     public LogAtribuicaoTarefaService(LogAtribuicaoTarefaRepository logAtribuicaoTarefaRepository) {
@@ -36,6 +34,4 @@ public class LogAtribuicaoTarefaService {
     public void atualizar(LogAtribuicaoTarefa logAtribuicaoTarefa) {
         this.logAtribuicaoTarefaRepository.save(logAtribuicaoTarefa);
     }
-
 }
-

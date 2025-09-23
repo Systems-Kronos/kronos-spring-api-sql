@@ -52,7 +52,6 @@ public class TarefaController {
         return ResponseEntity.ok("Tarefa atualizada com sucesso.");
     }
 
-
     @Operation(summary = "Deleta uma tarefa pelo ID")
     @DeleteMapping("/deletar/{id}")
     public ResponseEntity<Void> deletarTarefa(@PathVariable String id) {
