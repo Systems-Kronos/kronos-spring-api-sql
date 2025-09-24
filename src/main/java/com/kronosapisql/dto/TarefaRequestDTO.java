@@ -29,7 +29,7 @@ public class TarefaRequestDTO {
     private Integer tendencia;
 
     @NotNull
-    private Double tempoEstimado;
+    private Integer tempoEstimado;
 
     @NotNull
     private String status;

@@ -58,8 +58,8 @@ public class Tarefa {
     private Integer tendencia;
 
     @NotNull
-    @Column(name = "nTempoEstimado")
-    private Double tempoEstimado;
+    @Column(name = "iTempoEstimado")
+    private Integer tempoEstimado;
 
     @OneToMany(mappedBy = "tarefa", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
