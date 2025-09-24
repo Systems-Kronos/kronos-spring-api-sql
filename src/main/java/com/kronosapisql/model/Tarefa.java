@@ -59,7 +59,7 @@ public class Tarefa {
 
     @NotNull
     @Column(name = "iTempoEstimado")
-    private Double tempoEstimado;
+    private Integer tempoEstimado;
 
     @OneToMany(mappedBy = "tarefa", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
