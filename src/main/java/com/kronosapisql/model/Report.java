@@ -10,7 +10,6 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class Report {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "nCdReport")
@@ -28,4 +27,8 @@ public class Report {
     @NotNull
     @Column(name = "cProblema")
     private String problema;
+
+    @NotNull
+    @Column(name = "cStatus")
+    private String status;
 }

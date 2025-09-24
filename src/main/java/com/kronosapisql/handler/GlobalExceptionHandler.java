@@ -15,7 +15,6 @@ import java.sql.SQLIntegrityConstraintViolationException;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
-
     // Erro de validação
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<String> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {

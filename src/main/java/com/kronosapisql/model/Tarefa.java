@@ -16,7 +16,6 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class Tarefa {
-    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "nCdTarefa")
@@ -69,6 +68,4 @@ public class Tarefa {
     @OneToMany(mappedBy = "tarefa", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private List<TarefaUsuario> usuariosResponsaveis= new ArrayList<>();
-
-
 }
