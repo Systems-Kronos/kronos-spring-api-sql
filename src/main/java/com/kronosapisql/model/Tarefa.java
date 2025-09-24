@@ -59,7 +59,7 @@ public class Tarefa {
     private Integer tendencia;
 
     @NotNull
-    @Column(name = "nTempoEstimado")
+    @Column(name = "iTempoEstimado")
     private Double tempoEstimado;
 
     @OneToMany(mappedBy = "tarefa", cascade = CascadeType.ALL, orphanRemoval = true)
