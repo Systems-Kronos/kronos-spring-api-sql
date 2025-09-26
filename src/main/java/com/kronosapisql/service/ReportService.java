@@ -71,9 +71,6 @@ public class ReportService {
             default: throw new IllegalArgumentException("Status inválido: " + status);
         }
     }
-
-
-
     public void atualizar(Report report) {
         this.reportRepository.save(report);
     }
