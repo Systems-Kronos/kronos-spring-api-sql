@@ -1,5 +1,6 @@
 package com.kronosapisql.controller;
 
+import com.kronosapisql.dto.ReportDTO;
 import com.kronosapisql.model.Report;
 import com.kronosapisql.service.ReportService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -50,10 +51,9 @@ public class ReportController {
 
     @Operation(summary = "Inserir um novo report")
     @PostMapping("/adicionar")
-    public ResponseEntity<Report> inserirReport(@RequestBody Report report) {
-        Report salvo = reportService.salvar(report);
-
-        return ResponseEntity.status(201).body(salvo);
+    public ResponseEntity<Report> inserirReport(@RequestBody ReportDTO dto) {
+        Report reportSalvo = reportService.criarReport(dto);
+        return ResponseEntity.ok(reportSalvo);
     }
 
     @Operation(summary = "Atualiza um report")
