@@ -11,6 +11,7 @@ import java.util.Optional;
 
 public interface ReportRepository extends JpaRepository<Report, String> {
     Optional<Report> findByStatus(String status);
+
     @Modifying
     @Transactional
     @Query(value = "INSERT INTO report (cDescricao, cProblema, cStatus, nCdTarefa) " +
@@ -20,4 +21,3 @@ public interface ReportRepository extends JpaRepository<Report, String> {
                              @Param("status") String status,
                              @Param("tarefaId") Long tarefaId);
 }
-
