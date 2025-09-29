@@ -1,11 +1,13 @@
 package com.kronosapisql.controller;
 
+import com.kronosapisql.dto.LogAtribuicaoTarefaDTO;
 import com.kronosapisql.model.LogAtribuicaoTarefa;
 import com.kronosapisql.service.LogAtribuicaoTarefaService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,9 +33,13 @@ public class LogAtribuicaoTarefaController {
 
     @Operation(summary = "Adiciona um novo log")
     @PostMapping("/adicionar")
-    public ResponseEntity<String> adicionar(@Valid @RequestBody LogAtribuicaoTarefa logAtribuicaoTarefa) {
-        logAtribuicaoTarefaService.salvar(logAtribuicaoTarefa);
-        return ResponseEntity.ok("Log adicionado com sucesso.");
+    public ResponseEntity<LogAtribuicaoTarefaDTO> adicionar(@RequestBody LogAtribuicaoTarefaDTO dto) {
+        try {
+            LogAtribuicaoTarefaDTO salvo = logAtribuicaoTarefaService.adicionarLog(dto);
+            return new ResponseEntity<>(salvo, HttpStatus.CREATED);
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
     }
 
     @Operation(summary = "Atualiza um log")

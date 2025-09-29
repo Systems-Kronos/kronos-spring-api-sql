@@ -44,7 +44,7 @@ public class Usuario {
     private Boolean booleanGestor;
 
     @NotNull
-    @Column(name = "nCPF")
+    @Column(name = "cCPF")
     private String cpf;
 
     @Column(name = "cTelefone")
