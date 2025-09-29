@@ -20,13 +20,17 @@ public class Setor {
     @Column(name = "nCdSetor")
     private long id;
 
-    @Column(name = "cNmSetor")
-    @NotNull
-    @Schema(description = "Nome do setor", example = "Limpeza")
-    private String nome;
-
     @NotNull
     @ManyToOne
     @JoinColumn(name = "nCdEmpresa", nullable = false)
     private Empresa empresa;
+
+    @NotNull
+    @Schema(description = "Nome do setor", example = "Limpeza")
+    @Column(name = "cNmSetor")
+    private String nome;
+
+    @NotNull
+    @Column(name = "cSgSetor")
+    private String siglaSetor;
 }

@@ -24,18 +24,26 @@ public class Empresa {
     private String nome;
 
     @NotNull
-    @Column(name = "cCNPJ")
-    private String cnpj;
+    @Column(name = "cSgEmpresa")
+    private String siglaEmpresa;
 
     @NotNull
-    @Column(name = "cEmail")
-    private String email;
+    @Column(name = "cCNPJ")
+    private String cnpj;
 
     @NotNull
     @Column(name = "cTelefone")
     private String telefone;
 
     @NotNull
+    @Column(name = "cEmail")
+    private String email;
+
+    @NotNull
     @Column(name = "cCEP")
     private String cep;
+
+    @NotNull
+    @Column(name = "bAtivo")
+    private Boolean ativo;
 }

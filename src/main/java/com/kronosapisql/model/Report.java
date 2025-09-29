@@ -9,10 +9,8 @@ import lombok.*;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Setter
-@Getter
+@Builder
 public class Report {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "nCdReport")
@@ -22,6 +20,11 @@ public class Report {
     @ManyToOne
     @JoinColumn(name = "nCdTarefa", nullable = false)
     private Tarefa tarefa;
+
+    @NotNull
+    @ManyToOne
+    @JoinColumn(name = "nCdUsuario", nullable = false)
+    private Usuario usuario;
 
     @NotNull
     @Column(name = "cDescricao")
