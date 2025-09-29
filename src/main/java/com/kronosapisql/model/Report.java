@@ -24,6 +24,11 @@ public class Report {
     private Tarefa tarefa;
 
     @NotNull
+    @ManyToOne
+    @JoinColumn(name = "nCdUsuario", nullable = false)
+    private Usuario usuario;
+
+    @NotNull
     @Column(name = "cDescricao")
     private String descricao;
 

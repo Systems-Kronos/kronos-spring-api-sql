@@ -13,11 +13,12 @@ public interface ReportRepository extends JpaRepository<Report, String> {
     Optional<Report> findByStatus(String status);
     @Modifying
     @Transactional
-    @Query(value = "INSERT INTO report (cDescricao, cProblema, cStatus, nCdTarefa) " +
-            "VALUES (:descricao, :problema, CAST(:status AS opcao_status), :tarefaId)", nativeQuery = true)
+    @Query(value = "INSERT INTO report (cDescricao, cProblema, cStatus, nCdTarefa, nCdUsuario) " +
+            "VALUES (:descricao, :problema, CAST(:status AS opcao_status), :tarefaId, :usuarioId)", nativeQuery = true)
     void inserirReportNative(@Param("descricao") String descricao,
                              @Param("problema") String problema,
                              @Param("status") String status,
-                             @Param("tarefaId") Long tarefaId);
+                             @Param("tarefaId") Long tarefaId,
+                             @Param("usuarioId") Long usuarioId);
 }
 
