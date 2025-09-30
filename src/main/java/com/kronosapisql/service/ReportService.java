@@ -4,9 +4,11 @@ import com.kronosapisql.dto.ReportDTO;
 import com.kronosapisql.model.OpcaoStatus;
 import com.kronosapisql.model.Report;
 import com.kronosapisql.model.Tarefa;
+import com.kronosapisql.model.Usuario;
 import com.kronosapisql.repository.ReportRepository;
 import com.kronosapisql.repository.TarefaRepository;
 import jakarta.persistence.EntityNotFoundException;
+import com.kronosapisql.repository.UsuarioRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -16,10 +18,13 @@ import java.util.List;
 public class ReportService {
     private final ReportRepository reportRepository;
     private final TarefaRepository tarefaRepository;
+    private final UsuarioRepository usuarioRepository;
 
-    public ReportService(ReportRepository reportRepository, TarefaRepository tarefaRepository) {
+
+    public ReportService(ReportRepository reportRepository, TarefaRepository tarefaRepository, UsuarioRepository usuarioRepository) {
         this.reportRepository = reportRepository;
         this.tarefaRepository = tarefaRepository;
+        this.usuarioRepository = usuarioRepository;
     }
 
     public Report buscarPorId(Long id) {
@@ -74,13 +79,18 @@ public class ReportService {
         Tarefa tarefa = tarefaRepository.findById(dto.getIdTarefa())
                 .orElseThrow(() -> new RuntimeException("Tarefa não encontrada com ID " + dto.getIdTarefa()));
 
+        Usuario usuario = usuarioRepository.findById(dto.getIdUsuario())
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado com ID " + dto.getIdUsuario()));
+
         String statusDb = converterStatusParaBanco(dto.getStatus());
-        reportRepository.inserirReportNative(dto.getDescricao(), dto.getProblema(), statusDb, tarefa.getId());
+
+        reportRepository.inserirReportNative(dto.getDescricao(),dto.getProblema(), statusDb, usuario.getId(), tarefa.getId());
 
         Report report = new Report();
         report.setDescricao(dto.getDescricao());
         report.setProblema(dto.getProblema());
         report.setStatus(OpcaoStatus.valueOf(statusDb.toUpperCase().replace(" ", "_")));
+        report.setUsuario(usuario);
         report.setTarefa(tarefa);
 
         return report;
