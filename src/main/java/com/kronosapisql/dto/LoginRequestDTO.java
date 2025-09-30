@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class LoginDTO {
+public class LoginRequestDTO {
     @NotNull(message = "O cpf é obrigatório")
     private String cpf;
 

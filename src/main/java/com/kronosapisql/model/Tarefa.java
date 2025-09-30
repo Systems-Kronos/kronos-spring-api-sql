@@ -26,24 +26,19 @@ public class Tarefa {
     private String nome;
 
     @NotNull
-    @Column(name = "cDescricao")
-    private String descricao;
-
-    @NotNull
-    @Column(name = "cstatus")
-    private String status;
-
-    @NotNull
-    @Column(name = "ddataatribuicao")
-    private Date dataAtribuicao;
-
-    @Column(name = "ddataconclusao")
-    private Date dataConclusao;
-
-    @NotNull
     @ManyToOne
     @JoinColumn(name = "nCdUsuarioRelator", referencedColumnName = "nCdUsuario")
     private Usuario usuarioRelator;
+
+    @NotNull
+    @OneToMany(mappedBy = "tarefa", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<TarefaUsuario> usuariosResponsaveis= new ArrayList<>();
+
+    @NotNull
+    @OneToMany(mappedBy = "tarefa", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<TarefaHabilidade> habilidades = new ArrayList<>();
 
     @NotNull
     @Column(name = "iGravidade")
@@ -61,11 +56,18 @@ public class Tarefa {
     @Column(name = "iTempoEstimado")
     private Integer tempoEstimado;
 
-    @OneToMany(mappedBy = "tarefa", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
-    private List<TarefaHabilidade> habilidades = new ArrayList<>();
+    @NotNull
+    @Column(name = "cDescricao")
+    private String descricao;
 
-    @OneToMany(mappedBy = "tarefa", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
-    private List<TarefaUsuario> usuariosResponsaveis= new ArrayList<>();
+    @NotNull
+    @Column(name = "cstatus")
+    private String status;
+
+    @NotNull
+    @Column(name = "dDataAtribuicao")
+    private Date dataAtribuicao;
+
+    @Column(name = "dDataConclusao")
+    private Date dataConclusao;
 }

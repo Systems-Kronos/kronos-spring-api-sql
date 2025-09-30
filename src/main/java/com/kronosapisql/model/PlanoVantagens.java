@@ -24,11 +24,11 @@ public class PlanoVantagens {
     @JoinColumn(name = "nCdPlano", nullable = false)
     private PlanoPagamento planoPagamento;
 
-    @Column(name = "cNmVantagem")
     @NotNull
+    @Column(name = "cNmVantagem")
     private String nomeVantagem;
 
-    @Column(name = "cDescricao")
     @NotNull
+    @Column(name = "cDescricao")
     private String descricao;
 }

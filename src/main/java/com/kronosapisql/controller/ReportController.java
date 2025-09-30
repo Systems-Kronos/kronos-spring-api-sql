@@ -25,8 +25,8 @@ public class ReportController {
 
     @Operation(summary = "Lista todos os reports")
     @GetMapping("/listar")
-    public ResponseEntity<List<Report>> listarTodosReports() {
-        List<Report> reports = reportService.listarTodosReports();
+    public ResponseEntity<List<Report>> listarReport() {
+        List<Report> reports = reportService.listar();
         if (reports.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
@@ -34,19 +34,17 @@ public class ReportController {
     }
 
     @Operation(summary = "Lista report pelo ID")
-    @GetMapping("/listar/{id}")
-    public ResponseEntity<Report> buscarPorId(@PathVariable String id) {
-        return reportService.buscarPorId(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    @GetMapping("/selecionar/{id}")
+    public ResponseEntity<Report> buscarPorId(@PathVariable Long id) {
+        Report report = reportService.buscarPorId(id);
+        return ResponseEntity.ok(report);
     }
 
     @Operation(summary = "Lista report pelo status")
-    @GetMapping("/listar/{status}")
+    @GetMapping("/selecionar/{status}")
     public ResponseEntity<Report> buscarPorStatus(@PathVariable String status) {
-        return reportService.buscarPorStatus(status)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        Report report = reportService.buscarPorStatus(status);
+        return ResponseEntity.ok(report);
     }
 
     @Operation(summary = "Inserir um novo report")
@@ -58,14 +56,14 @@ public class ReportController {
 
     @Operation(summary = "Atualiza um report")
     @PutMapping("/atualizar")
-    public ResponseEntity<String> atualizar(@Valid @RequestBody Report report) {
+    public ResponseEntity<String> atualizarReport(@Valid @RequestBody Report report) {
         reportService.atualizar(report);
         return ResponseEntity.ok("Report atualizada com sucesso.");
     }
 
     @Operation(summary = "Deleta um Report pelo ID")
     @DeleteMapping("/deletar/{id}")
-    public ResponseEntity<Void> deletarReport(@PathVariable String id) {
+    public ResponseEntity<Void> deletarReport(@PathVariable Long id) {
         reportService.deletar(id);
         return ResponseEntity.noContent().build();
     }

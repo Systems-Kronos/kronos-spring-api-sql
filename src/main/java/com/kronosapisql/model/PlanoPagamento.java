@@ -19,11 +19,11 @@ public class PlanoPagamento {
     @Column(name = "nCdPlano")
     private long id;
 
-    @Column(name = "cNmPlano")
     @NotNull
+    @Column(name = "cNmPlano")
     private String nomePlano;
 
-    @Column(name = "nPreco")
     @NotNull
+    @Column(name = "nPreco")
     private Double preco;
 }

@@ -32,10 +32,9 @@ public class TarefaController {
 
     @Operation(summary = "Busca tarefa pelo ID")
     @GetMapping("/selecionar/{id}")
-    public ResponseEntity<Tarefa> buscarPorId(@PathVariable String id) {
-        return tarefaService.buscarPorId(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<Tarefa> buscarPorId(@PathVariable Long id) {
+        Tarefa tarefa = tarefaService.buscarPorId(id);
+        return ResponseEntity.ok(tarefa);
     }
 
     @Operation(summary = "Inserir uma nova tarefa")
@@ -47,14 +46,14 @@ public class TarefaController {
 
     @Operation(summary = "Atualiza uma tarefa")
     @PutMapping("/atualizar")
-    public ResponseEntity<String> atualizar(@Valid @RequestBody Tarefa tarefa) {
+    public ResponseEntity<String> atualizarTarefa(@Valid @RequestBody Tarefa tarefa) {
         tarefaService.atualizar(tarefa);
         return ResponseEntity.ok("Tarefa atualizada com sucesso.");
     }
 
     @Operation(summary = "Deleta uma tarefa pelo ID")
     @DeleteMapping("/deletar/{id}")
-    public ResponseEntity<Void> deletarTarefa(@PathVariable String id) {
+    public ResponseEntity<Void> deletarTarefa(@PathVariable Long id) {
         tarefaService.deletar(id);
         return ResponseEntity.noContent().build();
     }

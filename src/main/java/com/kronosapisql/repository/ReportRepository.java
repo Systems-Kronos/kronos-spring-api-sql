@@ -9,8 +9,9 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.Optional;
 
-public interface ReportRepository extends JpaRepository<Report, String> {
+public interface ReportRepository extends JpaRepository<Report, Long> {
     Optional<Report> findByStatus(String status);
+
     @Modifying
     @Transactional
     @Query(value = "INSERT INTO report (cDescricao, cProblema, cStatus, nCdTarefa, nCdUsuario) " +
@@ -21,4 +22,3 @@ public interface ReportRepository extends JpaRepository<Report, String> {
                              @Param("tarefaId") Long tarefaId,
                              @Param("usuarioId") Long usuarioId);
 }
-

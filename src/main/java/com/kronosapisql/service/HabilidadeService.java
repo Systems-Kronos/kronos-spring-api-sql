@@ -2,36 +2,55 @@ package com.kronosapisql.service;
 
 import com.kronosapisql.model.Habilidade;
 import com.kronosapisql.repository.HabilidadeRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class HabilidadeService {
-    private HabilidadeRepository habilidadeRepository;
+    private final HabilidadeRepository habilidadeRepository;
 
     public HabilidadeService(HabilidadeRepository habilidadeRepository) {
         this.habilidadeRepository = habilidadeRepository;
     }
 
-    public Optional<Habilidade> selecionarPeloId(Long id) {
-        return this.habilidadeRepository.findById(id);
+    public Habilidade buscarPorId(Long id) {
+        if (id == null) {
+            throw new IllegalArgumentException("ID não pode ser nulo");
+        }
+        return habilidadeRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Habilidade não encontrado com ID: " + id));
     }
 
-    public List<Habilidade> selecionar() {
-        return this.habilidadeRepository.findAll();
+    public List<Habilidade> listar() {
+        return habilidadeRepository.findAll();
     }
 
     public Habilidade salvar(Habilidade habilidade) {
-        return this.habilidadeRepository.save(habilidade);
+        if (habilidade == null) {
+            throw new IllegalArgumentException("Habilidade não pode ser nula");
+        }
+        return habilidadeRepository.save(habilidade);
+    }
+
+    public Habilidade atualizar(Habilidade habilidade) {
+        if (habilidade == null) {
+            throw new IllegalArgumentException("Habilidade não pode ser nula");
+        }
+        if (!habilidadeRepository.existsById(habilidade.getId())) {
+            throw new EntityNotFoundException("Habilidade não encontrado com ID: " + habilidade.getId());
+        }
+        return habilidadeRepository.save(habilidade);
     }
 
     public void deletar(Long id) {
-        this.habilidadeRepository.deleteById(id);
-    }
-
-    public void atualizar(Habilidade habilidade) {
-        this.habilidadeRepository.save(habilidade);
+        if (id == null) {
+            throw new IllegalArgumentException("ID não pode ser nulo");
+        }
+        if (!habilidadeRepository.existsById(id)) {
+            throw new EntityNotFoundException("Habilidade não encontrado com ID: " + id);
+        }
+        habilidadeRepository.deleteById(id);
     }
 }

@@ -1,7 +1,17 @@
 package com.kronosapisql.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class TarefaFunctionDTO {
     private Long id;
     private String nome;
@@ -16,121 +26,20 @@ public class TarefaFunctionDTO {
     private LocalDateTime dataConclusao;
     private String origemTarefa;
 
-    // construtor vazio
-    public TarefaFunctionDTO() {}
-
-    public TarefaFunctionDTO(Long id, String nome, Long usuarioRelator,
-                             Integer gravidade, Integer urgencia, Integer tendencia,
-                             Integer tempoEstimado, String descricao, String status,
-                             LocalDateTime dataAtribuicao, LocalDateTime dataConclusao,
-                             String origemTarefa) {
-        this.id = id;
-        this.nome = nome;
-        this.usuarioRelator = usuarioRelator;
-        this.gravidade = gravidade;
-        this.urgencia = urgencia;
-        this.tendencia = tendencia;
-        this.tempoEstimado = tempoEstimado;
-        this.descricao = descricao;
-        this.status = status;
-        this.dataAtribuicao = dataAtribuicao;
-        this.dataConclusao = dataConclusao;
-        this.origemTarefa = origemTarefa;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public Long getUsuarioRelator() {
-        return usuarioRelator;
-    }
-
-    public void setUsuarioRelator(Long usuarioRelator) {
-        this.usuarioRelator = usuarioRelator;
-    }
-
-    public Integer getGravidade() {
-        return gravidade;
-    }
-
-    public void setGravidade(Integer gravidade) {
-        this.gravidade = gravidade;
-    }
-
-    public Integer getUrgencia() {
-        return urgencia;
-    }
-
-    public void setUrgencia(Integer urgencia) {
-        this.urgencia = urgencia;
-    }
-
-    public Integer getTendencia() {
-        return tendencia;
-    }
-
-    public void setTendencia(Integer tendencia) {
-        this.tendencia = tendencia;
-    }
-
-    public Integer getTempoEstimado() {
-        return tempoEstimado;
-    }
-
-    public void setTempoEstimado(Integer tempoEstimado) {
-        this.tempoEstimado = tempoEstimado;
-    }
-
-    public String getDescricao() {
-        return descricao;
-    }
-
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public LocalDateTime getDataAtribuicao() {
-        return dataAtribuicao;
-    }
-
-    public void setDataAtribuicao(LocalDateTime dataAtribuicao) {
-        this.dataAtribuicao = dataAtribuicao;
-    }
-
-    public LocalDateTime getDataConclusao() {
-        return dataConclusao;
-    }
-
-    public void setDataConclusao(LocalDateTime dataConclusao) {
-        this.dataConclusao = dataConclusao;
-    }
-
-    public String getOrigemTarefa() {
-        return origemTarefa;
-    }
-
-    public void setOrigemTarefa(String origemTarefa) {
-        this.origemTarefa = origemTarefa;
+    public static TarefaFunctionDTO fromRow(Object[] row) {
+        return TarefaFunctionDTO.builder()
+                .id(((Number) row[0]).longValue())
+                .nome((String) row[1])
+                .usuarioRelator(((Number) row[2]).longValue())
+                .gravidade(row[3] != null ? ((Number) row[3]).intValue() : null)
+                .urgencia(row[4] != null ? ((Number) row[4]).intValue() : null)
+                .tendencia(row[5] != null ? ((Number) row[5]).intValue() : null)
+                .tempoEstimado(row[6] != null ? ((Number) row[6]).intValue() : null)
+                .descricao((String) row[7])
+                .status((String) row[8])
+                .dataAtribuicao(row[9] != null ? ((Timestamp) row[9]).toLocalDateTime() : null)
+                .dataConclusao(row[10] != null ? ((Timestamp) row[10]).toLocalDateTime() : null)
+                .origemTarefa((String) row[11])
+                .build();
     }
 }

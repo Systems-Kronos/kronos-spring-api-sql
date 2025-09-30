@@ -7,8 +7,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
-
 @Entity
 @Table(name = "usuario")
 @Data
@@ -21,9 +19,17 @@ public class Usuario {
     @Column(name = "nCdUsuario")
     private Long id;
 
+    @NotNull
+    @Column(name = "cNmUsuario")
+    private String nome;
+
     @ManyToOne
     @JoinColumn(name = "nCdGestor")
     private Usuario gestor;
+
+    @NotNull
+    @Column(name = "bGestor")
+    private Boolean booleanGestor;
 
     @NotNull
     @ManyToOne
@@ -36,12 +42,9 @@ public class Usuario {
     private Setor setor;
 
     @NotNull
-    @Column(name = "cNmUsuario")
-    private String nome;
-
-    @NotNull
-    @Column(name = "bGestor")
-    private Boolean booleanGestor;
+    @OneToOne
+    @JoinColumn(name = "nCdCargo", nullable = false)
+    private Cargo cargo;
 
     @NotNull
     @Column(name = "cCPF")
