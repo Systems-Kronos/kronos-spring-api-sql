@@ -9,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/empresa")
@@ -23,34 +22,35 @@ public class EmpresaController  {
     }
 
     @Operation(summary = "Lista todas as empresas")
-    @GetMapping("/selecionar")
-    public List<Empresa> selecionar() {
-        return empresaService.selecionar();
+    @GetMapping("/listar")
+    public List<Empresa> listarEmpresa() {
+        return empresaService.listar();
     }
 
     @GetMapping("/selecionar/{id}")
     @Operation(summary = "Lista uma empresa pelo id")
-    public Optional<Empresa> selecionarPeloId(@PathVariable Long id) {
-        return empresaService.selecionarPeloId(id);
+    public ResponseEntity<Empresa> selecionarPeloId(@PathVariable Long id) {
+        Empresa empresa = empresaService.buscarPorId(id);
+        return ResponseEntity.ok(empresa);
     }
 
     @Operation(summary = "Adiciona uma nova empresa")
     @PostMapping("/adicionar")
-    public ResponseEntity<String> adicionar(@RequestBody @Valid Empresa empresa) {
+    public ResponseEntity<String> adicionarEmpresa(@RequestBody @Valid Empresa empresa) {
         empresaService.salvar(empresa);
         return ResponseEntity.ok("Empresa adicionada com sucesso");
     }
 
     @Operation(summary = "Atualiza uma empresa")
     @PutMapping("/atualizar")
-    public ResponseEntity<String> atualizar(@RequestBody @Valid Empresa empresa) {
+    public ResponseEntity<String> atualizarEmpresa(@RequestBody @Valid Empresa empresa) {
         empresaService.atualizar(empresa);
         return ResponseEntity.ok("Empresa atualizada com sucesso");
     }
 
     @Operation(summary = "Deleta uma empresa")
     @DeleteMapping("/deletar/{id}")
-    public ResponseEntity<String> deletar(@PathVariable Long id) {
+    public ResponseEntity<String> deletarEmpresa(@PathVariable Long id) {
         empresaService.deletar(id);
         return ResponseEntity.ok("Empresa removida com sucesso");
     }

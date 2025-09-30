@@ -9,9 +9,6 @@ import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.Optional;
-
 @RestController
 @RequestMapping("/api/vantagens")
 @SecurityRequirement(name = "bearerAuth")
@@ -23,35 +20,30 @@ public class PlanoVantagensController {
         this.planoVantagensService = planoVantagensService;
     }
 
-    @GetMapping("/selecionar/")
-    @Operation(summary = "Lista todos as vantagens")
-    public List<PlanoVantagens> selecionar() {
-        return planoVantagensService.selecionar();
-    }
-
     @GetMapping("/selecionar/{id}")
     @Operation(summary = "Lista uma vantagem pelo id")
-    public Optional<PlanoVantagens> selecionarPeloId(@PathVariable Long id) {
-        return planoVantagensService.selecionarPeloId(id);
+    public ResponseEntity<PlanoVantagens> selecionarPeloId(@PathVariable Long id) {
+        PlanoVantagens planoVantagens = planoVantagensService.buscarPorId(id);
+        return ResponseEntity.ok(planoVantagens);
     }
 
     @Operation(summary = "Adiciona uma vantagem")
     @PostMapping("/adicionar")
-    public ResponseEntity<String> adicionar(@RequestBody @Valid PlanoVantagens planoVantagens) {
+    public ResponseEntity<String> adicionarVantagens(@RequestBody @Valid PlanoVantagens planoVantagens) {
         planoVantagensService.salvar(planoVantagens);
         return ResponseEntity.ok("Vantagem adicionada com sucesso");
     }
 
     @Operation(summary = "Atualiza uma vantagem")
     @PutMapping("/atualizar")
-    public ResponseEntity<String> atualizar(@Valid @RequestBody PlanoVantagens planoVantagens) {
+    public ResponseEntity<String> atualizarVantagens(@Valid @RequestBody PlanoVantagens planoVantagens) {
         planoVantagensService.atualizar(planoVantagens);
         return ResponseEntity.ok("Vantagem atualizada com sucesso.");
     }
 
     @Operation(summary = "Deleta uma vantagem")
     @DeleteMapping("/deletar/{id}")
-    public ResponseEntity<String> deletar(@PathVariable long id) {
+    public ResponseEntity<String> deletarVantagens(@PathVariable long id) {
         planoVantagensService.deletar(id);
         return ResponseEntity.ok("Vantagem deletada com sucesso.");
     }

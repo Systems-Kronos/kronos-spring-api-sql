@@ -9,8 +9,6 @@ import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
-
 @RestController
 @RequestMapping("/api/habilidade-usuario")
 @SecurityRequirement(name = "bearerAuth")
@@ -25,27 +23,28 @@ public class HabilidadeUsuarioController {
 
     @GetMapping("/selecionar/{id}")
     @Operation(summary = "Lista a habilidade do usuario pelo id")
-    public Optional<HabilidadeUsuario> selecionarPeloId(@PathVariable Long id) {
-        return habilidadeUsuarioService.selecionarPeloId(id);
+    public ResponseEntity<HabilidadeUsuario> selecionarPeloId(@PathVariable Long id) {
+        HabilidadeUsuario habilidadeUsuario = habilidadeUsuarioService.buscarPorId(id);
+        return ResponseEntity.ok(habilidadeUsuario);
     }
 
     @Operation(summary = "Adiciona um nova habilidade do usuario")
     @PostMapping("/adicionar")
-    public ResponseEntity<String> adicionar(@Valid @RequestBody HabilidadeUsuario habilidadeUsuario) {
+    public ResponseEntity<String> adicionarHabilidadeUsuario(@Valid @RequestBody HabilidadeUsuario habilidadeUsuario) {
         habilidadeUsuarioService.salvar(habilidadeUsuario);
         return ResponseEntity.ok("Habilidade do usuario adicionada com sucesso.");
     }
 
     @Operation(summary = "Atualiza uma habilidade do usuario")
     @PutMapping("/atualizar")
-    public ResponseEntity<String> atualizar(@Valid @RequestBody HabilidadeUsuario habilidadeUsuario) {
+    public ResponseEntity<String> atualizarHabilidadeUsuario(@Valid @RequestBody HabilidadeUsuario habilidadeUsuario) {
         habilidadeUsuarioService.atualizar(habilidadeUsuario);
         return ResponseEntity.ok("Habilidade do usuario atualizada com sucesso.");
     }
 
     @Operation(summary = "Deleta uma habilidade do usuario")
     @DeleteMapping("/deletar/{id}")
-    public ResponseEntity<String> deletar(@PathVariable long id) {
+    public ResponseEntity<String> deletarHabilidadeUsuario(@PathVariable long id) {
         habilidadeUsuarioService.deletar(id);
         return ResponseEntity.ok("Habilidade do usuario deletada com sucesso.");
     }

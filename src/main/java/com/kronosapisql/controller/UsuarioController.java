@@ -1,6 +1,7 @@
 package com.kronosapisql.controller;
 
-import com.kronosapisql.dto.LoginDTO;
+import com.kronosapisql.dto.LoginRequestDTO;
+import com.kronosapisql.dto.LoginResponseDTO;
 import com.kronosapisql.security.JwtUtil;
 import com.kronosapisql.model.Usuario;
 import com.kronosapisql.service.UsuarioService;
@@ -11,10 +12,7 @@ import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/usuario")
@@ -30,69 +28,61 @@ public class UsuarioController {
     }
 
     @Operation(summary = "Lista todos os usuários")
-    @GetMapping("/selecionar")
-    public List<Usuario> selecionar() {return usuarioService.selecionar();}
+    @GetMapping("/listar")
+    public List<Usuario> listarUsuario() {
+        return usuarioService.listar();
+    }
 
     @GetMapping("/selecionarId/{id}")
     @Operation(summary = "Lista um usuário pelo id")
-    public Optional<Usuario> selecionarPeloId(@PathVariable Long id) {
-        return usuarioService.selecionarPeloId(id);
+    public ResponseEntity<Usuario> buscarPorId(@PathVariable Long id) {
+        Usuario usuario = usuarioService.buscarPorId(id);
+        return ResponseEntity.ok(usuario);
     }
 
     @GetMapping("/selecionarCpf/{cpf}")
     @Operation(summary = "Lista um usuário pelo cpf")
-    public Optional<Usuario> selecionarPeloCpf(@PathVariable String cpf) {
-        return usuarioService.selecionarPeloCpf(cpf);
+    public ResponseEntity<Usuario> buscarPorCpf(@PathVariable String cpf) {
+        Usuario usuario = usuarioService.buscarPorCpf(cpf);
+        return ResponseEntity.ok(usuario);
     }
 
     @Operation(summary = "Adiciona um novo usuário")
     @PostMapping("/adicionar")
-    public ResponseEntity<String> adicionar(@Valid @RequestBody Usuario usuario) {
+    public ResponseEntity<String> adicionarUsuario(@Valid @RequestBody Usuario usuario) {
         usuarioService.salvar(usuario);
         return ResponseEntity.ok("Usuário adicionado com sucesso.");
     }
 
     @Operation(summary = "Atualiza um usuário")
     @PutMapping("/atualizar")
-    public ResponseEntity<String> atualizar(@Valid @RequestBody Usuario usuario) {
+    public ResponseEntity<String> atualizarUsuario(@Valid @RequestBody Usuario usuario) {
         usuarioService.atualizar(usuario);
         return ResponseEntity.ok("Usuário atualizada com sucesso.");
     }
 
     @Operation(summary = "Deleta um usuário")
     @DeleteMapping("/deletar/{id}")
-    public ResponseEntity<String> deletar(@PathVariable Long id) {
+    public ResponseEntity<String> deletarUsuario(@PathVariable Long id) {
         usuarioService.deletar(id);
         return ResponseEntity.ok("Usuário deletado com sucesso.");
     }
 
     @Operation(summary = "Faz login de um usuário no App")
     @PostMapping("/loginApp")
-    public ResponseEntity<?> loginApp(@Valid @RequestBody LoginDTO loginDTO) {
-        Optional<Usuario> usuarioEncontrado = usuarioService.loginApp(loginDTO.getCpf(), loginDTO.getSenha());
-        if (usuarioEncontrado.isPresent()) {
-            String token = jwtUtil.gerarToken(String.valueOf(usuarioEncontrado.get().getId()));
-            Map<String, String> response = new HashMap<>();
-            response.put("token", token);
-            return ResponseEntity.ok(response);
+    public ResponseEntity<LoginResponseDTO> loginApp(@Valid @RequestBody LoginRequestDTO loginRequestDTO) {
+        Usuario usuario = usuarioService.loginApp(loginRequestDTO.getCpf(), loginRequestDTO.getSenha());
 
-        } else {
-            return ResponseEntity.status(401).body("Usuário ou senha inválidos");
-        }
+        String token = jwtUtil.gerarToken(String.valueOf(usuario.getId()));
+        return ResponseEntity.ok(new LoginResponseDTO(usuario.getId(), token));
     }
 
     @Operation(summary = "Faz login de um gestor na Plataforma")
     @PostMapping("/loginPlataforma")
-    public ResponseEntity<?> loginPlataforma(@Valid @RequestBody LoginDTO loginDTO) {
-        Optional<Usuario> usuarioEncontrado = usuarioService.loginPlataforma(loginDTO.getCpf(), loginDTO.getSenha());
-        if (usuarioEncontrado.isPresent()) {
-            String token = jwtUtil.gerarToken(String.valueOf(usuarioEncontrado.get().getId()));
-            Map<String, String> response = new HashMap<>();
-            response.put("token", token);
-            return ResponseEntity.ok(response);
+    public ResponseEntity<LoginResponseDTO> loginPlataforma(@Valid @RequestBody LoginRequestDTO loginRequestDTO) {
+        Usuario usuario = usuarioService.loginPlataforma(loginRequestDTO.getCpf(), loginRequestDTO.getSenha());
 
-        } else {
-            return ResponseEntity.status(401).body("Usuário ou senha inválidos");
-        }
+        String token = jwtUtil.gerarToken(String.valueOf(usuario.getId()));
+        return ResponseEntity.ok(new LoginResponseDTO(usuario.getId(), token));
     }
 }
