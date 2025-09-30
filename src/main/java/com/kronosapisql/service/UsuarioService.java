@@ -3,12 +3,10 @@ package com.kronosapisql.service;
 import com.kronosapisql.model.Usuario;
 import com.kronosapisql.repository.UsuarioRepository;
 import jakarta.persistence.EntityNotFoundException;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class UsuarioService {
@@ -18,165 +16,72 @@ public class UsuarioService {
         this.usuarioRepository = usuarioRepository;
     }
 
-    public Optional<Usuario> selecionarPeloId(Long id) {
+    public Usuario buscarPorId(Long id) {
         if (id == null) {
             throw new IllegalArgumentException("ID do usuário não pode ser nulo");
         }
-        try {
-            Optional<Usuario> usuario = this.usuarioRepository.findById(id);
-            if (!usuario.isEmpty()) {
-                throw new EntityNotFoundException("Usuário não encontrado com ID: " + id);
-            }
-            return usuario;
-        } catch (EntityNotFoundException e) {
-            throw e;
-        } catch (Exception e) {
-            throw new RuntimeException("Erro ao buscar usuário por ID: " + e.getMessage());
-        }
+        return usuarioRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado com ID " + id));
     }
 
-    public Optional<Usuario> selecionarPeloCpf(String cpf) {
-        if (cpf == null || cpf.trim().isEmpty()) {
-            throw new IllegalArgumentException("CPF não pode ser nulo ou vazio");
+    public Usuario buscarPorCpf(String cpf) {
+        if (cpf == null || cpf.isBlank()) {
+            throw new IllegalArgumentException("CPF do usuário não pode ser nulo");
         }
-        try {
-            Optional<Usuario> usuario = this.usuarioRepository.findByCpf(cpf);
-            if (!usuario.isPresent()) {
-                throw new EntityNotFoundException("Usuário não encontrado com CPF: " + cpf);
-            }
-            return usuario;
-        } catch (EntityNotFoundException e) {
-            throw e;
-        } catch (Exception e) {
-            throw new RuntimeException("Erro ao buscar usuário por CPF: " + e.getMessage());
-        }
+        return usuarioRepository.findByCpf(cpf)
+                .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado com CPF " + cpf));
     }
 
-    public List<Usuario> selecionar() {
-        try {
-            return this.usuarioRepository.findAll();
-        } catch (Exception e) {
-            throw new RuntimeException("Erro ao listar usuários: " + e.getMessage());
-        }
+    public List<Usuario> listar() {
+        return this.usuarioRepository.findAll();
     }
 
     public Usuario salvar(Usuario usuario) {
         if (usuario == null) {
             throw new IllegalArgumentException("Usuário não pode ser nulo");
         }
-        try {
-            Optional<Usuario> existingUser = usuarioRepository.findByCpf(usuario.getCpf());
-            if (existingUser.isPresent()) {
-                throw new IllegalArgumentException("Já existe um usuário cadastrado com este CPF");
-            }
-            return this.usuarioRepository.save(usuario);
-        } catch (IllegalArgumentException e) {
-            throw e;
-        } catch (Exception e) {
-            throw new RuntimeException("Erro ao salvar usuário: " + e.getMessage());
+        usuarioRepository.findByCpf(usuario.getCpf()).ifPresent(u -> {
+            throw new IllegalArgumentException("Já existe um usuário com este CPF");
+        });
+        return usuarioRepository.save(usuario);
+    }
+
+    public Usuario atualizar(Usuario usuario) {
+        if (usuario == null) {
+            throw new IllegalArgumentException("Usuário não pode ser nulo");
         }
+        if (!usuarioRepository.existsById(usuario.getId())) {
+            throw new EntityNotFoundException("Usuário não encontrado com ID " + usuario.getId());
+        }
+        return usuarioRepository.save(usuario);
     }
 
     public void deletar(Long id) {
         if (id == null) {
-            throw new IllegalArgumentException("ID do usuário não pode ser nulo");
+            throw new IllegalArgumentException("ID não pode ser nulo");
         }
-        try {
-            if (!usuarioRepository.existsById(id)) {
-                throw new EntityNotFoundException("Usuário não encontrado com ID: " + id);
-            }
-            this.usuarioRepository.deleteById(id);
-        } catch (EntityNotFoundException e) {
-            throw e;
-        } catch (EmptyResultDataAccessException e) {
-            throw new EntityNotFoundException("Usuário não encontrado com ID: " + id);
-        } catch (Exception e) {
-            throw new RuntimeException("Erro ao deletar usuário: " + e.getMessage());
+        if (!usuarioRepository.existsById(id)) {
+            throw new EntityNotFoundException("Usuário não encontrado com ID " + id);
         }
+        usuarioRepository.deleteById(id);
     }
 
-    public void atualizar(Usuario usuario) {
-        if (usuario == null) {
-            throw new IllegalArgumentException("Usuário não pode ser nulo");
+    public Usuario loginApp(String cpf, String senha) {
+        Usuario usuario = buscarPorCpf(cpf);
+        if (!usuario.getSenha().equals(senha)) {
+            throw new BadCredentialsException("Senha inválida");
         }
-        try {
-            if (!usuarioRepository.existsById(usuario.getId())) {
-                throw new EntityNotFoundException("Usuário não encontrado com ID: " + usuario.getId());
-            }
-            
-            Optional<Usuario> existingUser = usuarioRepository.findByCpf(usuario.getCpf());
-            if (existingUser.isPresent() && !existingUser.get().getId().equals(usuario.getId())) {
-                throw new IllegalArgumentException("CPF já está sendo usado por outro usuário");
-            }
-            
-            this.usuarioRepository.save(usuario);
-        } catch (EntityNotFoundException | IllegalArgumentException e) {
-            throw e;
-        } catch (Exception e) {
-            throw new RuntimeException("Erro ao atualizar usuário: " + e.getMessage());
+        if (!usuario.getAtivo()) {
+            throw new BadCredentialsException("Usuário inativo");
         }
+        return usuario;
     }
 
-    public Optional<Usuario> loginApp(String cpf, String senha) {
-        if (cpf == null || cpf.trim().isEmpty()) {
-            throw new IllegalArgumentException("CPF não pode ser nulo ou vazio");
+    public Usuario loginPlataforma(String cpf, String senha) {
+        Usuario usuario = loginApp(cpf, senha);
+        if (!usuario.getBooleanGestor()) {
+            throw new BadCredentialsException("Acesso restrito a gestores");
         }
-        if (senha == null || senha.trim().isEmpty()) {
-            throw new IllegalArgumentException("Senha não pode ser nula ou vazia");
-        }
-        
-        try {
-            Optional<Usuario> usuario = usuarioRepository.findByCpf(cpf);
-            if (!usuario.isPresent()) {
-                throw new BadCredentialsException("Credenciais inválidas");
-            }
-
-            Usuario verificarUsuario = usuario.get();
-            if (!verificarUsuario.getSenha().equals(senha)) {
-                throw new BadCredentialsException("Senha inválida");
-            }
-            if (!verificarUsuario.getAtivo()) {
-                throw new BadCredentialsException("Usuário desligado");
-            }
-            
-            return usuario;
-        } catch (BadCredentialsException e) {
-            throw e;
-        } catch (Exception e) {
-            throw new RuntimeException("Erro ao realizar login: " + e.getMessage());
-        }
-    }
-
-    public Optional<Usuario> loginPlataforma(String cpf, String senha) {
-        if (cpf == null || cpf.trim().isEmpty()) {
-            throw new IllegalArgumentException("CPF não pode ser nulo ou vazio");
-        }
-        if (senha == null || senha.trim().isEmpty()) {
-            throw new IllegalArgumentException("Senha não pode ser nula ou vazia");
-        }
-
-        try {
-            Optional<Usuario> usuario = usuarioRepository.findByCpf(cpf);
-            if (!usuario.isPresent()) {
-                throw new BadCredentialsException("Credenciais inválidas");
-            }
-
-            Usuario verificarUsuario = usuario.get();
-            if (!verificarUsuario.getSenha().equals(senha)) {
-                throw new BadCredentialsException("Senha inválida");
-            }
-            if (!verificarUsuario.getAtivo()) {
-                throw new BadCredentialsException("Usuário desligado");
-            }
-            if (!verificarUsuario.getBooleanGestor()) {
-                throw new BadCredentialsException("Acesso restrito a gestores");
-            }
-
-            return usuario;
-        } catch (BadCredentialsException e) {
-            throw e;
-        } catch (Exception e) {
-            throw new RuntimeException("Erro ao realizar login: " + e.getMessage());
-        }
+        return usuario;
     }
 }

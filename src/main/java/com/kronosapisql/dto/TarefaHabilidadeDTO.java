@@ -2,8 +2,6 @@ package com.kronosapisql.dto;
 
 import lombok.*;
 
-import java.math.BigDecimal;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

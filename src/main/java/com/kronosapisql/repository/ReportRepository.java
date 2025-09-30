@@ -9,7 +9,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.Optional;
 
-public interface ReportRepository extends JpaRepository<Report, String> {
+public interface ReportRepository extends JpaRepository<Report, Long> {
     Optional<Report> findByStatus(String status);
 
     @Modifying
