@@ -10,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/plano")
@@ -23,35 +22,36 @@ public class PlanoPagamentoController {
         this.planoPagamentoService = planoPagamentoService;
     }
 
-    @GetMapping("/selecionar/")
+    @GetMapping("/listar/")
     @Operation(summary = "Lista todos os planos")
-    public List<PlanoPagamento> selecionar() {
-        return planoPagamentoService.selecionar();
+    public List<PlanoPagamento> listarPlano() {
+        return planoPagamentoService.listar();
     }
 
     @GetMapping("/selecionar/{id}")
     @Operation(summary = "Lista um plano pelo id")
-    public Optional<PlanoPagamento> selecionarPeloId(@PathVariable Long id) {
-        return planoPagamentoService.selecionarPeloId(id);
+    public ResponseEntity<PlanoPagamento> selecionarPeloId(@PathVariable Long id) {
+        PlanoPagamento planoPagamento = planoPagamentoService.buscarPorId(id);
+        return ResponseEntity.ok(planoPagamento);
     }
 
     @Operation(summary = "Adiciona um plano")
     @PostMapping("/adicionar")
-    public ResponseEntity<String> adicionar(@RequestBody @Valid PlanoPagamento planoPagamento) {
+    public ResponseEntity<String> adicionarPlano(@RequestBody @Valid PlanoPagamento planoPagamento) {
         planoPagamentoService.salvar(planoPagamento);
         return ResponseEntity.ok("Plano adicionado com sucesso");
     }
 
     @Operation(summary = "Atualiza um plano")
     @PutMapping("/atualizar")
-    public ResponseEntity<String> atualizar(@Valid @RequestBody PlanoPagamento planoPagamento) {
+    public ResponseEntity<String> atualizarPlano(@Valid @RequestBody PlanoPagamento planoPagamento) {
         planoPagamentoService.atualizar(planoPagamento);
         return ResponseEntity.ok("Plano atualizada com sucesso.");
     }
 
     @Operation(summary = "Deleta um plano")
     @DeleteMapping("/deletar/{id}")
-    public ResponseEntity<String> deletar(@PathVariable long id) {
+    public ResponseEntity<String> deletarPlano(@PathVariable long id) {
         planoPagamentoService.deletar(id);
         return ResponseEntity.ok("Plano deletada com sucesso.");
     }

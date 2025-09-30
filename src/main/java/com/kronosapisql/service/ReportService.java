@@ -7,12 +7,12 @@ import com.kronosapisql.model.Tarefa;
 import com.kronosapisql.model.Usuario;
 import com.kronosapisql.repository.ReportRepository;
 import com.kronosapisql.repository.TarefaRepository;
+import jakarta.persistence.EntityNotFoundException;
 import com.kronosapisql.repository.UsuarioRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ReportService {
@@ -27,25 +27,55 @@ public class ReportService {
         this.usuarioRepository = usuarioRepository;
     }
 
-    public List<Report> listarTodosReports() {
+    public Report buscarPorId(Long id) {
+        if (id == null) {
+            throw new IllegalArgumentException("ID do report não pode ser nulo");
+        }
+        return reportRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Report não encontrado com ID " + id));
+    }
+
+    public Report buscarPorStatus(String status) {
+        if (status == null || status.isBlank()) {
+            throw new IllegalArgumentException("Status do report não pode ser nulo");
+        }
+        return reportRepository.findByStatus(status)
+                .orElseThrow(() -> new EntityNotFoundException("Report não encontrado com status: " + status));
+    }
+
+    public List<Report> listar() {
         return reportRepository.findAll();
     }
 
-    public Optional<Report> buscarPorId(String id) {
-        return reportRepository.findById(id);
-    }
-
-    public Optional<Report> buscarPorStatus(String status) {
-        return reportRepository.findByStatus(status);
-    }
-
     public Report salvar(Report report) {
+        if (report == null) {
+            throw new IllegalArgumentException("Report não pode ser nulo");
+        }
         return reportRepository.save(report);
+    }
+
+    public Report atualizar(Report report) {
+        if (report == null) {
+            throw new IllegalArgumentException("Report não pode ser nulo");
+        }
+        if (!reportRepository.existsById(report.getId())) {
+            throw new EntityNotFoundException("Report não encontrado com ID " + report.getId());
+        }
+        return reportRepository.save(report);
+    }
+
+    public void deletar(Long id) {
+        if (id == null) {
+            throw new IllegalArgumentException("ID não pode ser nulo");
+        }
+        if (!reportRepository.existsById(id)) {
+            throw new EntityNotFoundException("Report não encontrado com ID " + id);
+        }
+        reportRepository.deleteById(id);
     }
 
     @Transactional
     public Report criarReport(ReportDTO dto) {
-        // Busca a tarefa pelo ID
         Tarefa tarefa = tarefaRepository.findById(dto.getIdTarefa())
                 .orElseThrow(() -> new RuntimeException("Tarefa não encontrada com ID " + dto.getIdTarefa()));
 
@@ -54,14 +84,12 @@ public class ReportService {
 
         String statusDb = converterStatusParaBanco(dto.getStatus());
 
-        // Chama a native query
         reportRepository.inserirReportNative(dto.getDescricao(),dto.getProblema(), statusDb, usuario.getId(), tarefa.getId());
 
-        // Retorna um objeto Report “simulado” ou busca o último inserido se quiser retornar completo
         Report report = new Report();
         report.setDescricao(dto.getDescricao());
         report.setProblema(dto.getProblema());
-        report.setStatus(OpcaoStatus.valueOf(statusDb.toUpperCase().replace(" ", "_"))); // opcional, para retornar enum
+        report.setStatus(OpcaoStatus.valueOf(statusDb.toUpperCase().replace(" ", "_")));
         report.setUsuario(usuario);
         report.setTarefa(tarefa);
 
@@ -78,12 +106,5 @@ public class ReportService {
             case "cancelada": return "Cancelada";
             default: throw new IllegalArgumentException("Status inválido: " + status);
         }
-    }
-    public void atualizar(Report report) {
-        this.reportRepository.save(report);
-    }
-
-    public void deletar(String id) {
-        reportRepository.deleteById(id);
     }
 }

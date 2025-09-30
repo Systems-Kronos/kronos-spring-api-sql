@@ -1,5 +1,7 @@
 package com.kronosapisql.dto;
 
+import com.kronosapisql.model.Tarefa;
+import com.kronosapisql.model.Usuario;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
@@ -42,4 +44,19 @@ public class TarefaRequestDTO {
 
     @NotNull
     private List<Integer> usuariosResponsaveis;
+
+    public Tarefa toEntity(Usuario usuarioRelator) {
+        return Tarefa.builder()
+                .nome(this.getNome())
+                .descricao(this.getDescricao())
+                .usuarioRelator(usuarioRelator)
+                .gravidade(this.getGravidade())
+                .urgencia(this.getUrgencia())
+                .tendencia(this.getTendencia())
+                .tempoEstimado(this.getTempoEstimado())
+                .dataAtribuicao(Date.from(this.getDataAtribuicao().toInstant()))
+                .dataConclusao(null)
+                .status(this.getStatus())
+                .build();
+    }
 }

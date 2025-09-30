@@ -11,8 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
-
 @RestController
 @RequestMapping("/api/log-atribuicao")
 @SecurityRequirement(name = "bearerAuth")
@@ -27,13 +25,14 @@ public class LogAtribuicaoTarefaController {
 
     @GetMapping("/selecionar/{id}")
     @Operation(summary = "Lista o log pelo id")
-    public Optional<LogAtribuicaoTarefa> selecionarPeloId(@PathVariable Long id) {
-        return logAtribuicaoTarefaService.selecionarPeloId(id);
+    public ResponseEntity<LogAtribuicaoTarefa> selecionarPeloId(@PathVariable Long id) {
+        LogAtribuicaoTarefa logAtribuicaoTarefa = logAtribuicaoTarefaService.buscarPorId(id);
+        return ResponseEntity.ok(logAtribuicaoTarefa);
     }
 
     @Operation(summary = "Adiciona um novo log")
     @PostMapping("/adicionar")
-    public ResponseEntity<LogAtribuicaoTarefaDTO> adicionar(@RequestBody LogAtribuicaoTarefaDTO dto) {
+    public ResponseEntity<LogAtribuicaoTarefaDTO> adicionarLog(@RequestBody LogAtribuicaoTarefaDTO dto) {
         try {
             LogAtribuicaoTarefaDTO salvo = logAtribuicaoTarefaService.adicionarLog(dto);
             return new ResponseEntity<>(salvo, HttpStatus.CREATED);
@@ -44,14 +43,14 @@ public class LogAtribuicaoTarefaController {
 
     @Operation(summary = "Atualiza um log")
     @PutMapping("/atualizar")
-    public ResponseEntity<String> atualizar(@Valid @RequestBody LogAtribuicaoTarefa logAtribuicaoTarefa) {
+    public ResponseEntity<String> atualizarLog(@Valid @RequestBody LogAtribuicaoTarefa logAtribuicaoTarefa) {
         logAtribuicaoTarefaService.atualizar(logAtribuicaoTarefa);
         return ResponseEntity.ok("Log atualizado com sucesso.");
     }
 
     @Operation(summary = "Deleta um log")
     @DeleteMapping("/deletar/{id}")
-    public ResponseEntity<String> deletar(@PathVariable long id) {
+    public ResponseEntity<String> deletarLog(@PathVariable long id) {
         logAtribuicaoTarefaService.deletar(id);
         return ResponseEntity.ok("Log deletado com sucesso.");
     }

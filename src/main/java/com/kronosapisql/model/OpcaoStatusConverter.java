@@ -5,7 +5,6 @@ import jakarta.persistence.Converter;
 
 @Converter(autoApply = true)
 public class OpcaoStatusConverter implements AttributeConverter<OpcaoStatus, String> {
-
     @Override
     public String convertToDatabaseColumn(OpcaoStatus status) {
         if (status == null) return null;

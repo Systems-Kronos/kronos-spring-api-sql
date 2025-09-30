@@ -19,15 +19,15 @@ public class Mensagem {
     @Column(name = "nCdMensagem")
     private long id;
 
-    @Column(name = "cTitulo")
     @NotNull
+    @Column(name = "cTitulo")
     private String titulo;
 
-    @Column(name = "cMensagem")
     @NotNull
+    @Column(name = "cMensagem")
     private String mensagem;
 
-    @Column(name = "cCategoria")
     @NotNull
+    @Column(name = "cCategoria")
     private String categoria;
 }

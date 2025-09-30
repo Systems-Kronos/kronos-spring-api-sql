@@ -2,10 +2,10 @@ package com.kronosapisql.service;
 
 import com.kronosapisql.model.Cargo;
 import com.kronosapisql.repository.CargoRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class CargoService {
@@ -15,27 +15,42 @@ public class CargoService {
         this.cargoRepository = cargoRepository;
     }
 
-    public List<Cargo> selecionar() {
-        try {
-            return this.cargoRepository.findAll();
-        } catch (Exception e) {
-            throw new RuntimeException("Erro ao listar cargos: " + e.getMessage());
+    public Cargo buscarPorId(Long id) {
+        if (id == null) {
+            throw new IllegalArgumentException("ID não pode ser nulo");
         }
+        return cargoRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Cargo não encontrado com ID: " + id));
     }
 
-    public Optional<Cargo> selecionarPeloId(Long id) {
-        return cargoRepository.findById(id);
+    public List<Cargo> listar() {
+        return cargoRepository.findAll();
     }
 
     public Cargo salvar(Cargo cargo) {
+        if (cargo == null) {
+            throw new IllegalArgumentException("Cargo não pode ser nulo");
+        }
         return cargoRepository.save(cargo);
     }
 
-    public void atualizar(Cargo cargo) {
-        this.cargoRepository.save(cargo);
+    public Cargo atualizar(Cargo cargo) {
+        if (cargo == null) {
+            throw new IllegalArgumentException("Cargo não pode ser nulo");
+        }
+        if (!cargoRepository.existsById(cargo.getId())) {
+            throw new EntityNotFoundException("Cargo não encontrado com ID: " + cargo.getId());
+        }
+        return cargoRepository.save(cargo);
     }
 
     public void deletar(Long id) {
+        if (id == null) {
+            throw new IllegalArgumentException("ID não pode ser nulo");
+        }
+        if (!cargoRepository.existsById(id)) {
+            throw new EntityNotFoundException("Cargo não encontrado com ID: " + id);
+        }
         cargoRepository.deleteById(id);
     }
 }

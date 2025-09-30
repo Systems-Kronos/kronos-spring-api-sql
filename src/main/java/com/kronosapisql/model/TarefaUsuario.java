@@ -20,15 +20,18 @@ public class TarefaUsuario {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull
     @ManyToOne
     @JoinColumn(name = "nCdTarefa", referencedColumnName = "nCdTarefa")
     @JsonBackReference
     private Tarefa tarefa;
 
+    @NotNull
     @ManyToOne
     @JoinColumn(name = "nCdUsuarioOriginal", referencedColumnName = "nCdUsuario")
     private Usuario usuarioOriginal;
 
+    @NotNull
     @ManyToOne
     @JoinColumn(name = "nCdUsuarioAtuante", referencedColumnName = "nCdUsuario")
     private Usuario usuarioAtuante;
