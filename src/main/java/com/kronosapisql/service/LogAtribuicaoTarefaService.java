@@ -32,6 +32,8 @@ public class LogAtribuicaoTarefaService {
         return logAtribuicaoTarefaRepository.findAll();
     }
 
+
+
     public LogAtribuicaoTarefa salvar(LogAtribuicaoTarefa log) {
         if (log == null) {
             throw new IllegalArgumentException("Log não pode ser nulo");
