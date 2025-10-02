@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 import java.util.Date;
 
 @Entity
-@Table(name = "LogAtribuicaoTarefa")
+@Table(name = "LogAtribuicaoTarefa", schema = "table_log")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
