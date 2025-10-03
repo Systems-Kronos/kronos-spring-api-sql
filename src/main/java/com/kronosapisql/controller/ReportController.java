@@ -1,6 +1,7 @@
 package com.kronosapisql.controller;
 
 import com.kronosapisql.dto.ReportDTO;
+import com.kronosapisql.dto.ReportFunctionDTO;
 import com.kronosapisql.model.Report;
 import com.kronosapisql.service.ReportService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -31,6 +32,12 @@ public class ReportController {
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.ok(reports);
+    }
+
+    @Operation(summary = "Lista todos os reports dos usuários de um gestor específico baseado na function")
+    @GetMapping("/selecionarFunction/{idGestor}")
+    public List<ReportFunctionDTO> listarReportsFuncionariosGestor(@PathVariable Long idGestor) {
+        return reportService.listarReportsFuncionariosGestor(idGestor);
     }
 
     @Operation(summary = "Lista report pelo ID")

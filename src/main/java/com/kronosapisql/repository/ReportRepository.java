@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface ReportRepository extends JpaRepository<Report, Long> {
@@ -21,4 +22,7 @@ public interface ReportRepository extends JpaRepository<Report, Long> {
                              @Param("status") String status,
                              @Param("tarefaId") Long tarefaId,
                              @Param("usuarioId") Long usuarioId);
+
+    @Query(value = "SELECT * FROM fn_reports_gestor(:idGestor)", nativeQuery = true)
+    List<Object[]> listarReportsFuncionariosGestorRaw(@Param("idGestor") Long idGestor);
 }
