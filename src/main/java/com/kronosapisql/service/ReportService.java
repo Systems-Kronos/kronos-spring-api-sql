@@ -1,6 +1,7 @@
 package com.kronosapisql.service;
 
 import com.kronosapisql.dto.ReportDTO;
+import com.kronosapisql.dto.ReportFunctionDTO;
 import com.kronosapisql.model.OpcaoStatus;
 import com.kronosapisql.model.Report;
 import com.kronosapisql.model.Tarefa;
@@ -41,6 +42,13 @@ public class ReportService {
         }
         return reportRepository.findByStatus(status)
                 .orElseThrow(() -> new EntityNotFoundException("Report não encontrado com status: " + status));
+    }
+
+    public List<ReportFunctionDTO> listarReportsFuncionariosGestor(Long idGestor) {
+        return reportRepository.listarReportsFuncionariosGestorRaw(idGestor)
+                .stream()
+                .map(ReportFunctionDTO::fromRow)
+                .toList();
     }
 
     public List<Report> listar() {
