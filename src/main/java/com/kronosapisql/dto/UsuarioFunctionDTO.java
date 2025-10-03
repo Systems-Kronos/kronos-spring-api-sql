@@ -27,7 +27,7 @@ public class UsuarioFunctionDTO {
         return UsuarioFunctionDTO.builder()
                 .id(row[0] != null ? ((Number) row[0]).longValue() : null)
                 .nome(row[1] != null ? row[1].toString() : null)
-                .idSetor(row[2] != null ? ((Number) row[2]).longValue() : null)
+                .idSetor(row[2] != null ?  ((Number) row[2]).longValue() : null)
                 .nomeSetor(row[3] != null ? row[3].toString() : null)
                 .idGestor(row[4] != null ? ((Number) row[4]).longValue() : null)
                 .booleanGestor(row[5] != null ? (Boolean) row[5] : null)

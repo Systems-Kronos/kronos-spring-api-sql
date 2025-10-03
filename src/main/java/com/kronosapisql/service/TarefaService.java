@@ -34,7 +34,14 @@ public class TarefaService {
     public List<TarefaFunctionDTO> listarTarefasUsuario(Long usuario, String tipoTarefa, String status) {
         return tarefaRepository.listarTarefasUsuarioRaw(usuario, tipoTarefa, status)
                 .stream()
-                .map(TarefaFunctionDTO::fromRow)
+                .map(TarefaFunctionDTO::fromRowFunctionIdUsuario)
+                .toList();
+    }
+
+    public List<TarefaFunctionDTO> listarTarefasUsuarioGestor(Long idGestor, String tipoTarefa, String status) {
+        return tarefaRepository.listarTarefasUsuarioGestorRaw(idGestor, tipoTarefa, status)
+                .stream()
+                .map(TarefaFunctionDTO::fromRowFunctionIdGestor)
                 .toList();
     }
 

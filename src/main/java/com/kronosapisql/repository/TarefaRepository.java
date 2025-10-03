@@ -12,4 +12,9 @@ public interface TarefaRepository extends JpaRepository<Tarefa, Long> {
     List<Object[]> listarTarefasUsuarioRaw(@Param("usuario") Long usuario,
                                            @Param("tipoTarefa") String tipoTarefa,
                                            @Param("status") String status);
+
+    @Query(value = "SELECT * FROM fn_lista_tarefa_usuario_gestor(:idGestor, :tipoTarefa, :status)", nativeQuery = true)
+    List<Object[]> listarTarefasUsuarioGestorRaw(@Param("idGestor") Long idGestor,
+                                           @Param("tipoTarefa") String tipoTarefa,
+                                           @Param("status") String status);
 }
