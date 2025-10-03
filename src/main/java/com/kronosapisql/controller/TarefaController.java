@@ -24,10 +24,16 @@ public class TarefaController {
         this.tarefaService = tarefaService;
     }
 
-    @Operation(summary = "Lista todas as tarefas baseada na function")
+    @Operation(summary = "Lista todas as tarefas de um usuário baseada na function")
     @GetMapping("/selecionarFunction/{usuarioId}")
     public List<TarefaFunctionDTO> listarTarefasUsuario(@PathVariable Long usuarioId, @RequestParam(defaultValue = "1") String tipoTarefa, @RequestParam(defaultValue = "1") String status) {
         return tarefaService.listarTarefasUsuario(usuarioId, tipoTarefa, status);
+    }
+
+    @Operation(summary = "Lista todas as tarefas dos usuários de um gestor específico baseada na function")
+    @GetMapping("/selecionarFunctionGestor/{idGestor}")
+    public List<TarefaFunctionDTO> listarTarefasUsuarioGestor(@PathVariable Long idGestor, @RequestParam(defaultValue = "1") String tipoTarefa, @RequestParam(defaultValue = "4") String status) {
+        return tarefaService.listarTarefasUsuarioGestor(idGestor, tipoTarefa, status);
     }
 
     @Operation(summary = "Busca tarefa pelo ID")
