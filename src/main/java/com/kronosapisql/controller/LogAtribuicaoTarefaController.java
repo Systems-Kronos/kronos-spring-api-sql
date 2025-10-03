@@ -11,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/log-atribuicao")
 @SecurityRequirement(name = "bearerAuth")
@@ -27,6 +29,18 @@ public class LogAtribuicaoTarefaController {
     @Operation(summary = "Lista o log pelo id")
     public ResponseEntity<LogAtribuicaoTarefa> selecionarPeloId(@PathVariable Long id) {
         LogAtribuicaoTarefa logAtribuicaoTarefa = logAtribuicaoTarefaService.buscarPorId(id);
+        return ResponseEntity.ok(logAtribuicaoTarefa);
+    }
+
+    @GetMapping("/selecionarUsuario/{id}")
+    @Operation(summary = "Lista o log pelo id do usuário")
+    public ResponseEntity<List<LogAtribuicaoTarefa>> selecionarLogAtribuicaoTarefaPeloUsuario(@PathVariable Long id) {
+        List<LogAtribuicaoTarefa> logAtribuicaoTarefa = logAtribuicaoTarefaService.buscarPorIdUsuarioAtuante(id);
+
+        if (logAtribuicaoTarefa.isEmpty()) {
+            return ResponseEntity.noContent().build(); // retorna 204 caso não tenha nada
+        }
+
         return ResponseEntity.ok(logAtribuicaoTarefa);
     }
 

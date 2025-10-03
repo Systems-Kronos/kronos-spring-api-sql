@@ -84,7 +84,7 @@ public class ReportService {
 
         String statusDb = converterStatusParaBanco(dto.getStatus());
 
-        reportRepository.inserirReportNative(dto.getDescricao(),dto.getProblema(), statusDb, usuario.getId(), tarefa.getId());
+        reportRepository.inserirReportNative(dto.getDescricao(),dto.getProblema(), statusDb, tarefa.getId(), usuario.getId());
 
         Report report = new Report();
         report.setDescricao(dto.getDescricao());
