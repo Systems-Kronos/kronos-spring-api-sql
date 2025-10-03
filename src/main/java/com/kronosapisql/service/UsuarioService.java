@@ -1,5 +1,6 @@
 package com.kronosapisql.service;
 
+import com.kronosapisql.dto.UsuarioFunctionDTO;
 import com.kronosapisql.model.Usuario;
 import com.kronosapisql.repository.UsuarioRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -30,6 +31,13 @@ public class UsuarioService {
         }
         return usuarioRepository.findByCpf(cpf)
                 .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado com CPF " + cpf));
+    }
+
+    public List<UsuarioFunctionDTO> listarFuncionariosGestor(Long idGestor) {
+        return usuarioRepository.listarFuncionariosGestorRaw(idGestor)
+                .stream()
+                .map(UsuarioFunctionDTO::fromRow)
+                .toList();
     }
 
     public List<Usuario> listar() {
