@@ -6,5 +6,5 @@ public enum OpcaoStatus {
     CONCLUIDA,
     CONCLUIDO,
     CANCELADA,
-    CANCELADO;
+    CANCELADO
 }

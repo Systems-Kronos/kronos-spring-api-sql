@@ -1,5 +1,6 @@
 package com.kronosapisql.dto;
 
+import com.kronosapisql.model.OpcaoStatus;
 import com.kronosapisql.model.Tarefa;
 import com.kronosapisql.model.Usuario;
 import jakarta.validation.constraints.NotNull;
@@ -34,7 +35,7 @@ public class TarefaRequestDTO {
     private Integer tempoEstimado;
 
     @NotNull
-    private String status;
+    private OpcaoStatus status;
 
     @NotNull
     private Date dataAtribuicao;

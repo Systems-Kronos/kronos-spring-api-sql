@@ -35,7 +35,7 @@ public class Report {
     private String problema;
 
     @NotNull
-    @Convert(converter = OpcaoStatusConverter.class)
-    @Column(name = "cStatus", nullable = false, columnDefinition = "opcao_status")
+    @Enumerated(EnumType.STRING)
+    @Column(name = "cStatus")
     private OpcaoStatus status;
 }

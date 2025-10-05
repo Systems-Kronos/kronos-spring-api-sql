@@ -61,8 +61,8 @@ public class Tarefa {
     private String descricao;
 
     @NotNull
-    @Column(name = "cstatus")
-    private String status;
+    @Column(name = "cStatus")
+    private OpcaoStatus status;
 
     @NotNull
     @Column(name = "dDataAtribuicao")

@@ -57,6 +57,14 @@ public class TarefaController {
         return ResponseEntity.ok("Tarefa atualizada com sucesso.");
     }
 
+    @Operation(summary = "Atualiza o status de uma tarefa")
+    @PutMapping("/atualizarStatus/{id}")
+    public ResponseEntity<String> atualizarStatus(@PathVariable Long id, @RequestBody String status) {
+        String statusLimpo = status.replace("\"", "").trim();
+        tarefaService.atualizarStatus(id, statusLimpo);
+        return ResponseEntity.ok("Tarefa atualizada com sucesso.");
+    }
+
     @Operation(summary = "Deleta uma tarefa pelo ID")
     @DeleteMapping("/deletar/{id}")
     public ResponseEntity<Void> deletarTarefa(@PathVariable Long id) {

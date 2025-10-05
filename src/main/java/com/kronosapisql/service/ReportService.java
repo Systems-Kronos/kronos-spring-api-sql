@@ -8,6 +8,7 @@ import com.kronosapisql.model.Tarefa;
 import com.kronosapisql.model.Usuario;
 import com.kronosapisql.repository.ReportRepository;
 import com.kronosapisql.repository.TarefaRepository;
+import com.kronosapisql.util.StatusMapper;
 import jakarta.persistence.EntityNotFoundException;
 import com.kronosapisql.repository.UsuarioRepository;
 import jakarta.transaction.Transactional;
@@ -20,7 +21,6 @@ public class ReportService {
     private final ReportRepository reportRepository;
     private final TarefaRepository tarefaRepository;
     private final UsuarioRepository usuarioRepository;
-
 
     public ReportService(ReportRepository reportRepository, TarefaRepository tarefaRepository, UsuarioRepository usuarioRepository) {
         this.reportRepository = reportRepository;
@@ -36,12 +36,13 @@ public class ReportService {
                 .orElseThrow(() -> new EntityNotFoundException("Report não encontrado com ID " + id));
     }
 
-    public Report buscarPorStatus(String status) {
+    public List<Report> buscarPorStatus(String status) {
         if (status == null || status.isBlank()) {
             throw new IllegalArgumentException("Status do report não pode ser nulo");
         }
-        return reportRepository.findByStatus(status)
-                .orElseThrow(() -> new EntityNotFoundException("Report não encontrado com status: " + status));
+
+        OpcaoStatus statusEnum = StatusMapper.toEnum(status);
+        return reportRepository.findAllByStatus(statusEnum);
     }
 
     public List<ReportFunctionDTO> listarReportsFuncionariosGestor(Long idGestor) {
@@ -90,29 +91,17 @@ public class ReportService {
         Usuario usuario = usuarioRepository.findById(dto.getIdUsuario())
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado com ID " + dto.getIdUsuario()));
 
-        String statusDb = converterStatusParaBanco(dto.getStatus());
+        OpcaoStatus statusEnum = StatusMapper.toEnum(dto.getStatus());
+        String statusDb = StatusMapper.toDatabaseValue(statusEnum);
 
-        reportRepository.inserirReportNative(dto.getDescricao(),dto.getProblema(), statusDb, tarefa.getId(), usuario.getId());
+        reportRepository.inserirReportNative(dto.getDescricao(), dto.getProblema(), statusDb, tarefa.getId(), usuario.getId());
 
         Report report = new Report();
         report.setDescricao(dto.getDescricao());
         report.setProblema(dto.getProblema());
-        report.setStatus(OpcaoStatus.valueOf(statusDb.toUpperCase().replace(" ", "_")));
+        report.setStatus(statusEnum);
         report.setUsuario(usuario);
         report.setTarefa(tarefa);
-
         return report;
-    }
-
-    private String converterStatusParaBanco(String status) {
-        switch (status.trim().toLowerCase()) {
-            case "pendente": return "Pendente";
-            case "em andamento": return "Em Andamento";
-            case "concluído":
-            case "concluída": return "Concluído";
-            case "cancelado":
-            case "cancelada": return "Cancelada";
-            default: throw new IllegalArgumentException("Status inválido: " + status);
-        }
     }
 }

@@ -18,7 +18,7 @@ public class TarefaService {
     private final HabilidadeRepository habilidadeRepository;
 
     public TarefaService(TarefaRepository tarefaRepository, UsuarioRepository usuarioRepository, HabilidadeRepository habilidadeRepository) {
-        this.usuarioRepository  = usuarioRepository;
+        this.usuarioRepository = usuarioRepository;
         this.habilidadeRepository = habilidadeRepository;
         this.tarefaRepository = tarefaRepository;
     }
@@ -90,6 +90,15 @@ public class TarefaService {
             throw new EntityNotFoundException("Tarefa não encontrada com ID: " + tarefa.getId());
         }
         return tarefaRepository.save(tarefa);
+    }
+
+    public void atualizarStatus(Long id, String status) {
+        if (id == null || status == null || status.isBlank()) {
+            throw new IllegalArgumentException("Id e status não podem ser nulos!");
+        }
+        tarefaRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Tarefa não encontrada com ID: " + id));
+        tarefaRepository.atualizarStatusNative(id, status);
     }
 
     public void deletar(Long id) {
