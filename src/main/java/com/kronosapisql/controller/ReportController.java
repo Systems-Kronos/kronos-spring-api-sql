@@ -48,10 +48,13 @@ public class ReportController {
     }
 
     @Operation(summary = "Lista report pelo status")
-    @GetMapping("/selecionar/{status}")
-    public ResponseEntity<Report> buscarPorStatus(@PathVariable String status) {
-        Report report = reportService.buscarPorStatus(status);
-        return ResponseEntity.ok(report);
+    @GetMapping("/selecionarStatus/{status}")
+    public ResponseEntity<List<Report>> buscarPorStatus(@PathVariable String status) {
+        List<Report> reports = reportService.buscarPorStatus(status);
+        if (reports.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(reports);
     }
 
     @Operation(summary = "Inserir um novo report")
