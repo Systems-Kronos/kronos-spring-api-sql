@@ -2,6 +2,7 @@ package com.kronosapisql.controller;
 
 import com.kronosapisql.dto.ReportDTO;
 import com.kronosapisql.dto.ReportFunctionDTO;
+import com.kronosapisql.dto.StatusUpdateDTO;
 import com.kronosapisql.model.Report;
 import com.kronosapisql.service.ReportService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -69,6 +70,13 @@ public class ReportController {
     public ResponseEntity<String> atualizarReport(@Valid @RequestBody Report report) {
         reportService.atualizar(report);
         return ResponseEntity.ok("Report atualizada com sucesso.");
+    }
+
+    @Operation(summary = "Atualiza o status de um report")
+    @PutMapping("/atualizarStatus/{id}")
+    public ResponseEntity<String> atualizarStatus(@PathVariable Long id, @RequestBody StatusUpdateDTO dto) {
+        reportService.atualizarStatus(id, dto.getStatus());
+        return ResponseEntity.ok("Status do report atualizado com sucesso.");
     }
 
     @Operation(summary = "Deleta um Report pelo ID")

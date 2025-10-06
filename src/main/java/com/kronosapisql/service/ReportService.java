@@ -73,6 +73,18 @@ public class ReportService {
         return reportRepository.save(report);
     }
 
+    public void atualizarStatus(Long id, String status) {
+        if (id == null || status == null || status.isBlank()) {
+            throw new IllegalArgumentException("Id e status não podem ser nulos!");
+        }
+        reportRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Report não encontrada com ID: " + id));
+
+        OpcaoStatus statusEnum = OpcaoStatus.fromValorBanco(status);
+        String statusBanco = statusEnum.getValorBanco();
+        reportRepository.atualizarStatusNative(id, statusBanco);
+    }
+
     public void deletar(Long id) {
         if (id == null) {
             throw new IllegalArgumentException("ID não pode ser nulo");
