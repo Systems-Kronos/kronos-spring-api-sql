@@ -1,5 +1,6 @@
 package com.kronosapisql.repository;
 
+import com.kronosapisql.enums.OpcaoStatus;
 import com.kronosapisql.model.Tarefa;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;

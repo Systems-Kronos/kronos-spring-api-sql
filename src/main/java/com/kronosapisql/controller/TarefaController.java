@@ -1,5 +1,6 @@
 package com.kronosapisql.controller;
 
+import com.kronosapisql.dto.StatusUpdateDTO;
 import com.kronosapisql.dto.TarefaFunctionDTO;
 import com.kronosapisql.dto.TarefaRequestDTO;
 import com.kronosapisql.model.Tarefa;
@@ -26,7 +27,7 @@ public class TarefaController {
 
     @Operation(summary = "Lista todas as tarefas de um usuário baseada na function")
     @GetMapping("/selecionarFunction/{usuarioId}")
-    public List<TarefaFunctionDTO> listarTarefasUsuario(@PathVariable Long usuarioId, @RequestParam(defaultValue = "1") String tipoTarefa, @RequestParam(defaultValue = "1") String status) {
+    public List<TarefaFunctionDTO> listarTarefasUsuario(@PathVariable Long usuarioId, @RequestParam(defaultValue = "1") String tipoTarefa, @RequestParam(defaultValue = "4") String status) {
         return tarefaService.listarTarefasUsuario(usuarioId, tipoTarefa, status);
     }
 
@@ -59,9 +60,8 @@ public class TarefaController {
 
     @Operation(summary = "Atualiza o status de uma tarefa")
     @PutMapping("/atualizarStatus/{id}")
-    public ResponseEntity<String> atualizarStatus(@PathVariable Long id, @RequestBody String status) {
-        String statusLimpo = status.replace("\"", "").trim();
-        tarefaService.atualizarStatus(id, statusLimpo);
+    public ResponseEntity<String> atualizarStatus(@PathVariable Long id, @RequestBody StatusUpdateDTO dto) {
+        tarefaService.atualizarStatus(id, dto.getStatus());
         return ResponseEntity.ok("Tarefa atualizada com sucesso.");
     }
 

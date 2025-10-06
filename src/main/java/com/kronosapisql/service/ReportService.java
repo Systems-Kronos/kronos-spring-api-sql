@@ -2,13 +2,12 @@ package com.kronosapisql.service;
 
 import com.kronosapisql.dto.ReportDTO;
 import com.kronosapisql.dto.ReportFunctionDTO;
-import com.kronosapisql.model.OpcaoStatus;
+import com.kronosapisql.enums.OpcaoStatus;
 import com.kronosapisql.model.Report;
 import com.kronosapisql.model.Tarefa;
 import com.kronosapisql.model.Usuario;
 import com.kronosapisql.repository.ReportRepository;
 import com.kronosapisql.repository.TarefaRepository;
-import com.kronosapisql.util.StatusMapper;
 import jakarta.persistence.EntityNotFoundException;
 import com.kronosapisql.repository.UsuarioRepository;
 import jakarta.transaction.Transactional;
@@ -41,8 +40,9 @@ public class ReportService {
             throw new IllegalArgumentException("Status do report não pode ser nulo");
         }
 
-        OpcaoStatus statusEnum = StatusMapper.toEnum(status);
-        return reportRepository.findAllByStatus(statusEnum);
+        OpcaoStatus statusEnum = OpcaoStatus.fromValorBanco(status);
+        String statusDb = statusEnum.getValorBanco();
+        return reportRepository.findByStatusNative(statusDb);
     }
 
     public List<ReportFunctionDTO> listarReportsFuncionariosGestor(Long idGestor) {
@@ -91,9 +91,8 @@ public class ReportService {
         Usuario usuario = usuarioRepository.findById(dto.getIdUsuario())
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado com ID " + dto.getIdUsuario()));
 
-        OpcaoStatus statusEnum = StatusMapper.toEnum(dto.getStatus());
-        String statusDb = StatusMapper.toDatabaseValue(statusEnum);
-
+        OpcaoStatus statusEnum = OpcaoStatus.fromValorBanco(dto.getStatus());
+        String statusDb = statusEnum.getValorBanco();
         reportRepository.inserirReportNative(dto.getDescricao(), dto.getProblema(), statusDb, tarefa.getId(), usuario.getId());
 
         Report report = new Report();

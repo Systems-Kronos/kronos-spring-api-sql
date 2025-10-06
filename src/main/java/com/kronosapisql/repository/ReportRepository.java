@@ -1,6 +1,6 @@
 package com.kronosapisql.repository;
 
-import com.kronosapisql.model.OpcaoStatus;
+import com.kronosapisql.enums.OpcaoStatus;
 import com.kronosapisql.model.Report;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -11,7 +11,8 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface ReportRepository extends JpaRepository<Report, Long> {
-    List<Report> findAllByStatus(OpcaoStatus status);
+    @Query(value = "SELECT * FROM report WHERE cStatus = CAST(:status AS opcao_status)", nativeQuery = true)
+    List<Report> findByStatusNative(@Param("status") String status);
 
     @Modifying
     @Transactional

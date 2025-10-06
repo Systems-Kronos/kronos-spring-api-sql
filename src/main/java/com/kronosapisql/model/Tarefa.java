@@ -1,6 +1,7 @@
 package com.kronosapisql.model;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.kronosapisql.enums.OpcaoStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;

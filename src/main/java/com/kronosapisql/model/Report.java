@@ -1,5 +1,6 @@
 package com.kronosapisql.model;
 
+import com.kronosapisql.enums.OpcaoStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -35,7 +36,6 @@ public class Report {
     private String problema;
 
     @NotNull
-    @Enumerated(EnumType.STRING)
     @Column(name = "cStatus")
     private OpcaoStatus status;
 }

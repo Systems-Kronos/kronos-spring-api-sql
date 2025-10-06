@@ -2,6 +2,7 @@ package com.kronosapisql.service;
 
 import com.kronosapisql.dto.TarefaFunctionDTO;
 import com.kronosapisql.dto.TarefaRequestDTO;
+import com.kronosapisql.enums.OpcaoStatus;
 import com.kronosapisql.model.*;
 import com.kronosapisql.repository.HabilidadeRepository;
 import com.kronosapisql.repository.TarefaRepository;
@@ -98,7 +99,10 @@ public class TarefaService {
         }
         tarefaRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Tarefa não encontrada com ID: " + id));
-        tarefaRepository.atualizarStatusNative(id, status);
+
+        OpcaoStatus statusEnum = OpcaoStatus.fromValorBanco(status);
+        String statusBanco = statusEnum.getValorBanco();
+        tarefaRepository.atualizarStatusNative(id, statusBanco);
     }
 
     public void deletar(Long id) {

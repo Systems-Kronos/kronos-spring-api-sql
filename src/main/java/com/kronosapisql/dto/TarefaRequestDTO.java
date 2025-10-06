@@ -1,13 +1,17 @@
 package com.kronosapisql.dto;
 
-import com.kronosapisql.model.OpcaoStatus;
+import com.kronosapisql.enums.OpcaoStatus;
 import com.kronosapisql.model.Tarefa;
 import com.kronosapisql.model.Usuario;
 import jakarta.validation.constraints.NotNull;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Date;
 import java.util.List;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
