@@ -1,6 +1,5 @@
 package com.kronosapisql.repository;
 
-import com.kronosapisql.enums.OpcaoStatus;
 import com.kronosapisql.model.Report;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -13,6 +12,11 @@ import java.util.List;
 public interface ReportRepository extends JpaRepository<Report, Long> {
     @Query(value = "SELECT * FROM report WHERE cStatus = CAST(:status AS opcao_status)", nativeQuery = true)
     List<Report> findByStatusNative(@Param("status") String status);
+
+    @Modifying
+    @org.springframework.transaction.annotation.Transactional
+    @Query(value = "UPDATE report SET cStatus = CAST(:status AS opcao_status) WHERE nCdReport = :id", nativeQuery = true)
+    void atualizarStatusNative(@Param("id") Long id, @Param("status") String status);
 
     @Modifying
     @Transactional
