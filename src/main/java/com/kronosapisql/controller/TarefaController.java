@@ -62,7 +62,7 @@ public class TarefaController {
     @PutMapping("/atualizarStatus/{id}")
     public ResponseEntity<String> atualizarStatus(@PathVariable Long id, @RequestBody StatusUpdateDTO dto) {
         tarefaService.atualizarStatus(id, dto.getStatus());
-        return ResponseEntity.ok("Tarefa atualizada com sucesso.");
+        return ResponseEntity.ok("Status da tarefa atualizado com sucesso.");
     }
 
     @Operation(summary = "Deleta uma tarefa pelo ID")
