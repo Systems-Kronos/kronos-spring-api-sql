@@ -1,6 +1,8 @@
 package com.kronosapisql.controller;
 
 import com.kronosapisql.dto.ReportDTO;
+import com.kronosapisql.dto.ReportFunctionDTO;
+import com.kronosapisql.dto.StatusUpdateDTO;
 import com.kronosapisql.model.Report;
 import com.kronosapisql.service.ReportService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -33,6 +35,12 @@ public class ReportController {
         return ResponseEntity.ok(reports);
     }
 
+    @Operation(summary = "Lista todos os reports dos usuários de um gestor específico baseado na function")
+    @GetMapping("/selecionarFunction/{idGestor}")
+    public List<ReportFunctionDTO> listarReportsFuncionariosGestor(@PathVariable Long idGestor) {
+        return reportService.listarReportsFuncionariosGestor(idGestor);
+    }
+
     @Operation(summary = "Lista report pelo ID")
     @GetMapping("/selecionar/{id}")
     public ResponseEntity<Report> buscarPorId(@PathVariable Long id) {
@@ -41,10 +49,13 @@ public class ReportController {
     }
 
     @Operation(summary = "Lista report pelo status")
-    @GetMapping("/selecionar/{status}")
-    public ResponseEntity<Report> buscarPorStatus(@PathVariable String status) {
-        Report report = reportService.buscarPorStatus(status);
-        return ResponseEntity.ok(report);
+    @GetMapping("/selecionarStatus/{status}")
+    public ResponseEntity<List<Report>> buscarPorStatus(@PathVariable String status) {
+        List<Report> reports = reportService.buscarPorStatus(status);
+        if (reports.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(reports);
     }
 
     @Operation(summary = "Inserir um novo report")
@@ -59,6 +70,13 @@ public class ReportController {
     public ResponseEntity<String> atualizarReport(@Valid @RequestBody Report report) {
         reportService.atualizar(report);
         return ResponseEntity.ok("Report atualizada com sucesso.");
+    }
+
+    @Operation(summary = "Atualiza o status de um report")
+    @PutMapping("/atualizarStatus/{id}")
+    public ResponseEntity<String> atualizarStatus(@PathVariable Long id, @RequestBody StatusUpdateDTO dto) {
+        reportService.atualizarStatus(id, dto.getStatus());
+        return ResponseEntity.ok("Status do report atualizado com sucesso.");
     }
 
     @Operation(summary = "Deleta um Report pelo ID")

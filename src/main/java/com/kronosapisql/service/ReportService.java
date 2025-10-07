@@ -1,7 +1,8 @@
 package com.kronosapisql.service;
 
 import com.kronosapisql.dto.ReportDTO;
-import com.kronosapisql.model.OpcaoStatus;
+import com.kronosapisql.dto.ReportFunctionDTO;
+import com.kronosapisql.enums.OpcaoStatus;
 import com.kronosapisql.model.Report;
 import com.kronosapisql.model.Tarefa;
 import com.kronosapisql.model.Usuario;
@@ -20,7 +21,6 @@ public class ReportService {
     private final TarefaRepository tarefaRepository;
     private final UsuarioRepository usuarioRepository;
 
-
     public ReportService(ReportRepository reportRepository, TarefaRepository tarefaRepository, UsuarioRepository usuarioRepository) {
         this.reportRepository = reportRepository;
         this.tarefaRepository = tarefaRepository;
@@ -35,12 +35,21 @@ public class ReportService {
                 .orElseThrow(() -> new EntityNotFoundException("Report não encontrado com ID " + id));
     }
 
-    public Report buscarPorStatus(String status) {
+    public List<Report> buscarPorStatus(String status) {
         if (status == null || status.isBlank()) {
             throw new IllegalArgumentException("Status do report não pode ser nulo");
         }
-        return reportRepository.findByStatus(status)
-                .orElseThrow(() -> new EntityNotFoundException("Report não encontrado com status: " + status));
+
+        OpcaoStatus statusEnum = OpcaoStatus.fromValorBanco(status);
+        String statusDb = statusEnum.getValorBanco();
+        return reportRepository.findByStatusNative(statusDb);
+    }
+
+    public List<ReportFunctionDTO> listarReportsFuncionariosGestor(Long idGestor) {
+        return reportRepository.listarReportsFuncionariosGestorRaw(idGestor)
+                .stream()
+                .map(ReportFunctionDTO::fromRow)
+                .toList();
     }
 
     public List<Report> listar() {
@@ -64,6 +73,18 @@ public class ReportService {
         return reportRepository.save(report);
     }
 
+    public void atualizarStatus(Long id, String status) {
+        if (id == null || status == null || status.isBlank()) {
+            throw new IllegalArgumentException("Id e status não podem ser nulos!");
+        }
+        reportRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Report não encontrada com ID: " + id));
+
+        OpcaoStatus statusEnum = OpcaoStatus.fromValorBanco(status);
+        String statusBanco = statusEnum.getValorBanco();
+        reportRepository.atualizarStatusNative(id, statusBanco);
+    }
+
     public void deletar(Long id) {
         if (id == null) {
             throw new IllegalArgumentException("ID não pode ser nulo");
@@ -82,29 +103,16 @@ public class ReportService {
         Usuario usuario = usuarioRepository.findById(dto.getIdUsuario())
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado com ID " + dto.getIdUsuario()));
 
-        String statusDb = converterStatusParaBanco(dto.getStatus());
-
-        reportRepository.inserirReportNative(dto.getDescricao(),dto.getProblema(), statusDb, tarefa.getId(), usuario.getId());
+        OpcaoStatus statusEnum = OpcaoStatus.fromValorBanco(dto.getStatus());
+        String statusDb = statusEnum.getValorBanco();
+        reportRepository.inserirReportNative(dto.getDescricao(), dto.getProblema(), statusDb, tarefa.getId(), usuario.getId());
 
         Report report = new Report();
         report.setDescricao(dto.getDescricao());
         report.setProblema(dto.getProblema());
-        report.setStatus(OpcaoStatus.valueOf(statusDb.toUpperCase().replace(" ", "_")));
+        report.setStatus(statusEnum);
         report.setUsuario(usuario);
         report.setTarefa(tarefa);
-
         return report;
-    }
-
-    private String converterStatusParaBanco(String status) {
-        switch (status.trim().toLowerCase()) {
-            case "pendente": return "Pendente";
-            case "em andamento": return "Em Andamento";
-            case "concluído":
-            case "concluída": return "Concluído";
-            case "cancelado":
-            case "cancelada": return "Cancelada";
-            default: throw new IllegalArgumentException("Status inválido: " + status);
-        }
     }
 }

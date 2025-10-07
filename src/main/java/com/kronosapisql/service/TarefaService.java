@@ -2,6 +2,7 @@ package com.kronosapisql.service;
 
 import com.kronosapisql.dto.TarefaFunctionDTO;
 import com.kronosapisql.dto.TarefaRequestDTO;
+import com.kronosapisql.enums.OpcaoStatus;
 import com.kronosapisql.model.*;
 import com.kronosapisql.repository.HabilidadeRepository;
 import com.kronosapisql.repository.TarefaRepository;
@@ -18,7 +19,7 @@ public class TarefaService {
     private final HabilidadeRepository habilidadeRepository;
 
     public TarefaService(TarefaRepository tarefaRepository, UsuarioRepository usuarioRepository, HabilidadeRepository habilidadeRepository) {
-        this.usuarioRepository  = usuarioRepository;
+        this.usuarioRepository = usuarioRepository;
         this.habilidadeRepository = habilidadeRepository;
         this.tarefaRepository = tarefaRepository;
     }
@@ -34,7 +35,14 @@ public class TarefaService {
     public List<TarefaFunctionDTO> listarTarefasUsuario(Long usuario, String tipoTarefa, String status) {
         return tarefaRepository.listarTarefasUsuarioRaw(usuario, tipoTarefa, status)
                 .stream()
-                .map(TarefaFunctionDTO::fromRow)
+                .map(TarefaFunctionDTO::fromRowFunctionIdUsuario)
+                .toList();
+    }
+
+    public List<TarefaFunctionDTO> listarTarefasUsuarioGestor(Long idGestor, String tipoTarefa, String status) {
+        return tarefaRepository.listarTarefasUsuarioGestorRaw(idGestor, tipoTarefa, status)
+                .stream()
+                .map(TarefaFunctionDTO::fromRowFunctionIdGestor)
                 .toList();
     }
 
@@ -83,6 +91,18 @@ public class TarefaService {
             throw new EntityNotFoundException("Tarefa não encontrada com ID: " + tarefa.getId());
         }
         return tarefaRepository.save(tarefa);
+    }
+
+    public void atualizarStatus(Long id, String status) {
+        if (id == null || status == null || status.isBlank()) {
+            throw new IllegalArgumentException("Id e status não podem ser nulos!");
+        }
+        tarefaRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Tarefa não encontrada com ID: " + id));
+
+        OpcaoStatus statusEnum = OpcaoStatus.fromValorBanco(status);
+        String statusBanco = statusEnum.getValorBanco();
+        tarefaRepository.atualizarStatusNative(id, statusBanco);
     }
 
     public void deletar(Long id) {

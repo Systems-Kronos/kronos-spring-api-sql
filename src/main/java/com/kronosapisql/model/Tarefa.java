@@ -1,6 +1,7 @@
 package com.kronosapisql.model;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.kronosapisql.enums.OpcaoStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -61,8 +62,8 @@ public class Tarefa {
     private String descricao;
 
     @NotNull
-    @Column(name = "cstatus")
-    private String status;
+    @Column(name = "cStatus")
+    private OpcaoStatus status;
 
     @NotNull
     @Column(name = "dDataAtribuicao")

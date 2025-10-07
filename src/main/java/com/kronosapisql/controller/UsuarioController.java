@@ -2,6 +2,7 @@ package com.kronosapisql.controller;
 
 import com.kronosapisql.dto.LoginRequestDTO;
 import com.kronosapisql.dto.LoginResponseDTO;
+import com.kronosapisql.dto.UsuarioFunctionDTO;
 import com.kronosapisql.security.JwtUtil;
 import com.kronosapisql.model.Usuario;
 import com.kronosapisql.service.UsuarioService;
@@ -32,6 +33,12 @@ public class UsuarioController {
     @GetMapping("/listar")
     public List<Usuario> listarUsuario() {
         return usuarioService.listar();
+    }
+
+    @Operation(summary = "Lista todos os usuários de um gestor específico baseado na function")
+    @GetMapping("/selecionarFunction/{idGestor}")
+    public List<UsuarioFunctionDTO> listarFuncionariosGestor(@PathVariable Long idGestor) {
+        return usuarioService.listarFuncionariosGestor(idGestor);
     }
 
     @GetMapping("/selecionarId/{id}")

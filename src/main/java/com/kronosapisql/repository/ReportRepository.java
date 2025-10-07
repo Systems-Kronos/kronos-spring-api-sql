@@ -7,10 +7,16 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import java.util.Optional;
+import java.util.List;
 
 public interface ReportRepository extends JpaRepository<Report, Long> {
-    Optional<Report> findByStatus(String status);
+    @Query(value = "SELECT * FROM report WHERE cStatus = CAST(:status AS opcao_status)", nativeQuery = true)
+    List<Report> findByStatusNative(@Param("status") String status);
+
+    @Modifying
+    @org.springframework.transaction.annotation.Transactional
+    @Query(value = "UPDATE report SET cStatus = CAST(:status AS opcao_status) WHERE nCdReport = :id", nativeQuery = true)
+    void atualizarStatusNative(@Param("id") Long id, @Param("status") String status);
 
     @Modifying
     @Transactional
@@ -21,4 +27,7 @@ public interface ReportRepository extends JpaRepository<Report, Long> {
                              @Param("status") String status,
                              @Param("tarefaId") Long tarefaId,
                              @Param("usuarioId") Long usuarioId);
+
+    @Query(value = "SELECT * FROM fn_reports_gestor(:idGestor)", nativeQuery = true)
+    List<Object[]> listarReportsFuncionariosGestorRaw(@Param("idGestor") Long idGestor);
 }
