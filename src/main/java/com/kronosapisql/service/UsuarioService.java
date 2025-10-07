@@ -1,20 +1,28 @@
 package com.kronosapisql.service;
 
+
+import com.kronosapisql.model.Setor;
+
 import com.kronosapisql.dto.UsuarioFunctionDTO;
+
 import com.kronosapisql.model.Usuario;
+import com.kronosapisql.repository.SetorRepository;
 import com.kronosapisql.repository.UsuarioRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class UsuarioService {
     private final UsuarioRepository usuarioRepository;
+    private final SetorRepository setorRepository;
     
-    public UsuarioService(UsuarioRepository usuarioRepository){
+    public UsuarioService(UsuarioRepository usuarioRepository, SetorRepository setorRepository){
         this.usuarioRepository = usuarioRepository;
+        this.setorRepository = setorRepository;
     }
 
     public Usuario buscarPorId(Long id) {
@@ -61,6 +69,40 @@ public class UsuarioService {
         if (!usuarioRepository.existsById(usuario.getId())) {
             throw new EntityNotFoundException("Usuário não encontrado com ID " + usuario.getId());
         }
+        return usuarioRepository.save(usuario);
+    }
+
+    public Usuario atualizarParcial(Long id, Map<String, Object> campos) {
+        Usuario usuario = usuarioRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+
+        // Permitir apenas atualização dos campos específicos
+        if (campos.containsKey("nome")) {
+            usuario.setNome((String) campos.get("nome"));
+        }
+
+        if (campos.containsKey("email")) {
+            usuario.setEmail((String) campos.get("email"));
+        }
+
+        if (campos.containsKey("booleanGestor")) {
+            usuario.setBooleanGestor((Boolean) campos.get("booleanGestor"));
+        }
+
+        if (campos.containsKey("ativo")) {
+            usuario.setAtivo((Boolean) campos.get("ativo"));
+        }
+
+        if (campos.containsKey("setor")) {
+            Object setorObj = campos.get("setor");
+            if (setorObj instanceof Map<?, ?> setorMap && setorMap.containsKey("id")) {
+                Long setorId = ((Number) setorMap.get("id")).longValue();
+                Setor setor = setorRepository.findById(setorId)
+                        .orElseThrow(() -> new RuntimeException("Setor não encontrado"));
+                usuario.setSetor(setor);
+            }
+        }
+
         return usuarioRepository.save(usuario);
     }
 
