@@ -2,6 +2,7 @@ package com.kronosapisql.controller;
 
 import com.kronosapisql.dto.LoginRequestDTO;
 import com.kronosapisql.dto.LoginResponseDTO;
+import com.kronosapisql.dto.UsuarioDTO;
 import com.kronosapisql.dto.UsuarioFunctionDTO;
 import com.kronosapisql.security.JwtUtil;
 import com.kronosapisql.model.Usuario;
@@ -57,9 +58,9 @@ public class UsuarioController {
 
     @Operation(summary = "Adiciona um novo usuário")
     @PostMapping("/adicionar")
-    public ResponseEntity<String> adicionarUsuario(@Valid @RequestBody Usuario usuario) {
-        usuarioService.salvar(usuario);
-        return ResponseEntity.ok("Usuário adicionado com sucesso.");
+    public ResponseEntity<String> adicionarUsuario(@Valid @RequestBody UsuarioDTO usuariodto) {
+        Usuario usuario = usuarioService.criarUsuario(usuariodto);
+        return ResponseEntity.ok("Usuário adicionado com sucesso.\n" + usuario);
     }
 
     @Operation(summary = "Atualiza um usuário")
