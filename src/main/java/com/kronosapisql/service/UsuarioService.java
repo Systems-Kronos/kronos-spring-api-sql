@@ -1,14 +1,18 @@
 package com.kronosapisql.service;
 
 
-import com.kronosapisql.model.Setor;
+import com.kronosapisql.dto.UsuarioDTO;
+import com.kronosapisql.enums.OpcaoStatus;
+import com.kronosapisql.model.*;
 
 import com.kronosapisql.dto.UsuarioFunctionDTO;
 
-import com.kronosapisql.model.Usuario;
+import com.kronosapisql.repository.CargoRepository;
+import com.kronosapisql.repository.EmpresaRepository;
 import com.kronosapisql.repository.SetorRepository;
 import com.kronosapisql.repository.UsuarioRepository;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
 
@@ -18,11 +22,15 @@ import java.util.Map;
 @Service
 public class UsuarioService {
     private final UsuarioRepository usuarioRepository;
+    private final CargoRepository cargoRepository;
+    private final EmpresaRepository empresaRepository;
     private final SetorRepository setorRepository;
     
-    public UsuarioService(UsuarioRepository usuarioRepository, SetorRepository setorRepository){
+    public UsuarioService(UsuarioRepository usuarioRepository, SetorRepository setorRepository, EmpresaRepository empresaRepository, CargoRepository cargoRepository){
         this.usuarioRepository = usuarioRepository;
         this.setorRepository = setorRepository;
+        this.empresaRepository = empresaRepository;
+        this.cargoRepository = cargoRepository;
     }
 
     public Usuario buscarPorId(Long id) {
@@ -60,6 +68,38 @@ public class UsuarioService {
             throw new IllegalArgumentException("Já existe um usuário com este CPF");
         });
         return usuarioRepository.save(usuario);
+    }
+
+    @Transactional
+    public Usuario criarUsuario(UsuarioDTO dto) {
+        Setor setor = setorRepository.findById(dto.getSetorId())
+                .orElseThrow(() -> new RuntimeException("Setor não encontrado com ID " + dto.getSetorId()));
+
+        Usuario usuario = usuarioRepository.findById(dto.getGestorId())
+                .orElseThrow(() -> new RuntimeException("Gestor não encontrado com ID " + dto.getGestorId()));
+
+        Empresa empresa = empresaRepository.findById(dto.getEmpresaId())
+                .orElseThrow(() -> new RuntimeException("Empresa não encontrada com Id "+ dto.getEmpresaId()));
+
+        Cargo cargo = cargoRepository.findById(dto.getCargoId())
+                        .orElseThrow(() -> new RuntimeException("Cargo não encontrado com ID "+ dto.getCargoId()));
+
+        usuarioRepository.inserirUsuarioNative(dto.getNome(), usuario.getId(), dto.getBooleanGestor(), empresa.getId(), setor.getId(), cargo.getId(), dto.getCpf(), dto.getTelefone(), dto.getEmail(),dto.getSenha(), dto.getFoto() , dto.getAtivo() );
+
+        Usuario usuario1 = new Usuario();
+        usuario1.setNome(dto.getNome());
+        usuario1.setGestor(usuario);
+        usuario1.setBooleanGestor(dto.getBooleanGestor());
+        usuario1.setEmpresa(empresa);
+        usuario1.setSetor(setor);
+        usuario1.setCargo(cargo);
+        usuario1.setCpf(dto.getCpf());
+        usuario1.setTelefone(dto.getTelefone());
+        usuario1.setEmail(dto.getEmail());
+        usuario1.setSenha(dto.getSenha());
+        usuario1.setFoto(dto.getFoto());
+        usuario1.setAtivo(dto.getAtivo());
+        return usuario1;
     }
 
     public Usuario atualizar(Usuario usuario) {
