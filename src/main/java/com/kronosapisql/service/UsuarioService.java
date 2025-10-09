@@ -141,6 +141,9 @@ public class UsuarioService {
                 usuario.setSetor(setor);
             }
         }
+        if (campos.containsKey("telefone")){
+            usuario.setTelefone((String) campos.get("telefone"));
+        }
 
         if (campos.containsKey("cargo")) {
             Object cargoObj = campos.get("cargo");
