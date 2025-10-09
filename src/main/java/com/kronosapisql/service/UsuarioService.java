@@ -116,7 +116,6 @@ public class UsuarioService {
         Usuario usuario = usuarioRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 
-        // Permitir apenas atualização dos campos específicos
         if (campos.containsKey("nome")) {
             usuario.setNome((String) campos.get("nome"));
         }
@@ -140,6 +139,16 @@ public class UsuarioService {
                 Setor setor = setorRepository.findById(setorId)
                         .orElseThrow(() -> new RuntimeException("Setor não encontrado"));
                 usuario.setSetor(setor);
+            }
+        }
+
+        if (campos.containsKey("cargo")) {
+            Object cargoObj = campos.get("cargo");
+            if (cargoObj instanceof Map<?, ?> cargoMap && cargoMap.containsKey("id")) {
+                Long cargoId = ((Number) cargoMap.get("id")).longValue();
+                Cargo cargo = cargoRepository.findById(cargoId)
+                        .orElseThrow(() -> new RuntimeException("Cargo não encontrado"));
+                usuario.setCargo(cargo);
             }
         }
 
