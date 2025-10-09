@@ -116,7 +116,6 @@ public class UsuarioService {
         Usuario usuario = usuarioRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 
-        // Permitir apenas atualização dos campos específicos
         if (campos.containsKey("nome")) {
             usuario.setNome((String) campos.get("nome"));
         }
@@ -141,6 +140,9 @@ public class UsuarioService {
                         .orElseThrow(() -> new RuntimeException("Setor não encontrado"));
                 usuario.setSetor(setor);
             }
+        }
+        if (campos.containsKey("telefone")){
+            usuario.setTelefone((String) campos.get("telefone"));
         }
 
         return usuarioRepository.save(usuario);
