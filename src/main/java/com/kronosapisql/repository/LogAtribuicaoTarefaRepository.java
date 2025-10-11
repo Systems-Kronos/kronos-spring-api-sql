@@ -1,5 +1,6 @@
 package com.kronosapisql.repository;
 
+import com.kronosapisql.dto.LogAtribuicaoTarefaDTO;
 import com.kronosapisql.model.LogAtribuicaoTarefa;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -11,6 +12,6 @@ public interface LogAtribuicaoTarefaRepository extends JpaRepository<LogAtribuic
     @Override
     Optional<LogAtribuicaoTarefa> findById(Long id);
 
-    List<LogAtribuicaoTarefa> findByIdUsuarioAtuante(Long id);
+    List<LogAtribuicaoTarefa> findByTarefa_Id(Long id);
 
 }
