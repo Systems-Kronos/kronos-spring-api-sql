@@ -1,10 +1,12 @@
 package com.kronosapisql.model;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.kronosapisql.converters.OpcaoStatusConverter;
 import com.kronosapisql.enums.OpcaoStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import org.hibernate.annotations.ColumnTransformer;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -62,6 +64,8 @@ public class Tarefa {
     private String descricao;
 
     @NotNull
+    @Convert(converter = OpcaoStatusConverter.class)
+    @ColumnTransformer(write = "?::opcao_status")
     @Column(name = "cStatus")
     private OpcaoStatus status;
 
