@@ -32,15 +32,15 @@ public class LogAtribuicaoTarefaService {
         return logAtribuicaoTarefaRepository.findAll();
     }
 
-    public List<LogAtribuicaoTarefa> buscarPorIdUsuarioAtuante(Long id) {
+    public List<LogAtribuicaoTarefa> buscarPorIdTarefa(Long id) {
         if (id == null) {
             throw new IllegalArgumentException("ID não pode ser nulo");
         }
 
-        List<LogAtribuicaoTarefa> logs = logAtribuicaoTarefaRepository.findByIdUsuarioAtuante(id);
+        List<LogAtribuicaoTarefa> logs = logAtribuicaoTarefaRepository.findByTarefa_Id(id);
 
         if (logs.isEmpty()) {
-            throw new EntityNotFoundException("Nenhum log de atribuição encontrado para o usuário ID: " + id);
+            throw new EntityNotFoundException("Nenhum log de atribuição encontrado para com o ID da tarefa: " + id);
         }
 
         return logs;
