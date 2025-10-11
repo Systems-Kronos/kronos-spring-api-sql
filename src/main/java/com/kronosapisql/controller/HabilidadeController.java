@@ -35,6 +35,13 @@ public class HabilidadeController {
         return ResponseEntity.ok(habilidade);
     }
 
+    @Operation(summary = "Lista todas as habilidades pertencentes a uma empresa pelo id dela")
+    @GetMapping("/selecionar/empresa/{id}")
+    public List<Habilidade> buscarPorEmpresaId(@PathVariable Long id) {
+        return habilidadeService.buscarPeloIdEmpresa(id);
+    }
+
+
     @Operation(summary = "Adiciona uma habilidade")
     @PostMapping("/adicionar")
     public ResponseEntity<String> adicionarHabilidade(@RequestBody @Valid Habilidade habilidade) {

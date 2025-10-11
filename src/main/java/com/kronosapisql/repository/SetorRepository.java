@@ -1,7 +1,6 @@
 package com.kronosapisql.repository;
 
 import com.kronosapisql.model.Setor;
-import com.kronosapisql.model.Usuario;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
