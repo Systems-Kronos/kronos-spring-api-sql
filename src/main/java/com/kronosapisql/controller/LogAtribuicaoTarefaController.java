@@ -32,10 +32,10 @@ public class LogAtribuicaoTarefaController {
         return ResponseEntity.ok(logAtribuicaoTarefa);
     }
 
-    @GetMapping("/selecionarUsuario/{id}")
+    @GetMapping("/selecionarTarefa/{id}")
     @Operation(summary = "Lista o log pelo id do usuário")
     public ResponseEntity<List<LogAtribuicaoTarefa>> selecionarLogAtribuicaoTarefaPeloUsuario(@PathVariable Long id) {
-        List<LogAtribuicaoTarefa> logAtribuicaoTarefa = logAtribuicaoTarefaService.buscarPorIdUsuarioAtuante(id);
+        List<LogAtribuicaoTarefa> logAtribuicaoTarefa = logAtribuicaoTarefaService.buscarPorIdTarefa(id);
 
         if (logAtribuicaoTarefa.isEmpty()) {
             return ResponseEntity.noContent().build(); // retorna 204 caso não tenha nada
