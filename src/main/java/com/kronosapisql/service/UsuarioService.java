@@ -154,6 +154,10 @@ public class UsuarioService {
                 usuario.setCargo(cargo);
             }
         }
+        if (campos.containsKey("foto")){
+            usuario.setFoto((String) campos.get("foto"));
+        }
+
 
         return usuarioRepository.save(usuario);
     }
