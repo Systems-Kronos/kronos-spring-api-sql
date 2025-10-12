@@ -71,35 +71,36 @@ public class UsuarioService {
     }
 
     @Transactional
-    public Usuario criarUsuario(UsuarioDTO dto) {
+    public Long criarUsuario(UsuarioDTO dto) {
         Setor setor = setorRepository.findById(dto.getSetorId())
-                .orElseThrow(() -> new RuntimeException("Setor não encontrado com ID " + dto.getSetorId()));
+                .orElseThrow(() -> new RuntimeException("Setor não encontrado"));
 
-        Usuario usuario = usuarioRepository.findById(dto.getGestorId())
-                .orElseThrow(() -> new RuntimeException("Gestor não encontrado com ID " + dto.getGestorId()));
+        Usuario gestor = usuarioRepository.findById(dto.getGestorId())
+                .orElseThrow(() -> new RuntimeException("Gestor não encontrado"));
 
         Empresa empresa = empresaRepository.findById(dto.getEmpresaId())
-                .orElseThrow(() -> new RuntimeException("Empresa não encontrada com Id "+ dto.getEmpresaId()));
+                .orElseThrow(() -> new RuntimeException("Empresa não encontrada"));
 
         Cargo cargo = cargoRepository.findById(dto.getCargoId())
-                        .orElseThrow(() -> new RuntimeException("Cargo não encontrado com ID "+ dto.getCargoId()));
+                .orElseThrow(() -> new RuntimeException("Cargo não encontrado"));
 
-        usuarioRepository.inserirUsuarioNative(dto.getNome(), usuario.getId(), dto.getBooleanGestor(), empresa.getId(), setor.getId(), cargo.getId(), dto.getCpf(), dto.getTelefone(), dto.getEmail(),dto.getSenha(), dto.getFoto() , dto.getAtivo() );
+        Usuario usuario = Usuario.builder()
+                .nome(dto.getNome())
+                .gestor(gestor)
+                .booleanGestor(dto.getBooleanGestor())
+                .empresa(empresa)
+                .setor(setor)
+                .cargo(cargo)
+                .cpf(dto.getCpf())
+                .telefone(dto.getTelefone())
+                .email(dto.getEmail())
+                .senha(dto.getSenha())
+                .foto(dto.getFoto())
+                .ativo(dto.getAtivo())
+                .build();
 
-        Usuario usuario1 = new Usuario();
-        usuario1.setNome(dto.getNome());
-        usuario1.setGestor(usuario);
-        usuario1.setBooleanGestor(dto.getBooleanGestor());
-        usuario1.setEmpresa(empresa);
-        usuario1.setSetor(setor);
-        usuario1.setCargo(cargo);
-        usuario1.setCpf(dto.getCpf());
-        usuario1.setTelefone(dto.getTelefone());
-        usuario1.setEmail(dto.getEmail());
-        usuario1.setSenha(dto.getSenha());
-        usuario1.setFoto(dto.getFoto());
-        usuario1.setAtivo(dto.getAtivo());
-        return usuario1;
+        Usuario usuarioSalvo = usuarioRepository.save(usuario);
+        return usuarioSalvo.getId();
     }
 
     public Usuario atualizar(Usuario usuario) {

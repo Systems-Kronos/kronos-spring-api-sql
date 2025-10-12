@@ -58,9 +58,15 @@ public class UsuarioController {
 
     @Operation(summary = "Adiciona um novo usuário")
     @PostMapping("/adicionar")
-    public ResponseEntity<String> adicionarUsuario(@Valid @RequestBody UsuarioDTO usuariodto) {
-        Usuario usuario = usuarioService.criarUsuario(usuariodto);
-        return ResponseEntity.ok("Usuário adicionado com sucesso.\n" + usuario);
+    public ResponseEntity<Map<String, Object>> adicionarUsuario(@Valid @RequestBody UsuarioDTO usuariodto) {
+        Long idUsuario = usuarioService.criarUsuario(usuariodto);
+
+        Map<String, Object> response = Map.of(
+                "mensagem", "Usuário adicionado com sucesso",
+                "id", idUsuario
+        );
+
+        return ResponseEntity.status(201).body(response);
     }
 
     @Operation(summary = "Atualiza um usuário")
