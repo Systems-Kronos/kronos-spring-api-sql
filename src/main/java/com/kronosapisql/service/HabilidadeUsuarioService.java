@@ -1,8 +1,11 @@
 package com.kronosapisql.service;
 
+import com.kronosapisql.model.Habilidade;
 import com.kronosapisql.model.HabilidadeUsuario;
+import com.kronosapisql.model.Usuario;
 import com.kronosapisql.repository.HabilidadeUsuarioRepository;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -27,11 +30,26 @@ public class HabilidadeUsuarioService {
         return habilidadeUsuarioRepository.findAll();
     }
 
-    public HabilidadeUsuario salvar(HabilidadeUsuario habilidade) {
-        if (habilidade == null) {
-            throw new IllegalArgumentException("Habilidade não pode ser nula");
+    @Transactional
+    public List<HabilidadeUsuario> inserir(Long idUsuario, List<Long> idsHabilidade) {
+        if (idUsuario == null) {
+            throw new IllegalArgumentException("O ID do usuário não pode ser nulo");
         }
-        return habilidadeUsuarioRepository.save(habilidade);
+
+        if (idsHabilidade == null || idsHabilidade.isEmpty()) {
+            throw new IllegalArgumentException("A lista de IDs de habilidade não pode ser nula nem vazia");
+        }
+
+        // Cria os objetos intermediários ligando usuário e habilidades
+        List<HabilidadeUsuario> habilidadesUsuario = idsHabilidade.stream()
+                .map(idHab -> HabilidadeUsuario.builder()
+                        .usuario(Usuario.builder().id(idUsuario).build())
+                        .habilidade(Habilidade.builder().id(idHab).build())
+                        .build())
+                .toList();
+
+        // Salva todos de uma vez
+        return habilidadeUsuarioRepository.saveAll(habilidadesUsuario);
     }
 
     public HabilidadeUsuario atualizar(HabilidadeUsuario habilidade) {

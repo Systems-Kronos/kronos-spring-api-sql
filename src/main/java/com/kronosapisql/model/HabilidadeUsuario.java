@@ -14,13 +14,19 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class HabilidadeUsuario {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "nCdHabilidade")
+    @Column(name = "nCdHabilidadeUsuario")
     private Long id;
 
     @NotNull
     @ManyToOne
     @JoinColumn(name = "nCdUsuario", referencedColumnName = "nCdUsuario")
     private Usuario usuario;
+
+    @NotNull
+    @ManyToOne
+    @JoinColumn(name = "nCdHabilidade", referencedColumnName = "nCdHabilidade")
+    private Habilidade habilidade;
 }

@@ -1,5 +1,6 @@
 package com.kronosapisql.controller;
 
+import com.kronosapisql.dto.HabilidadeUsuarioDTO;
 import com.kronosapisql.model.HabilidadeUsuario;
 import com.kronosapisql.service.HabilidadeUsuarioService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -8,6 +9,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/habilidade-usuario")
@@ -30,9 +33,9 @@ public class HabilidadeUsuarioController {
 
     @Operation(summary = "Adiciona um nova habilidade do usuario")
     @PostMapping("/adicionar")
-    public ResponseEntity<String> adicionarHabilidadeUsuario(@Valid @RequestBody HabilidadeUsuario habilidadeUsuario) {
-        habilidadeUsuarioService.salvar(habilidadeUsuario);
-        return ResponseEntity.ok("Habilidade do usuario adicionada com sucesso.");
+    public ResponseEntity<List<HabilidadeUsuario>> inserir(@RequestBody HabilidadeUsuarioDTO dto) {
+        List<HabilidadeUsuario> habilidadesInseridas = habilidadeUsuarioService.inserir(dto.getIdUsuario(), dto.getIdsHabilidade());
+        return ResponseEntity.ok(habilidadesInseridas);
     }
 
     @Operation(summary = "Atualiza uma habilidade do usuario")
