@@ -16,7 +16,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class UsuarioDTO {
-    private Long id;
     private String nome;
     private Long gestorId;
     private Boolean booleanGestor;
