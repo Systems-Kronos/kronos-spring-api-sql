@@ -18,12 +18,15 @@ public class HabilidadeUsuarioService {
         this.habilidadeUsuarioRepository = habilidadeUsuarioRepository;
     }
 
-    public HabilidadeUsuario buscarPorId(Long id) {
-        if (id == null) {
-            throw new IllegalArgumentException("ID não pode ser nulo");
+    public List<HabilidadeUsuario> buscarPorUsuario(Long idUsuario) {
+        if (idUsuario == null) {
+            throw new IllegalArgumentException("ID do usuário não pode ser nulo");
         }
-        return habilidadeUsuarioRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Habilidade do usuário não encontrado com ID: " + id));
+        List<HabilidadeUsuario> habilidades = habilidadeUsuarioRepository.findByUsuarioId(idUsuario);
+        if (habilidades.isEmpty()) {
+            throw new EntityNotFoundException("Nenhuma habilidade encontrada para o usuário com ID: " + idUsuario);
+        }
+        return habilidades;
     }
 
     public List<HabilidadeUsuario> listar() {

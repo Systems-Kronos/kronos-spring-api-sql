@@ -24,11 +24,18 @@ public class HabilidadeUsuarioController {
         this.habilidadeUsuarioService = habilidadeUsuarioService;
     }
 
+    @GetMapping("/selecionar")
+    @Operation(summary = "Lista todos as habilidades usuário")
+    public ResponseEntity<List<HabilidadeUsuario>> listarTodos(){
+        List<HabilidadeUsuario> habilidades = habilidadeUsuarioService.listar();
+        return ResponseEntity.ok(habilidades);
+    }
+
     @GetMapping("/selecionar/{id}")
     @Operation(summary = "Lista a habilidade do usuario pelo id")
-    public ResponseEntity<HabilidadeUsuario> selecionarPeloId(@PathVariable Long id) {
-        HabilidadeUsuario habilidadeUsuario = habilidadeUsuarioService.buscarPorId(id);
-        return ResponseEntity.ok(habilidadeUsuario);
+    public ResponseEntity<List<HabilidadeUsuario>> listarPorUsuario(@PathVariable Long id) {
+        List<HabilidadeUsuario> habilidades = habilidadeUsuarioService.buscarPorUsuario(id);
+        return ResponseEntity.ok(habilidades);
     }
 
     @Operation(summary = "Adiciona um nova habilidade do usuario")
