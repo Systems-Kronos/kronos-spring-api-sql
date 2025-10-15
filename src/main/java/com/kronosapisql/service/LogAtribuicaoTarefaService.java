@@ -1,23 +1,34 @@
 package com.kronosapisql.service;
 
 import com.kronosapisql.dto.LogAtribuicaoTarefaDTO;
+import com.kronosapisql.dto.LogAtribuicaoTarefaResponse;
 import com.kronosapisql.model.LogAtribuicaoTarefa;
 import com.kronosapisql.model.Tarefa;
+import com.kronosapisql.model.Usuario;
 import com.kronosapisql.repository.LogAtribuicaoTarefaRepository;
 import com.kronosapisql.repository.TarefaRepository;
+import com.kronosapisql.repository.UsuarioRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class LogAtribuicaoTarefaService {
     private final LogAtribuicaoTarefaRepository logAtribuicaoTarefaRepository;
     private final TarefaRepository tarefaRepository;
+    private final UsuarioRepository usuarioRepository;
 
-    public LogAtribuicaoTarefaService(LogAtribuicaoTarefaRepository logAtribuicaoTarefaRepository, TarefaRepository tarefaRepository) {
+    public LogAtribuicaoTarefaService(LogAtribuicaoTarefaRepository logAtribuicaoTarefaRepository, TarefaRepository tarefaRepository, UsuarioRepository usuarioRepository) {
         this.logAtribuicaoTarefaRepository = logAtribuicaoTarefaRepository;
         this.tarefaRepository = tarefaRepository;
+        this.usuarioRepository = usuarioRepository;
+    }
+
+
+    public List<LogAtribuicaoTarefa> listar() {
+        return logAtribuicaoTarefaRepository.findAll();
     }
 
     public LogAtribuicaoTarefa buscarPorId(Long id) {
@@ -28,23 +39,33 @@ public class LogAtribuicaoTarefaService {
                 .orElseThrow(() -> new EntityNotFoundException("Log de atribuição não encontrado com ID: " + id));
     }
 
-    public List<LogAtribuicaoTarefa> listar() {
-        return logAtribuicaoTarefaRepository.findAll();
-    }
-
-    public List<LogAtribuicaoTarefa> buscarPorIdTarefa(Long id) {
-        if (id == null) {
-            throw new IllegalArgumentException("ID não pode ser nulo");
+    public List<LogAtribuicaoTarefaResponse> buscarPorIdTarefa(Long idTarefa) {
+        if (idTarefa == null) {
+            throw new IllegalArgumentException("ID da tarefa não pode ser nulo");
         }
 
-        List<LogAtribuicaoTarefa> logs = logAtribuicaoTarefaRepository.findByTarefa_Id(id);
+        List<LogAtribuicaoTarefa> logs = logAtribuicaoTarefaRepository.findByTarefa_Id(idTarefa);
 
         if (logs.isEmpty()) {
-            throw new EntityNotFoundException("Nenhum log de atribuição encontrado para com o ID da tarefa: " + id);
+            throw new EntityNotFoundException("Nenhum log encontrado para o ID da tarefa: " + idTarefa);
         }
 
-        return logs;
+        return logs.stream().map(log -> {
+            String nomeUsuario = usuarioRepository.findById(log.getIdUsuarioAtuante())
+                    .map(Usuario::getNome)
+                    .orElse("Usuário desconhecido");
+
+            return new LogAtribuicaoTarefaResponse(
+                    log.getId(),
+                    log.getTarefa().getId(),
+                    log.getIdUsuarioAtuante(),
+                    nomeUsuario,
+                    log.getDataRealocacao(),
+                    log.getObservacao()
+            );
+        }).collect(Collectors.toList());
     }
+
 
 
 
