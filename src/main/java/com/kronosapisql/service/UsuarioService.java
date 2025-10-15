@@ -14,6 +14,7 @@ import com.kronosapisql.repository.UsuarioRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,12 +26,14 @@ public class UsuarioService {
     private final CargoRepository cargoRepository;
     private final EmpresaRepository empresaRepository;
     private final SetorRepository setorRepository;
-    
-    public UsuarioService(UsuarioRepository usuarioRepository, SetorRepository setorRepository, EmpresaRepository empresaRepository, CargoRepository cargoRepository){
+    private final PasswordEncoder passwordEncoder;
+
+    public UsuarioService(UsuarioRepository usuarioRepository, SetorRepository setorRepository, EmpresaRepository empresaRepository, CargoRepository cargoRepository, PasswordEncoder passwordEncoder){
         this.usuarioRepository = usuarioRepository;
         this.setorRepository = setorRepository;
         this.empresaRepository = empresaRepository;
         this.cargoRepository = cargoRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public Usuario buscarPorId(Long id) {
@@ -84,6 +87,8 @@ public class UsuarioService {
         Cargo cargo = cargoRepository.findById(dto.getCargoId())
                 .orElseThrow(() -> new RuntimeException("Cargo não encontrado"));
 
+        String senhaCriptografada = passwordEncoder.encode(dto.getSenha());
+
         Usuario usuario = Usuario.builder()
                 .nome(dto.getNome())
                 .gestor(gestor)
@@ -94,7 +99,7 @@ public class UsuarioService {
                 .cpf(dto.getCpf())
                 .telefone(dto.getTelefone())
                 .email(dto.getEmail())
-                .senha(dto.getSenha())
+                .senha(senhaCriptografada)
                 .foto(dto.getFoto())
                 .ativo(dto.getAtivo())
                 .build();
@@ -175,9 +180,10 @@ public class UsuarioService {
 
     public Usuario loginApp(String cpf, String senha) {
         Usuario usuario = buscarPorCpf(cpf);
-        if (!usuario.getSenha().equals(senha)) {
+        if (!passwordEncoder.matches(senha, usuario.getSenha())) {
             throw new BadCredentialsException("Senha inválida");
         }
+
         if (!usuario.getAtivo()) {
             throw new BadCredentialsException("Usuário inativo");
         }
