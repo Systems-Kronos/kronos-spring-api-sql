@@ -1,6 +1,7 @@
 package com.kronosapisql.controller;
 
 import com.kronosapisql.dto.LogAtribuicaoTarefaDTO;
+import com.kronosapisql.dto.LogAtribuicaoTarefaResponse;
 import com.kronosapisql.model.LogAtribuicaoTarefa;
 import com.kronosapisql.service.LogAtribuicaoTarefaService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -33,15 +34,10 @@ public class LogAtribuicaoTarefaController {
     }
 
     @GetMapping("/selecionarTarefa/{id}")
-    @Operation(summary = "Lista o log pelo id do usuário")
-    public ResponseEntity<List<LogAtribuicaoTarefa>> selecionarLogAtribuicaoTarefaPeloUsuario(@PathVariable Long id) {
-        List<LogAtribuicaoTarefa> logAtribuicaoTarefa = logAtribuicaoTarefaService.buscarPorIdTarefa(id);
-
-        if (logAtribuicaoTarefa.isEmpty()) {
-            return ResponseEntity.noContent().build(); // retorna 204 caso não tenha nada
-        }
-
-        return ResponseEntity.ok(logAtribuicaoTarefa);
+    @Operation(summary = "Lista o log pelo id da tarefa")
+    public ResponseEntity<List<LogAtribuicaoTarefaResponse>> buscarPorIdTarefa(@PathVariable Long id) {
+        List<LogAtribuicaoTarefaResponse> resposta = logAtribuicaoTarefaService.buscarPorIdTarefa(id);
+        return ResponseEntity.ok(resposta);
     }
 
     @Operation(summary = "Adiciona um novo log")
