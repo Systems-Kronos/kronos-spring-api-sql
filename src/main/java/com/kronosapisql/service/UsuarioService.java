@@ -52,6 +52,19 @@ public class UsuarioService {
                 .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado com CPF " + cpf));
     }
 
+    public String buscarTelefonePorCpf(String cpf) {
+        if (cpf == null || cpf.isBlank()) {
+            throw new IllegalArgumentException("CPF do usuário não pode ser nulo");
+        }
+
+        Usuario usuario = usuarioRepository.findByCpf(cpf)
+                .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado com CPF " + cpf));
+
+        return usuario.getTelefone();
+    }
+
+
+
     public List<UsuarioFunctionDTO> listarFuncionariosGestor(Long idGestor) {
         return usuarioRepository.listarFuncionariosGestorRaw(idGestor)
                 .stream()
