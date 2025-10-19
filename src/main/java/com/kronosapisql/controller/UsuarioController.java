@@ -11,6 +11,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import org.apache.coyote.Response;
+import org.springframework.boot.web.reactive.context.ReactiveWebServerApplicationContext;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -54,6 +56,13 @@ public class UsuarioController {
     public ResponseEntity<Usuario> buscarPorCpf(@PathVariable String cpf) {
         Usuario usuario = usuarioService.buscarPorCpf(cpf);
         return ResponseEntity.ok(usuario);
+    }
+
+    @GetMapping("/selecionarNoSec/{cpf}")
+    @Operation(summary = "Lista o telefone de um usuário pelo cpf")
+    public ResponseEntity<String> buscaroTelefonePeloCpf(@PathVariable String cpf){
+        String telefone = usuarioService.buscarTelefonePorCpf(cpf);
+        return ResponseEntity.ok(telefone);
     }
 
     @Operation(summary = "Adiciona um novo usuário")
