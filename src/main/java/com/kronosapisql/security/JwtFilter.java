@@ -5,9 +5,10 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
+import org.springframework.util.AntPathMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
@@ -17,19 +18,19 @@ import java.util.List;
 
 @Component
 public class JwtFilter extends OncePerRequestFilter {
+
     private final JwtUtil jwtUtil;
+    private static final AntPathMatcher pathMatcher = new AntPathMatcher();
 
     private static final List<String> EXCLUDED_PATHS = Arrays.asList(
+            "/api/usuario/selecionarNoSec/**",
+            "/api/usuario/selecionarCpf/**",
             "/api/usuario/loginApp",
             "/api/usuario/loginPlataforma",
             "/api/usuario/adicionar",
             "/swagger-ui.html",
-            "/swagger-ui/",
-            "/swagger-ui/index.html",
             "/swagger-ui/**",
-            "/v3/api-docs",
             "/v3/api-docs/**",
-            "/swagger-resources",
             "/swagger-resources/**",
             "/webjars/**"
     );
@@ -43,13 +44,14 @@ public class JwtFilter extends OncePerRequestFilter {
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
 
-        String authHeader = request.getHeader("Authorization");
         String path = request.getRequestURI();
 
-        if (EXCLUDED_PATHS.stream().anyMatch(path::startsWith)) {
+        if (EXCLUDED_PATHS.stream().anyMatch(p -> pathMatcher.match(p, path))) {
             filterChain.doFilter(request, response);
             return;
         }
+
+        String authHeader = request.getHeader("Authorization");
 
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             String token = authHeader.substring(7);
@@ -63,10 +65,7 @@ public class JwtFilter extends OncePerRequestFilter {
                                     Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"))
                             );
                     SecurityContextHolder.getContext().setAuthentication(auth);
-
-                    System.out.println("Token válido para usuário ID: " + subject);
-                }
-                else {
+                } else {
                     response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Token inválido ou expirado");
                     return;
                 }
