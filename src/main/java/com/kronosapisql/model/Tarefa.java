@@ -55,7 +55,6 @@ public class Tarefa {
     @Column(name = "iTendencia")
     private Integer tendencia;
 
-    @NotNull
     @Column(name = "iTempoEstimado")
     private Integer tempoEstimado;
 
