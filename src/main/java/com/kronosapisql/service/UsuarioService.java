@@ -142,6 +142,10 @@ public class UsuarioService {
         if (campos.containsKey("email")) {
             usuario.setEmail((String) campos.get("email"));
         }
+        if (campos.containsKey("senha")) {
+            String senhaCriptografada = passwordEncoder.encode((String) campos.get("senha"));
+            usuario.setSenha(senhaCriptografada);
+        }
 
         if (campos.containsKey("booleanGestor")) {
             usuario.setBooleanGestor((Boolean) campos.get("booleanGestor"));
