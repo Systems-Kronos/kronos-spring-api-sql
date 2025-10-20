@@ -73,6 +73,9 @@ public class Tarefa {
     @Column(name = "dDataAtribuicao")
     private Date dataAtribuicao;
 
+    @Column(name = "ddataprazo")
+    private Date dataPrazo;
+
     @Column(name = "dDataConclusao")
     private Date dataConclusao;
 }

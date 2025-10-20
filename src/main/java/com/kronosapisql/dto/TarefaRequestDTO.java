@@ -44,6 +44,8 @@ public class TarefaRequestDTO {
     @NotNull
     private Date dataAtribuicao;
 
+    private Date dataPrazo;
+
     @NotNull
     private List<TarefaHabilidadeDTO> habilidades;
 
@@ -59,6 +61,7 @@ public class TarefaRequestDTO {
                 .urgencia(this.getUrgencia())
                 .tendencia(this.getTendencia())
                 .tempoEstimado(this.getTempoEstimado())
+                .dataPrazo(Date.from(this.getDataPrazo().toInstant()))
                 .dataAtribuicao(Date.from(this.getDataAtribuicao().toInstant()))
                 .dataConclusao(null)
                 .status(this.getStatus())
