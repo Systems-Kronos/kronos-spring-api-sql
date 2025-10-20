@@ -52,6 +52,15 @@ public class TarefaRequestDTO {
     private List<Integer> usuariosResponsaveis;
 
     public Tarefa toEntity(Usuario usuarioRelator) {
+        Date dataPrazoConvertida = null;
+        if (this.getDataPrazo() != null) {
+            dataPrazoConvertida = Date.from(this.getDataPrazo().toInstant());
+        }
+
+        Date dataAtribuicaoConvertida = null;
+        if (this.getDataAtribuicao() != null) {
+            dataAtribuicaoConvertida = Date.from(this.getDataAtribuicao().toInstant());
+        }
         return Tarefa.builder()
                 .nome(this.getNome())
                 .descricao(this.getDescricao())
@@ -60,8 +69,8 @@ public class TarefaRequestDTO {
                 .urgencia(this.getUrgencia())
                 .tendencia(this.getTendencia())
                 .tempoEstimado(this.getTempoEstimado())
-                .dataPrazo(Date.from(this.getDataPrazo().toInstant()))
-                .dataAtribuicao(Date.from(this.getDataAtribuicao().toInstant()))
+                .dataPrazo(dataPrazoConvertida)
+                .dataAtribuicao(dataAtribuicaoConvertida)
                 .dataConclusao(null)
                 .status(this.getStatus())
                 .build();
