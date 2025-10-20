@@ -2,6 +2,7 @@ package com.kronosapisql.service;
 
 
 import com.kronosapisql.dto.UsuarioDTO;
+import com.kronosapisql.dto.UsuarioTelefoneDTO;
 import com.kronosapisql.enums.OpcaoStatus;
 import com.kronosapisql.model.*;
 
@@ -52,7 +53,7 @@ public class UsuarioService {
                 .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado com CPF " + cpf));
     }
 
-    public String buscarTelefonePorCpf(String cpf) {
+    public UsuarioTelefoneDTO buscarTelefonePorCpf(String cpf) {
         if (cpf == null || cpf.isBlank()) {
             throw new IllegalArgumentException("CPF do usuário não pode ser nulo");
         }
@@ -60,8 +61,9 @@ public class UsuarioService {
         Usuario usuario = usuarioRepository.findByCpf(cpf)
                 .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado com CPF " + cpf));
 
-        return usuario.getTelefone();
+        return new UsuarioTelefoneDTO(usuario.getId(), usuario.getTelefone());
     }
+
 
 
 

@@ -1,9 +1,6 @@
 package com.kronosapisql.controller;
 
-import com.kronosapisql.dto.LoginRequestDTO;
-import com.kronosapisql.dto.LoginResponseDTO;
-import com.kronosapisql.dto.UsuarioDTO;
-import com.kronosapisql.dto.UsuarioFunctionDTO;
+import com.kronosapisql.dto.*;
 import com.kronosapisql.security.JwtUtil;
 import com.kronosapisql.model.Usuario;
 import com.kronosapisql.service.UsuarioService;
@@ -60,9 +57,9 @@ public class UsuarioController {
 
     @GetMapping("/selecionarNoSec/{cpf}")
     @Operation(summary = "Lista o telefone de um usuário pelo cpf")
-    public ResponseEntity<String> buscaroTelefonePeloCpf(@PathVariable String cpf){
-        String telefone = usuarioService.buscarTelefonePorCpf(cpf);
-        return ResponseEntity.ok(telefone);
+    public ResponseEntity<UsuarioTelefoneDTO> buscarTelefonePorCpf(@PathVariable String cpf) {
+        UsuarioTelefoneDTO dto = usuarioService.buscarTelefonePorCpf(cpf);
+        return ResponseEntity.ok(dto);
     }
 
     @Operation(summary = "Adiciona um novo usuário")
