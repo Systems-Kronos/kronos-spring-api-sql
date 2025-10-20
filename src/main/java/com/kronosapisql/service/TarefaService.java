@@ -77,7 +77,6 @@ public class TarefaService {
                             .tarefa(tarefa)
                             .build();
                 }).toList();
-
         tarefa.setUsuariosResponsaveis(usuariosResponsaveis);
         tarefa.setHabilidades(habilidades);
         return tarefaRepository.save(tarefa);
