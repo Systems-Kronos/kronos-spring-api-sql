@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 @Service
 public class UsuarioService {
@@ -63,9 +64,6 @@ public class UsuarioService {
 
         return new UsuarioTelefoneDTO(usuario.getId(), usuario.getTelefone());
     }
-
-
-
 
     public List<UsuarioFunctionDTO> listarFuncionariosGestor(Long idGestor) {
         return usuarioRepository.listarFuncionariosGestorRaw(idGestor)
@@ -184,6 +182,18 @@ public class UsuarioService {
         }
 
 
+        return usuarioRepository.save(usuario);
+    }
+
+    @Transactional
+    public Usuario atualizarSenha(Long id, String novaSenha) {
+        if (novaSenha == null || novaSenha.trim().isEmpty()) {
+            throw new IllegalArgumentException("A nova senha não pode ser vazia.");
+        }
+        Usuario usuario = usuarioRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Usuário não encontrado com ID: " + id));
+        String senhaCriptografada = passwordEncoder.encode(novaSenha);
+        usuario.setSenha(senhaCriptografada);
         return usuarioRepository.save(usuario);
     }
 
