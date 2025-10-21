@@ -23,6 +23,9 @@ public class JwtFilter extends OncePerRequestFilter {
     private static final AntPathMatcher pathMatcher = new AntPathMatcher();
 
     private static final List<String> EXCLUDED_PATHS = Arrays.asList(
+            "/api/administracao/loginArea",
+            "/api/administracao/adicionar",
+            "/api/usuario/atualizarSenha/**",
             "/api/usuario/selecionarNoSec/**",
             "/api/usuario/selecionarCpf/**",
             "/api/usuario/loginApp",

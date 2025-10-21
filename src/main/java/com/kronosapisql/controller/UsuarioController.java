@@ -82,6 +82,14 @@ public class UsuarioController {
         return ResponseEntity.ok("Usuário atualizada com sucesso.");
     }
 
+    @Operation(summary = "Atualiza a senha do usuário")
+    @PutMapping("/atualizarSenha/{id}")
+    public ResponseEntity<String> atualizarSenha(@PathVariable Long id, @Valid @RequestBody SenhaDTO senhaDTO) {
+        String novaSenha = senhaDTO.getNovaSenha();
+        usuarioService.atualizarSenha(id, novaSenha);
+        return ResponseEntity.ok("Senha do usuário atualizada com sucesso.");
+    }
+
     @Operation(summary = "Atualiza alguns campos de usuário")
     @PutMapping("/atualizar/{id}")
     public ResponseEntity<Usuario> atualizarParcial(
