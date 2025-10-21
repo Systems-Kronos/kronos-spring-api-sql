@@ -14,6 +14,7 @@ import com.kronosapisql.repository.SetorRepository;
 import com.kronosapisql.repository.UsuarioRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -86,17 +87,22 @@ public class UsuarioService {
         return usuarioRepository.save(usuario);
     }
 
-    @Transactional
     public Long criarUsuario(UsuarioDTO dto) {
+
+        if (usuarioRepository.existsByEmail(dto.getEmail())) {
+            throw new RuntimeException("Já existe um usuário com este e-mail.");
+        }
+        if (usuarioRepository.existsByCpf(dto.getCpf())) {
+            throw new RuntimeException("Já existe um usuário com este CPF.");
+        }
+
+        // Busca entidades relacionadas
         Setor setor = setorRepository.findById(dto.getSetorId())
                 .orElseThrow(() -> new RuntimeException("Setor não encontrado"));
-
         Usuario gestor = usuarioRepository.findById(dto.getGestorId())
                 .orElseThrow(() -> new RuntimeException("Gestor não encontrado"));
-
         Empresa empresa = empresaRepository.findById(dto.getEmpresaId())
                 .orElseThrow(() -> new RuntimeException("Empresa não encontrada"));
-
         Cargo cargo = cargoRepository.findById(dto.getCargoId())
                 .orElseThrow(() -> new RuntimeException("Cargo não encontrado"));
 
@@ -117,8 +123,12 @@ public class UsuarioService {
                 .ativo(dto.getAtivo())
                 .build();
 
-        Usuario usuarioSalvo = usuarioRepository.save(usuario);
-        return usuarioSalvo.getId();
+        try {
+            Usuario usuarioSalvo = usuarioRepository.save(usuario);
+            return usuarioSalvo.getId();
+        } catch (DataIntegrityViolationException e) {
+            throw new RuntimeException("Erro: dados duplicados ou violação de integridade.");
+        }
     }
 
     public Usuario atualizar(Usuario usuario) {
