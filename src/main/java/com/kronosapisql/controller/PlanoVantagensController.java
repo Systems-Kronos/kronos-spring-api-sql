@@ -1,49 +1,39 @@
 package com.kronosapisql.controller;
 
+import com.kronosapisql.controller.docs.PlanoVantagensControllerDocs;
 import com.kronosapisql.model.PlanoVantagens;
 import com.kronosapisql.service.PlanoVantagensService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/vantagens")
-@SecurityRequirement(name = "bearerAuth")
-@Tag(name = "Vantagens", description = "Operações relacionadas a vantagens dos planos")
-public class PlanoVantagensController {
+public class PlanoVantagensController implements PlanoVantagensControllerDocs {
+
     private final PlanoVantagensService planoVantagensService;
 
     public PlanoVantagensController(PlanoVantagensService planoVantagensService) {
         this.planoVantagensService = planoVantagensService;
     }
 
-    @GetMapping("/selecionar/{id}")
-    @Operation(summary = "Lista uma vantagem pelo id")
-    public ResponseEntity<PlanoVantagens> selecionarPeloId(@PathVariable Long id) {
-        PlanoVantagens planoVantagens = planoVantagensService.buscarPorId(id);
-        return ResponseEntity.ok(planoVantagens);
+    @Override
+    public ResponseEntity<PlanoVantagens> selecionarPeloId(Long id) {
+        return ResponseEntity.ok(planoVantagensService.buscarPorId(id));
     }
 
-    @Operation(summary = "Adiciona uma vantagem")
-    @PostMapping("/adicionar")
-    public ResponseEntity<String> adicionarVantagens(@RequestBody @Valid PlanoVantagens planoVantagens) {
+    @Override
+    public ResponseEntity<String> adicionarVantagens(PlanoVantagens planoVantagens) {
         planoVantagensService.salvar(planoVantagens);
         return ResponseEntity.ok("Vantagem adicionada com sucesso");
     }
 
-    @Operation(summary = "Atualiza uma vantagem")
-    @PutMapping("/atualizar")
-    public ResponseEntity<String> atualizarVantagens(@Valid @RequestBody PlanoVantagens planoVantagens) {
+    @Override
+    public ResponseEntity<String> atualizarVantagens(PlanoVantagens planoVantagens) {
         planoVantagensService.atualizar(planoVantagens);
         return ResponseEntity.ok("Vantagem atualizada com sucesso.");
     }
 
-    @Operation(summary = "Deleta uma vantagem")
-    @DeleteMapping("/deletar/{id}")
-    public ResponseEntity<String> deletarVantagens(@PathVariable long id) {
+    @Override
+    public ResponseEntity<String> deletarVantagens(long id) {
         planoVantagensService.deletar(id);
         return ResponseEntity.ok("Vantagem deletada com sucesso.");
     }

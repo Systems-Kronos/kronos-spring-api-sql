@@ -1,126 +1,101 @@
 package com.kronosapisql.controller;
 
+import com.kronosapisql.controller.docs.UsuarioControllerDocs;
 import com.kronosapisql.dto.*;
-import com.kronosapisql.security.JwtUtil;
 import com.kronosapisql.model.Usuario;
+import com.kronosapisql.security.JwtUtil;
 import com.kronosapisql.service.UsuarioService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import org.apache.coyote.Response;
-import org.springframework.boot.web.reactive.context.ReactiveWebServerApplicationContext;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/usuario")
-@SecurityRequirement(name = "bearerAuth")
-@Tag(name = "Usuario", description = "Operações relacionadas ao usuário")
-public class UsuarioController {
+public class UsuarioController implements UsuarioControllerDocs {
+
     private final UsuarioService usuarioService;
     private final JwtUtil jwtUtil;
 
-    public UsuarioController(UsuarioService usuarioService, JwtUtil jwtUtil){
+    public UsuarioController(UsuarioService usuarioService, JwtUtil jwtUtil) {
         this.usuarioService = usuarioService;
         this.jwtUtil = jwtUtil;
     }
 
-    @Operation(summary = "Lista todos os usuários")
-    @GetMapping("/listar")
+    @Override
     public List<Usuario> listarUsuario() {
         return usuarioService.listar();
     }
 
-    @Operation(summary = "Lista todos os usuários de um gestor específico baseado na function")
-    @GetMapping("/selecionarFunction/{idGestor}")
-    public List<UsuarioFunctionDTO> listarFuncionariosGestor(@PathVariable Long idGestor) {
+    @Override
+    public List<UsuarioFunctionDTO> listarFuncionariosGestor(Long idGestor) {
         return usuarioService.listarFuncionariosGestor(idGestor);
     }
 
-    @GetMapping("/selecionarId/{id}")
-    @Operation(summary = "Lista um usuário pelo id")
-    public ResponseEntity<Usuario> buscarPorId(@PathVariable Long id) {
+    @Override
+    public ResponseEntity<Usuario> buscarPorId(Long id) {
         Usuario usuario = usuarioService.buscarPorId(id);
         return ResponseEntity.ok(usuario);
     }
 
-    @GetMapping("/selecionarCpf/{cpf}")
-    @Operation(summary = "Lista um usuário pelo cpf")
-    public ResponseEntity<Usuario> buscarPorCpf(@PathVariable String cpf) {
+    @Override
+    public ResponseEntity<Usuario> buscarPorCpf(String cpf) {
         Usuario usuario = usuarioService.buscarPorCpf(cpf);
         return ResponseEntity.ok(usuario);
     }
 
-    @GetMapping("/selecionarNoSec/{cpf}")
-    @Operation(summary = "Lista o telefone de um usuário pelo cpf")
-    public ResponseEntity<UsuarioTelefoneDTO> buscarTelefonePorCpf(@PathVariable String cpf) {
+    @Override
+    public ResponseEntity<UsuarioTelefoneDTO> buscarTelefonePorCpf(String cpf) {
         UsuarioTelefoneDTO dto = usuarioService.buscarTelefonePorCpf(cpf);
         return ResponseEntity.ok(dto);
     }
 
-    @Operation(summary = "Adiciona um novo usuário")
-    @PostMapping("/adicionar")
-    public ResponseEntity<Map<String, Object>> adicionarUsuario(@Valid @RequestBody UsuarioDTO usuariodto) {
-        Long idUsuario = usuarioService.criarUsuario(usuariodto);
-
+    @Override
+    public ResponseEntity<Map<String, Object>> adicionarUsuario(@Valid UsuarioDTO usuarioDTO) {
+        Long id = usuarioService.criarUsuario(usuarioDTO);
         Map<String, Object> response = Map.of(
                 "mensagem", "Usuário adicionado com sucesso",
-                "id", idUsuario
+                "id", id
         );
-
-        return ResponseEntity.status(201).body(response);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    @Operation(summary = "Atualiza um usuário")
-    @PutMapping("/atualizar")
-    public ResponseEntity<String> atualizarUsuario(@Valid @RequestBody Usuario usuario) {
+    @Override
+    public ResponseEntity<String> atualizarUsuario(@Valid Usuario usuario) {
         usuarioService.atualizar(usuario);
-        return ResponseEntity.ok("Usuário atualizada com sucesso.");
+        return ResponseEntity.ok("Usuário atualizado com sucesso.");
     }
 
-    @Operation(summary = "Atualiza a senha do usuário")
-    @PutMapping("/atualizarSenha/{id}")
-    public ResponseEntity<String> atualizarSenha(@PathVariable Long id, @Valid @RequestBody SenhaDTO senhaDTO) {
-        String novaSenha = senhaDTO.getNovaSenha();
-        usuarioService.atualizarSenha(id, novaSenha);
-        return ResponseEntity.ok("Senha do usuário atualizada com sucesso.");
+    @Override
+    public ResponseEntity<String> atualizarSenha(Long id, @Valid SenhaDTO senhaDTO) {
+        usuarioService.atualizarSenha(id, senhaDTO.getNovaSenha());
+        return ResponseEntity.ok("Senha atualizada com sucesso.");
     }
 
-    @Operation(summary = "Atualiza alguns campos de usuário")
-    @PutMapping("/atualizar/{id}")
-    public ResponseEntity<Usuario> atualizarParcial(
-            @PathVariable Long id,
-            @RequestBody Map<String, Object> campos) {
-
+    @Override
+    public ResponseEntity<Usuario> atualizarParcial(Long id, Map<String, Object> campos) {
         Usuario atualizado = usuarioService.atualizarParcial(id, campos);
         return ResponseEntity.ok(atualizado);
     }
 
-    @Operation(summary = "Deleta um usuário")
-    @DeleteMapping("/deletar/{id}")
-    public ResponseEntity<String> deletarUsuario(@PathVariable Long id) {
+    @Override
+    public ResponseEntity<String> deletarUsuario(Long id) {
         usuarioService.deletar(id);
         return ResponseEntity.ok("Usuário deletado com sucesso.");
     }
 
-    @Operation(summary = "Faz login de um usuário no App")
-    @PostMapping("/loginApp")
-    public ResponseEntity<LoginResponseDTO> loginApp(@Valid @RequestBody LoginRequestDTO loginRequestDTO) {
+    @Override
+    public ResponseEntity<LoginResponseDTO> loginApp(@Valid LoginRequestDTO loginRequestDTO) {
         Usuario usuario = usuarioService.loginApp(loginRequestDTO.getCpf(), loginRequestDTO.getSenha());
-
         String token = jwtUtil.gerarToken(String.valueOf(usuario.getId()));
         return ResponseEntity.ok(new LoginResponseDTO(usuario.getId(), token));
     }
 
-    @Operation(summary = "Faz login de um gestor na Plataforma")
-    @PostMapping("/loginPlataforma")
-    public ResponseEntity<LoginResponseDTO> loginPlataforma(@Valid @RequestBody LoginRequestDTO loginRequestDTO) {
+    @Override
+    public ResponseEntity<LoginResponseDTO> loginPlataforma(@Valid LoginRequestDTO loginRequestDTO) {
         Usuario usuario = usuarioService.loginPlataforma(loginRequestDTO.getCpf(), loginRequestDTO.getSenha());
-
         String token = jwtUtil.gerarToken(String.valueOf(usuario.getId()));
         return ResponseEntity.ok(new LoginResponseDTO(usuario.getId(), token));
     }
