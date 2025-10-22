@@ -27,7 +27,6 @@ public class JwtFilter extends OncePerRequestFilter {
             "/api/administracao/adicionar",
             "/api/usuario/atualizarSenha/**",
             "/api/usuario/selecionarNoSec/**",
-            "/api/usuario/selecionarCpf/**",
             "/api/usuario/loginApp",
             "/api/usuario/loginPlataforma",
             "/api/usuario/adicionar",
