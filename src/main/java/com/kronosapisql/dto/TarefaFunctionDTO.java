@@ -29,6 +29,7 @@ public class TarefaFunctionDTO {
     private String status;
     private LocalDateTime dataAtribuicao;
     private LocalDateTime dataConclusao;
+    private LocalDateTime dataPrazo;
     private String origemTarefa;
 
     public static TarefaFunctionDTO fromRowFunctionIdUsuario(Object[] row) {
@@ -44,7 +45,8 @@ public class TarefaFunctionDTO {
                 .status((String) row[8])
                 .dataAtribuicao(row[9] != null ? ((Timestamp) row[9]).toLocalDateTime() : null)
                 .dataConclusao(row[10] != null ? ((Timestamp) row[10]).toLocalDateTime() : null)
-                .origemTarefa((String) row[11])
+                .dataPrazo(row[11] != null ? ((Timestamp) row[11]).toLocalDateTime() : null)
+                .origemTarefa((String) row[12])
                 .build();
     }
 
@@ -66,7 +68,8 @@ public class TarefaFunctionDTO {
                 .status((String) row[13])
                 .dataAtribuicao(row[14] != null ? ((Timestamp) row[14]).toLocalDateTime() : null)
                 .dataConclusao(row[15] != null ? ((Timestamp) row[15]).toLocalDateTime() : null)
-                .origemTarefa((String) row[16])
+                .dataPrazo(row[16] != null ? ((Timestamp) row[16]).toLocalDateTime() : null)
+                .origemTarefa((String) row[17])
                 .build();
     }
 }
