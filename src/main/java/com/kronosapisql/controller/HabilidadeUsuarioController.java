@@ -1,60 +1,48 @@
 package com.kronosapisql.controller;
 
+import com.kronosapisql.controller.docs.HabilidadeUsuarioControllerDocs;
 import com.kronosapisql.dto.HabilidadeUsuarioDTO;
 import com.kronosapisql.model.HabilidadeUsuario;
 import com.kronosapisql.service.HabilidadeUsuarioService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/habilidade-usuario")
-@SecurityRequirement(name = "bearerAuth")
-@Tag(name = "Habilidade Usuario", description = "Operações relacionadas ao Habilidade Usuario")
+public class HabilidadeUsuarioController implements HabilidadeUsuarioControllerDocs {
 
-public class HabilidadeUsuarioController {
     private final HabilidadeUsuarioService habilidadeUsuarioService;
 
     public HabilidadeUsuarioController(HabilidadeUsuarioService habilidadeUsuarioService) {
         this.habilidadeUsuarioService = habilidadeUsuarioService;
     }
 
-    @GetMapping("/selecionar")
-    @Operation(summary = "Lista todos as habilidades usuário")
-    public ResponseEntity<List<HabilidadeUsuario>> listarTodos(){
-        List<HabilidadeUsuario> habilidades = habilidadeUsuarioService.listar();
-        return ResponseEntity.ok(habilidades);
+    @Override
+    public ResponseEntity<List<HabilidadeUsuario>> listarTodos() {
+        return ResponseEntity.ok(habilidadeUsuarioService.listar());
     }
 
-    @GetMapping("/selecionar/{id}")
-    @Operation(summary = "Lista a habilidade do usuario pelo id")
-    public ResponseEntity<List<HabilidadeUsuario>> listarPorUsuario(@PathVariable Long id) {
-        List<HabilidadeUsuario> habilidades = habilidadeUsuarioService.buscarPorUsuario(id);
-        return ResponseEntity.ok(habilidades);
+    @Override
+    public ResponseEntity<List<HabilidadeUsuario>> listarPorUsuario(Long id) {
+        return ResponseEntity.ok(habilidadeUsuarioService.buscarPorUsuario(id));
     }
 
-    @Operation(summary = "Adiciona um nova habilidade do usuario")
-    @PostMapping("/adicionar")
-    public ResponseEntity<List<HabilidadeUsuario>> inserir(@RequestBody HabilidadeUsuarioDTO dto) {
-        List<HabilidadeUsuario> habilidadesInseridas = habilidadeUsuarioService.inserir(dto.getIdUsuario(), dto.getIdsHabilidade());
-        return ResponseEntity.ok(habilidadesInseridas);
+    @Override
+    public ResponseEntity<List<HabilidadeUsuario>> inserir(@Valid HabilidadeUsuarioDTO dto) {
+        List<HabilidadeUsuario> inseridas = habilidadeUsuarioService.inserir(dto.getIdUsuario(), dto.getIdsHabilidade());
+        return ResponseEntity.ok(inseridas);
     }
 
-    @Operation(summary = "Atualiza uma habilidade do usuario")
-    @PutMapping("/atualizar")
-    public ResponseEntity<String> atualizarHabilidadeUsuario(@Valid @RequestBody HabilidadeUsuario habilidadeUsuario) {
+    @Override
+    public ResponseEntity<String> atualizarHabilidadeUsuario(@Valid HabilidadeUsuario habilidadeUsuario) {
         habilidadeUsuarioService.atualizar(habilidadeUsuario);
         return ResponseEntity.ok("Habilidade do usuario atualizada com sucesso.");
     }
 
-    @Operation(summary = "Deleta uma habilidade do usuario")
-    @DeleteMapping("/deletar/{id}")
-    public ResponseEntity<String> deletarHabilidadeUsuario(@PathVariable long id) {
+    @Override
+    public ResponseEntity<String> deletarHabilidadeUsuario(long id) {
         habilidadeUsuarioService.deletar(id);
         return ResponseEntity.ok("Habilidade do usuario deletada com sucesso.");
     }
