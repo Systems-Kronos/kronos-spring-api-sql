@@ -1,30 +1,28 @@
 package com.kronosapisql.service;
 
-import org.springframework.jdbc.core.simple.SimpleJdbcCall;
-import org.springframework.stereotype.Service;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Service;
 
-import java.util.Map;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Service
 public class SinalVidaService {
 
     private final JdbcTemplate jdbcTemplate;
 
-    @Autowired
     public SinalVidaService(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
     public void enviarSinalVida(Long idUsuario, String localUso) {
-        SimpleJdbcCall jdbcCall = new SimpleJdbcCall(jdbcTemplate)
-                .withSchemaName("public")
-                .withProcedureName("sp_envia_sinal_vida");
+        if (idUsuario == null || localUso == null) return;
 
-        jdbcCall.execute(Map.of(
-                "p_nCdUsuario", idUsuario,
-                "p_LocalUso", localUso
-        ));
+        String sql = "CALL public.sp_envia_sinal_vida(?, ?, ?)";
+        jdbcTemplate.update(sql,
+                idUsuario,
+                localUso,
+                Timestamp.valueOf(LocalDateTime.now())
+        );
     }
 }
