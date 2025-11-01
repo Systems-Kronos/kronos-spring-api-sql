@@ -4,6 +4,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
@@ -11,10 +12,14 @@ import java.util.Date;
 
 @Component
 public class JwtUtil {
-    private final Key chaveSecreta = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+
+    private final Key chaveSecreta;
+
+    public JwtUtil(@Value("${JWT_SECRET}") String secret) {
+        this.chaveSecreta = Keys.hmacShaKeyFor(secret.getBytes());
+    }
 
     public String gerarToken(String subject) {
-
         Date agora = new Date();
         Date meiaNoite = getProximaMeiaNoite();
 
@@ -24,16 +29,6 @@ public class JwtUtil {
                 .setExpiration(meiaNoite)
                 .signWith(chaveSecreta)
                 .compact();
-    }
-
-    private Date getProximaMeiaNoite() {
-        java.util.Calendar cal = java.util.Calendar.getInstance();
-        cal.add(java.util.Calendar.DAY_OF_MONTH, 1);
-        cal.set(java.util.Calendar.HOUR_OF_DAY, 0);
-        cal.set(java.util.Calendar.MINUTE, 0);
-        cal.set(java.util.Calendar.SECOND, 0);
-        cal.set(java.util.Calendar.MILLISECOND, 0);
-        return cal.getTime();
     }
 
     public String getSubject(String token) {
@@ -55,5 +50,15 @@ public class JwtUtil {
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
+    }
+
+    private Date getProximaMeiaNoite() {
+        java.util.Calendar cal = java.util.Calendar.getInstance();
+        cal.add(java.util.Calendar.DAY_OF_MONTH, 1);
+        cal.set(java.util.Calendar.HOUR_OF_DAY, 0);
+        cal.set(java.util.Calendar.MINUTE, 0);
+        cal.set(java.util.Calendar.SECOND, 0);
+        cal.set(java.util.Calendar.MILLISECOND, 0);
+        return cal.getTime();
     }
 }
