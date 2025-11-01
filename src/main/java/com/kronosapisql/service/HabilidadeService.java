@@ -23,10 +23,6 @@ public class HabilidadeService {
                 .orElseThrow(() -> new EntityNotFoundException("Habilidade não encontrado com ID: " + id));
     }
 
-    public List<Habilidade> buscarPeloIdEmpresa(Long id) {
-        return habilidadeRepository.findByEmpresaId(id);
-    }
-
     public List<Habilidade> listar() {
         return habilidadeRepository.findAll();
     }
