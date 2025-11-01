@@ -35,15 +35,6 @@ public interface HabilidadeControllerDocs {
     @GetMapping("/selecionar/{id}")
     ResponseEntity<Habilidade> selecionarPeloId(@PathVariable Long id);
 
-    @Operation(summary = "Lista todas as habilidades pertencentes a uma empresa pelo ID dela")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Lista de habilidades retornada com sucesso"),
-            @ApiResponse(responseCode = "404", description = "Empresa não encontrada"),
-            @ApiResponse(responseCode = "401", description = "Não autorizado")
-    })
-    @GetMapping("/selecionar/empresa/{id}")
-    List<Habilidade> buscarPorEmpresaId(@PathVariable Long id);
-
     @Operation(summary = "Adiciona uma nova habilidade")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Habilidade adicionada com sucesso"),

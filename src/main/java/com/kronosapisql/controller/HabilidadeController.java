@@ -30,11 +30,6 @@ public class HabilidadeController implements HabilidadeControllerDocs {
     }
 
     @Override
-    public List<Habilidade> buscarPorEmpresaId(Long id) {
-        return habilidadeService.buscarPeloIdEmpresa(id);
-    }
-
-    @Override
     public ResponseEntity<String> adicionarHabilidade(@Valid Habilidade habilidade) {
         habilidadeService.salvar(habilidade);
         return ResponseEntity.ok("Habilidade adicionada com sucesso");

@@ -20,11 +20,6 @@ public class Habilidade {
     private long id;
 
     @NotNull
-    @ManyToOne
-    @JoinColumn(name = "nCdEmpresa")
-    private Empresa empresa;
-
-    @NotNull
     @Column(name = "cNmHabilidade")
     private String nome;
 
