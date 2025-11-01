@@ -15,6 +15,8 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
 
     Optional<Usuario> findByCpf(String cpf);
 
+    Optional<Usuario> findByEmail(String email);
+
     Boolean existsByEmail(String email);
 
     Boolean existsByCpf(String cpf);
@@ -23,4 +25,5 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
 
     @Query(value = "SELECT * FROM fn_funcionarios_gestor(:idGestor)", nativeQuery = true)
     List<Object[]> listarFuncionariosGestorRaw(@Param("idGestor") Long idGestor);
+
 }
